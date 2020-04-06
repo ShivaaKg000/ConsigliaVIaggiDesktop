@@ -1,6 +1,7 @@
-package consiglia.viaggi.desktop;
+package consiglia.viaggi.desktop.view;
 
 import java.io.IOException;
+
 import javafx.stage.Screen;
 import javafx.geometry.Rectangle2D;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class MenuViewController {
+public class MenuView {
 
 
 
@@ -25,6 +26,7 @@ public class MenuViewController {
     private Parent login;
 
     public String UserName;
+    
     public void NomeUser(String Username){
 
     	this.UserName=Username;
@@ -54,11 +56,11 @@ public class MenuViewController {
     public void loadReviewView(String UserName) throws IOException
     {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("viewfxml/ReviewView.fxml"));
+        loader.setLocation(getClass().getResource("ReviewView.fxml"));
         Parent view = loader.load();
         Scene viewscene = new Scene(view);
 
-        ReviewViewController controller = loader.getController();
+        ReviewView controller = loader.getController();
         controller.NomeUser(UserName);
 
         Stage window = (Stage) menuview.getScene().getWindow();

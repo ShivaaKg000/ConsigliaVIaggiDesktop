@@ -1,16 +1,16 @@
-package consiglia.viaggi.desktop;
+package consiglia.viaggi.desktop.model;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Review {
+public class ReviewOld {
 
  	private final SimpleStringProperty testo;
  	private final SimpleIntegerProperty id;
  	private final SimpleIntegerProperty idAccomodation;
 
 
-    Review(String setTesto,Integer setid, Integer setidAccomodation)
+    public ReviewOld(String setTesto,Integer setid, Integer setidAccomodation)
     {
         this.testo = new SimpleStringProperty(setTesto);
         this.id = new SimpleIntegerProperty(setid);

@@ -12,9 +12,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("viewfxml/LoginView.fxml"));
+			BorderPane root = FXMLLoader.load(getClass().getResource("view/LoginView.fxml"));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("viewfxml/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("view/application.css").toExternalForm());
 			stage.setScene(scene);
 			stage.setHeight(480);
 			stage.setWidth(640);

@@ -1,7 +1,9 @@
-package consiglia.viaggi.desktop;
+package consiglia.viaggi.desktop.view;
 
 import java.io.IOException;
 
+import consiglia.viaggi.desktop.controller.LoginController;
+import consiglia.viaggi.desktop.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,11 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class LoginViewController {
+public class LoginView {
 
     @FXML
     private BorderPane login;
-
     @FXML
     private TextField userNameField ;
     @FXML
@@ -32,7 +33,7 @@ public class LoginViewController {
     	String userName = userNameField.getText();
         String password = passwordField.getText();
 
-        if (Login_Controller.authenticate(userName, password))
+        if (LoginController.authenticate(userName, password))
         {
             User user =new User(userName);
             errorLabel.setText("");
@@ -57,16 +58,11 @@ public class LoginViewController {
     public void loadMenuView(String UserName) throws IOException
     {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("viewfxml/MenuView.fxml"));
+        loader.setLocation(getClass().getResource("MenuView.fxml"));
         Parent view = loader.load();
-
         Scene viewscene = new Scene(view);
-
-
-        //access the controller and call a method
-        MenuViewController controller = loader.getController();
+        MenuView controller = loader.getController();
         controller.NomeUser(UserName);
-
         Stage window = (Stage) login.getScene().getWindow();
         window.setScene(viewscene);
         window.setHeight(480);

@@ -1,4 +1,4 @@
-package consiglia.viaggi.desktop;
+package consiglia.viaggi.desktop.model;
 
 public class User {
 

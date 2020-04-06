@@ -1,10 +1,14 @@
-package consiglia.viaggi.desktop;
+package consiglia.viaggi.desktop.view;
 
 import java.io.IOException;
-import consiglia.viaggi.desktop.Controller_Review;
+
+import consiglia.viaggi.desktop.controller.ViewReviewController;
+import consiglia.viaggi.desktop.model.Review;
+import consiglia.viaggi.desktop.model.ReviewOld;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,16 +17,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-public class ReviewViewController {
+public class ReviewView {
 
 		@FXML BorderPane reviewView;
-
 		@FXML TableView<Review> TableReview;
-
+		
 		@FXML private TableColumn<Review, String> testo ;
 		@FXML private TableColumn<Review, Integer> id ;
 		@FXML private TableColumn<Review, Integer> idAccomodation ;
 
+		private final ObservableList<Review> reviewList = FXCollections.observableArrayList();
+
+		private  ViewReviewController viewReviewController;
+		
 		private String UserName;
 
 		public void NomeUser(String Username){
@@ -31,20 +38,21 @@ public class ReviewViewController {
 
 		public void initialize()
 		{
-			testo.setCellValueFactory(new PropertyValueFactory<Review, String>("testo"));
+			
+			
+			viewReviewController = new ViewReviewController();
+			reviewList.addAll(viewReviewController.getReviewList(1));
+			
+			testo.setCellValueFactory(new PropertyValueFactory<Review,String>("reviewText"));
 			id.setCellValueFactory(new PropertyValueFactory<Review, Integer>("id"));
 			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccomodation"));
-
-			reviewList.add(new Review("Ciro",1,2));
-			reviewList.add(new Review("Cirro",11,22));
-
-	        TableReview.setItems(reviewList);
-			//Controller_Review.recuperaRecensioni();
+			
+			TableReview.setItems(reviewList);
+			
 
 		}
 
-		private final ObservableList<Review> reviewList = FXCollections.observableArrayList();
-
+		
 
 		@FXML
 		public void indietro() throws IOException{
@@ -54,7 +62,7 @@ public class ReviewViewController {
 		@FXML
 		public void cerca() {
 
-
+			
 
 
 		}
@@ -62,13 +70,13 @@ public class ReviewViewController {
 		public void loadMenuView(String UserName) throws IOException
 	    {
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("viewfxml/MenuView.fxml"));
+	        loader.setLocation(getClass().getResource("view/MenuView.fxml"));
 	        Parent view = loader.load();
 
 	        Scene viewscene = new Scene(view);
 
 	        //access the controller and call a method
-	        MenuViewController controller = loader.getController();
+	        MenuView controller = loader.getController();
 	        controller.NomeUser(UserName);
 
 	        Stage window = (Stage) reviewView.getScene().getWindow();

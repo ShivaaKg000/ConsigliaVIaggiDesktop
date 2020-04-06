@@ -1,6 +1,6 @@
-package consiglia.viaggi.desktop;
+package consiglia.viaggi.desktop.controller;
 
-public class Login_Controller {
+public class LoginController {
 	
 	public static boolean authenticate(String user, String pswd)
 	{
