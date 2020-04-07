@@ -8,6 +8,8 @@ import consiglia.viaggi.desktop.model.ReviewOld;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +28,7 @@ public class ReviewView {
 		@FXML private TableColumn<Review, Integer> id ;
 		@FXML private TableColumn<Review, Integer> idAccomodation ;
 
-		private final ObservableList<Review> reviewList = FXCollections.observableArrayList();
+		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
 
 		private  ViewReviewController viewReviewController;
 		
@@ -38,17 +40,32 @@ public class ReviewView {
 
 		public void initialize()
 		{
-			
-			
-			viewReviewController = new ViewReviewController();
-			reviewList.addAll(viewReviewController.getReviewList(1));
-			
 			testo.setCellValueFactory(new PropertyValueFactory<Review,String>("reviewText"));
 			id.setCellValueFactory(new PropertyValueFactory<Review, Integer>("id"));
 			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccomodation"));
 			
-			TableReview.setItems(reviewList);
+			viewReviewController = new ViewReviewController();
+			//reviewList.addAll(viewReviewController.getReviewList(1));
+			//TableReview.setItems(reviewList);
 			
+			/*bind di reviewList all'observable nel controller*/
+			reviewList=viewReviewController.getObsarvableReviewList();
+			
+			/*set del listener per intercettare il notify dell'observable*/
+			reviewList.addListener(new InvalidationListener() {
+				
+				@Override
+				public void invalidated(Observable observable) {
+				
+					TableReview.setItems(reviewList);
+					
+				}
+			});;
+			
+			
+			/*richiesta al controller di fare l'update della lista in background*/
+			viewReviewController.loadReviewListAsync(1);
+				
 
 		}
 

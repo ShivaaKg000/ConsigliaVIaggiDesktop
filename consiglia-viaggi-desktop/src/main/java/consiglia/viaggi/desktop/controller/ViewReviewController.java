@@ -9,18 +9,40 @@ import consiglia.viaggi.desktop.Constants;
 import consiglia.viaggi.desktop.model.Review;
 import consiglia.viaggi.desktop.model.ReviewDao;
 import consiglia.viaggi.desktop.model.ReviewDaoStub;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 public class ViewReviewController {
 
     private ReviewDao reviewDao;
+    private ObservableList observableReviewList;
+    
     public ViewReviewController() {
 
         reviewDao= new ReviewDaoStub();
+        observableReviewList= FXCollections.observableArrayList();		
     }
 
-    public List<Review> getReviewList(int accommodationId) {
+    /*public List<Review> getReviewList(int accommodationId) {
         List<Review> reviewList= reviewDao.getReviewList(accommodationId);
         return reviewList;
+    }*/
+    
+    public void loadReviewListAsync(int accommodationId) {
+    	Task task = new Task() {
+    		@Override
+            public Void call() throws InterruptedException {
+    			
+    			List<Review> reviewList= reviewDao.getReviewList(accommodationId);
+    			observableReviewList.addAll(reviewList);
+    			observableReviewList.notifyAll();
+				return null;
+            }
+        };
+        Thread testThread = new Thread(task);
+        testThread.start();
+     
     }
 
     // create sublist of length size
@@ -32,11 +54,11 @@ public class ViewReviewController {
         return sublist;
     }
 
-    public List<Review> orderReviewListByDate(List reviewList){
+    public List<Review> orderReviewListByDate(List<Review> reviewList){
             Collections.sort(reviewList, Collections.reverseOrder());
         return reviewList;
     }
-    public List orderReviewListByRating(List reviewList, int order){
+    public List<Review> orderReviewListByRating(List<Review> reviewList, int order){
         if(order== Constants.ASCENDING)
             Collections.sort(reviewList, new Review.ReviewRatingComparator());
         else if (order == Constants.DESCENDING)
@@ -44,9 +66,9 @@ public class ViewReviewController {
         return reviewList;
     }
 
-    public List filterReviewList(List<Review> reviewList, float minRating, float maxRating) {
+    public List<Review> filterReviewList(List<Review> reviewList, float minRating, float maxRating) {
 
-        List filteredList = new ArrayList();
+        List<Review> filteredList = new ArrayList<Review>();
         for(Review review : reviewList){
             if(review.getRating()>minRating&&review.getRating()<maxRating)
                 filteredList.add(review);
@@ -54,13 +76,17 @@ public class ViewReviewController {
         return filteredList;
     }
 
-    public List copyList(List acList) {
+    public List<Review> copyList(List<Review> acList) {
 
-        List copyList= new ArrayList();
+        List<Review> copyList= new ArrayList<Review>();
         for(Review ac : (ArrayList<Review>) acList){
             copyList.add(ac);
         }
 
         return copyList;
     }
+
+	public ObservableList getObsarvableReviewList() {
+		return observableReviewList;
+	}
 }

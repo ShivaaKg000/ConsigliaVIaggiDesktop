@@ -22,6 +22,12 @@ public class ReviewDaoStub implements ReviewDao{
     }
 
     private List<Review> createReviewList(int id) {
+    	try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         List<Review> reviewList=new ArrayList<Review>();
         for (int i=0; i<10;i++){
             String sDate=(i+1)+"/12/2020";
