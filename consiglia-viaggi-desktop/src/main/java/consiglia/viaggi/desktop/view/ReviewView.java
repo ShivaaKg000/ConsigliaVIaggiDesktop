@@ -103,3 +103,25 @@ public class ReviewView {
 	        window.show();
 	    }
 }
+etResource("view/MenuView.fxml"));
+	        Parent view = loader.load();
+	        Scene viewscene = new Scene(view);
+	        MenuView controller = loader.getController();
+	        controller.NomeUser(UserName);
+	        Stage window = (Stage) reviewView.getScene().getWindow();
+			@FXML private TableColumn<ReviewOld, Integer> idAccomodation ;
+			@FXML private TableColumn<ReviewOld, Integer> id ;
+			@FXML private TableColumn<ReviewOld, String> testo ;
+			@FXML TableView<ReviewOld> TableReview;
+			@FXML private TableColumn<Review, Checkbox> approved ;
+			@FXML private TableColumn<Review, Boolean> approved ;
+			@FXML private TableColumn<Review, String> reviewText ;
+			@FXML private TableColumn<Review, String> nameAccommodation ;
+			@FXML private TableColumn<Review, String> author ;
+			private final ObservableList<ReviewOld> reviewList = FXCollections.observableArrayList();
+	        window.setScene(viewscene);
+	        window.setHeight(480);
+			window.setWidth(640);
+	        window.show();
+	    }
+}

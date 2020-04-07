@@ -9,22 +9,35 @@ import java.util.Date;
 public class Review implements Comparable{
 
 	private int id;
+	private int idAccommodation;
+	private String nameAccommodation;
 	private String author;
     private String reviewText;
     private float rating;
     private String data;
+    private boolean approved;
 
     public Review(Builder builder) {
     	this.id=builder.id;
+    	this.idAccommodation=builder.idAccommodation;
+    	this.nameAccommodation=builder.nameAccommodation;
         this.author=builder.author;
         this.reviewText=builder.reviewText;
         this.rating=builder.rating;
         this.data= builder.data;
+        this.approved=builder.approved;
     }
 
     public int getId() {
 		return id;
 	}
+    public int getIdAccommodation() {
+  		return idAccommodation;
+  	}
+      
+    public String getNameAccommodation() {
+  		return nameAccommodation;
+  	}
     public String getAuthor() {
         return author;
     }
@@ -41,6 +54,11 @@ public class Review implements Comparable{
         return rating;
     }
 
+    public boolean getApproved() {
+		return approved;
+	}
+
+
     @Override
     public int compareTo(Object o) {
         Review review = (Review) o ;
@@ -55,18 +73,37 @@ public class Review implements Comparable{
     }
 
 
-    static class Builder {
+	
+
+	static class Builder {
 
     	private int id;
+    	private int idAccommodation;
+    	private String nameAccommodation;
         private String data;
         private String author;
         private String reviewText;
         private float rating;
+        private boolean approved;
 
+        public Builder setApproved(boolean approved) {
+        	this.approved=approved;
+        	return this;
+        }
         public Builder setId(int id) {
             this.id = id;
             return this;
         }
+        
+        public Builder setIdAccommodation(int idAccommodation) {
+            this.idAccommodation = idAccommodation;
+            return this;
+        }
+        
+        public Builder setNameAccommodation(String nameAccommodation) {
+			this.nameAccommodation = nameAccommodation;
+			return this;
+		}
         
         public Builder setReviewText(String reviewText) {
             this.reviewText = reviewText;

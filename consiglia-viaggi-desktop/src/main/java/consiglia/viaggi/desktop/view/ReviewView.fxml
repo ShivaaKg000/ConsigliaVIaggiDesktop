@@ -43,9 +43,11 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <columns>
-                        <TableColumn fx:id="testo" prefWidth="75.0" text="testo" />
-                        <TableColumn fx:id="id" prefWidth="75.0" text="id" />
-                        <TableColumn fx:id="idAccomodation" prefWidth="75.0" text="idAccomodation" />
+                        <TableColumn fx:id="author" prefWidth="45.0" text="Autore" />
+                        <TableColumn fx:id="nameAccommodation" prefWidth="45.0" text="Nome Struttura" />
+                        <TableColumn fx:id="idAccomodation" prefWidth="45.0" text="Id Struttura" />
+                        <TableColumn fx:id="reviewText" prefWidth="45.0" text="Testo" />
+                     	<TableColumn fx:id="approved" prefWidth="45.0" text="Stato" />          
                      </columns>
                   </TableView>
                </children>
