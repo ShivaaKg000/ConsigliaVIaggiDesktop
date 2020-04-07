@@ -33,10 +33,13 @@ public class ReviewDaoStub implements ReviewDao{
             String sDate=(i+1)+"/12/2020";
             reviewList.add(new Review.Builder()
             		.setId(i)
+            		.setIdAccommodation(i)
+            		.setNameAccommodation("Da Peppino")
                     .setAuthor("Paolo")
-                    .setReviewText("Peppino Ã¨ na schifezz "+i)
+                    .setReviewText("Peppino è na schifezz "+i)
                     .setRating((float) (1 + Math.random() * (5 - 1)))
                     .setData(sDate)
+                    .setApproved(true)
                     .build()
             );
 

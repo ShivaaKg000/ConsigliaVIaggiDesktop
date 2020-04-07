@@ -1,12 +1,14 @@
 package consiglia.viaggi.desktop.view;
 
+
+import java.awt.Checkbox;
 import java.io.IOException;
 
 import consiglia.viaggi.desktop.controller.ViewReviewController;
 import consiglia.viaggi.desktop.model.Review;
-import consiglia.viaggi.desktop.model.ReviewOld;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -21,13 +23,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 public class ReviewView {
 
-		@FXML BorderPane reviewView;
-		@FXML TableView<Review> TableReview;
-		
-		@FXML private TableColumn<Review, String> testo ;
-		@FXML private TableColumn<Review, Integer> id ;
+	
+		@FXML private BorderPane reviewView;
+		@FXML private TableView<Review> TableReview;
+		@FXML private TableColumn<Review, String> author ;
+		@FXML private TableColumn<Review, String> nameAccommodation ;
 		@FXML private TableColumn<Review, Integer> idAccomodation ;
-
+		@FXML private TableColumn<Review, String> reviewText ;
+		@FXML private TableColumn<Review, Boolean> approved ;
+		
 		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
 
 		private  ViewReviewController viewReviewController;
@@ -40,13 +44,18 @@ public class ReviewView {
 
 		public void initialize()
 		{
-			testo.setCellValueFactory(new PropertyValueFactory<Review,String>("reviewText"));
-			id.setCellValueFactory(new PropertyValueFactory<Review, Integer>("id"));
-			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccomodation"));
+
+			viewReviewController = new ViewReviewController();
+			
+			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
+			nameAccommodation.setCellValueFactory(new PropertyValueFactory<Review, String>("nameAccommodation"));
+			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccommodation"));
+			reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
+			approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));
+			approved.setCellValueFactory(new PropertyValueFactory<Review, Boolean>("approved"));
+			
 			
 			viewReviewController = new ViewReviewController();
-			//reviewList.addAll(viewReviewController.getReviewList(1));
-			//TableReview.setItems(reviewList);
 			
 			/*bind di reviewList all'observable nel controller*/
 			reviewList=viewReviewController.getObsarvableReviewList();
@@ -66,36 +75,27 @@ public class ReviewView {
 			/*richiesta al controller di fare l'update della lista in background*/
 			viewReviewController.loadReviewListAsync(1);
 				
-
 		}
 
 		
-
 		@FXML
 		public void indietro() throws IOException{
 			loadMenuView(UserName);
 		}
-
 		@FXML
-		public void cerca() {
-
-			
-
-
+		public void cerca() { 
+			//body
 		}
+		
 
 		public void loadMenuView(String UserName) throws IOException
 	    {
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(getClass().getResource("view/MenuView.fxml"));
 	        Parent view = loader.load();
-
 	        Scene viewscene = new Scene(view);
-
-	        //access the controller and call a method
 	        MenuView controller = loader.getController();
 	        controller.NomeUser(UserName);
-
 	        Stage window = (Stage) reviewView.getScene().getWindow();
 	        window.setScene(viewscene);
 	        window.setHeight(480);
