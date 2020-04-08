@@ -13,7 +13,8 @@ public class ReviewDaoStub implements ReviewDao{
 
     @Override
     public Review getReviewById(int id) {
-        return null;
+    	return createReview(id);
+       
     }
 
     @Override
@@ -46,5 +47,27 @@ public class ReviewDaoStub implements ReviewDao{
         }
 
         return reviewList;
+    }
+    
+    private Review createReview(int id) {
+    	try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        String sDate=(id)+"/12/2020";
+        return new Review.Builder()
+        		.setId(id)
+        		.setIdAccommodation(id)
+        		.setNameAccommodation("Da Peppino")
+                .setAuthor("Paolo")
+                .setReviewText("Peppino è na schifezz "+id)
+                .setRating((float) (1 + Math.random() * (5 - 1)))
+                .setData(sDate)
+                .setApproved(true)
+                .build();
+        
     }
 }

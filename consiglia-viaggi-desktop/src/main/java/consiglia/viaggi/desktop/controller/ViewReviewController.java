@@ -44,6 +44,22 @@ public class ViewReviewController {
         testThread.start();
      
     }
+    
+    public void addReviewtoListAsync(int reviewId) {
+    	Task task = new Task() {
+    		@Override
+            public Void call() throws InterruptedException {
+    			
+    			Review review= reviewDao.getReviewById(reviewId);
+    			observableReviewList.add(review);
+    			observableReviewList.notifyAll();
+				return null;
+            }
+        };
+        Thread testThread = new Thread(task);
+        testThread.start();
+     
+    }
 
     // create sublist of length size
     public List<Review> reviewSubList(List<Review> reviewList, final int size) {

@@ -51,16 +51,18 @@ public class ReviewView {
 			nameAccommodation.setCellValueFactory(new PropertyValueFactory<Review, String>("nameAccommodation"));
 			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccommodation"));
 			reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
-			approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));
-			approved.setCellValueFactory(new PropertyValueFactory<Review, Boolean>("approved"));
+			
+			approved.setCellValueFactory(new PropertyValueFactory<Review, Boolean>("approve"));
+			approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));  
 			
 			
 			viewReviewController = new ViewReviewController();
 			
 			/*bind di reviewList all'observable nel controller*/
 			reviewList=viewReviewController.getObsarvableReviewList();
+			TableReview.setItems(reviewList);
 			
-			/*set del listener per intercettare il notify dell'observable*/
+			/*set del listener per intercettare il notify dell'observable
 			reviewList.addListener(new InvalidationListener() {
 				
 				@Override
@@ -69,11 +71,13 @@ public class ReviewView {
 					TableReview.setItems(reviewList);
 					
 				}
-			});;
+			});;*/
 			
 			
 			/*richiesta al controller di fare l'update della lista in background*/
 			viewReviewController.loadReviewListAsync(1);
+			/*test modifica lista aggiungendo una nuova riga*/
+			viewReviewController.addReviewtoListAsync(11);
 				
 		}
 

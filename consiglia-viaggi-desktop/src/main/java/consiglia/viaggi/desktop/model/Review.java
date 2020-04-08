@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 
 public class Review implements Comparable{
 
@@ -16,6 +19,8 @@ public class Review implements Comparable{
     private float rating;
     private String data;
     private boolean approved;
+    private final BooleanProperty approve;
+
 
     public Review(Builder builder) {
     	this.id=builder.id;
@@ -26,6 +31,12 @@ public class Review implements Comparable{
         this.rating=builder.rating;
         this.data= builder.data;
         this.approved=builder.approved;
+        this.approve = new SimpleBooleanProperty(this, "approve", approved);
+        
+    }
+    
+    public BooleanProperty approveProperty() {
+        return approve;
     }
 
     public int getId() {
