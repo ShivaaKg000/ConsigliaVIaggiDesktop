@@ -104,13 +104,12 @@ public class ReviewView {
 			            	setText(String.valueOf(item)); //Put the String data in the cell
 
 			                if (item==Status.PENDING) {
-			                    this.setTextFill(javafx.scene.paint.Paint.valueOf("#ff0000")); //The text in red
+			                    this.setTextFill(javafx.scene.paint.Paint.valueOf("#000000")); //The text in red
 			                    setStyle("-fx-background-color: yellow"); //The background of the cell in yellow
 			                } else if (item == Status.APPROVED) {
 			                   
-			                	this.setTextFill(javafx.scene.paint.Paint.valueOf("000000")); //The text in red
-			                }
-			                    else
+			                	this.setTextFill(javafx.scene.paint.Paint.valueOf("#00cc00")); 
+			                } else
 			                        setTextFill(javafx.scene.paint.Paint.valueOf("#ff0000"));
 			                }
 			           }
