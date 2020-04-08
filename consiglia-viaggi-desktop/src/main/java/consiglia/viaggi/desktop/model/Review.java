@@ -18,8 +18,8 @@ public class Review implements Comparable{
     private String reviewText;
     private float rating;
     private String data;
-    private boolean approved;
-    private final BooleanProperty approve;
+    private Status status;
+    //private final BooleanProperty approve;
 
 
     public Review(Builder builder) {
@@ -30,14 +30,14 @@ public class Review implements Comparable{
         this.reviewText=builder.reviewText;
         this.rating=builder.rating;
         this.data= builder.data;
-        this.approved=builder.approved;
-        this.approve = new SimpleBooleanProperty(this, "approve", approved);
+        this.status=builder.status;
+        //this.approve = new SimpleBooleanProperty(this, "approve", status);
         
     }
     
-    public BooleanProperty approveProperty() {
+    /*public BooleanProperty approveProperty() {
         return approve;
-    }
+    }*/
 
     public int getId() {
 		return id;
@@ -65,8 +65,8 @@ public class Review implements Comparable{
         return rating;
     }
 
-    public boolean getApproved() {
-		return approved;
+    public Status getStatus() {
+		return status;
 	}
 
 
@@ -95,10 +95,10 @@ public class Review implements Comparable{
         private String author;
         private String reviewText;
         private float rating;
-        private boolean approved;
+        private Status status;
 
-        public Builder setApproved(boolean approved) {
-        	this.approved=approved;
+        public Builder setApproved(Status approved) {
+        	this.status=approved;
         	return this;
         }
         public Builder setId(int id) {

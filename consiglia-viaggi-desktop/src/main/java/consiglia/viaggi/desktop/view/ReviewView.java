@@ -2,10 +2,15 @@ package consiglia.viaggi.desktop.view;
 
 
 import java.awt.Checkbox;
+import java.awt.Paint;
 import java.io.IOException;
+
+import com.sun.prism.paint.Color;
 
 import consiglia.viaggi.desktop.controller.ViewReviewController;
 import consiglia.viaggi.desktop.model.Review;
+import consiglia.viaggi.desktop.model.Status;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -30,7 +35,7 @@ public class ReviewView {
 		@FXML private TableColumn<Review, String> nameAccommodation ;
 		@FXML private TableColumn<Review, Integer> idAccomodation ;
 		@FXML private TableColumn<Review, String> reviewText ;
-		@FXML private TableColumn<Review, Boolean> approved ;
+		@FXML private TableColumn<Review, Status> approved ;
 		
 		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
 
@@ -52,8 +57,9 @@ public class ReviewView {
 			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccommodation"));
 			reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
 			
-			approved.setCellValueFactory(new PropertyValueFactory<Review, Boolean>("approve"));
-			approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));  
+			approved.setCellValueFactory(new PropertyValueFactory<Review, Status>("status"));
+			//approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));
+			setApprovedCellStyle(approved);
 			
 			
 			viewReviewController = new ViewReviewController();
@@ -82,6 +88,38 @@ public class ReviewView {
 		}
 
 		
+		private void setApprovedCellStyle(TableColumn<Review, Status> approved) {
+			approved.setCellFactory(column -> {
+			    return new TableCell<Review, Status>() {
+			        @Override
+			        protected void updateItem(Status item, boolean empty) {
+			            super.updateItem(item, empty); //This is mandatory
+
+			            if (item == null || empty) { //If the cell is empty
+			                setText(null);
+			                setStyle("");
+			            } else { //If the cell is not empty
+
+			                
+			            	setText(String.valueOf(item)); //Put the String data in the cell
+
+			                if (item==Status.PENDING) {
+			                    this.setTextFill(javafx.scene.paint.Paint.valueOf("#ff0000")); //The text in red
+			                    setStyle("-fx-background-color: yellow"); //The background of the cell in yellow
+			                } else if (item == Status.APPROVED) {
+			                   
+			                	this.setTextFill(javafx.scene.paint.Paint.valueOf("000000")); //The text in red
+			                }
+			                    else
+			                        setTextFill(javafx.scene.paint.Paint.valueOf("#ff0000"));
+			                }
+			           }
+			        };
+			   
+			});
+			
+		}
+
 		@FXML
 		public void indietro() throws IOException{
 			loadMenuView(UserName);

@@ -40,7 +40,7 @@ public class ReviewDaoStub implements ReviewDao{
                     .setReviewText("Peppino è na schifezz "+i)
                     .setRating((float) (1 + Math.random() * (5 - 1)))
                     .setData(sDate)
-                    .setApproved(true)
+                    .setApproved(Status.PENDING)
                     .build()
             );
 
@@ -66,7 +66,7 @@ public class ReviewDaoStub implements ReviewDao{
                 .setReviewText("Peppino è na schifezz "+id)
                 .setRating((float) (1 + Math.random() * (5 - 1)))
                 .setData(sDate)
-                .setApproved(true)
+                .setApproved(Status.PENDING)
                 .build();
         
     }
