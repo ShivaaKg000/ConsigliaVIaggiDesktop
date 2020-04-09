@@ -2,10 +2,7 @@ package consiglia.viaggi.desktop.view;
 
 
 import java.awt.Checkbox;
-import java.awt.Paint;
 import java.io.IOException;
-
-import com.sun.prism.paint.Color;
 
 import consiglia.viaggi.desktop.controller.ViewReviewController;
 import consiglia.viaggi.desktop.model.Review;
@@ -22,9 +19,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 public class ReviewView {
 
@@ -83,7 +82,7 @@ public class ReviewView {
 			/*richiesta al controller di fare l'update della lista in background*/
 			viewReviewController.loadReviewListAsync(1);
 			/*test modifica lista aggiungendo una nuova riga*/
-			viewReviewController.addReviewtoListAsync(11);
+			viewReviewController.addReviewtoListAsync(58);
 				
 		}
 
@@ -132,15 +131,18 @@ public class ReviewView {
 		public void loadMenuView(String UserName) throws IOException
 	    {
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("view/MenuView.fxml"));
+	        loader.setLocation(getClass().getResource("MenuView.fxml"));
 	        Parent view = loader.load();
 	        Scene viewscene = new Scene(view);
 	        MenuView controller = loader.getController();
 	        controller.NomeUser(UserName);
 	        Stage window = (Stage) reviewView.getScene().getWindow();
 	        window.setScene(viewscene);
+	        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 	        window.setHeight(480);
 			window.setWidth(640);
+			window.setY((screenBounds.getHeight() - 480) / 2);
+			window.setX((screenBounds.getWidth() - 640) / 2);
 	        window.show();
 	    }
 }

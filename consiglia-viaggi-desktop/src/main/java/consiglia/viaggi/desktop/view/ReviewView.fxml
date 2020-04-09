@@ -13,7 +13,7 @@
 
 <BorderPane fx:id="reviewView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consiglia.viaggi.desktop.view.ReviewView">
    <center>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="684.0" prefWidth="1224.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.15" orientation="VERTICAL" prefHeight="684.0" prefWidth="1224.0" BorderPane.alignment="CENTER">
         <items>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="192.0" prefWidth="1180.0">
                <children>
@@ -38,7 +38,7 @@
             </AnchorPane>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="590.0" prefWidth="1180.0">
                <children>
-                  <TableView fx:id="TableReview" layoutX="27.0" layoutY="30.0" prefWidth="1100.0">
+                  <TableView fx:id="TableReview" layoutX="27.0" layoutY="30.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>

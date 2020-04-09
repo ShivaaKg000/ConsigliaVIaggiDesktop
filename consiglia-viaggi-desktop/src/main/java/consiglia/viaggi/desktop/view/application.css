@@ -1,0 +1,10 @@
+#home {
+    -fx-background-color:darkturquoise ;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+}
+#home:hover {
+	-fx-background-color:turquoise  ;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+ }

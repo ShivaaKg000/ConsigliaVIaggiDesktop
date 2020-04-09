@@ -30,7 +30,7 @@ public class ReviewDaoStub implements ReviewDao{
 			e.printStackTrace();
 		}
         List<Review> reviewList=new ArrayList<Review>();
-        for (int i=0; i<10;i++){
+        for (int i=0; i<30;i++){
             String sDate=(i+1)+"/12/2020";
             reviewList.add(new Review.Builder()
             		.setId(i)

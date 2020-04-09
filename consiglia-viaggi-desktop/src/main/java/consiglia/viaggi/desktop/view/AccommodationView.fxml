@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="accommodationView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consiglia.viaggi.desktop.view.AccommodationView">
+   <center>
+
+   </center>
+   <center>
+      <SplitPane dividerPositions="0.15" orientation="VERTICAL" prefHeight="684.0" prefWidth="1224.0" BorderPane.alignment="CENTER">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="249.0" prefWidth="1178.0">
+               <children>
+                  <Button layoutX="860.0" layoutY="39.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="103.0" text="Cerca">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <TextField layoutX="168.0" layoutY="33.0" prefHeight="58.0" prefWidth="676.0" promptText="Cerca una struttura">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </TextField>
+                  <Button id="home" layoutX="10.0" layoutY="21.0" mnemonicParsing="false" onAction="#indietro" prefHeight="42.0" prefWidth="98.0" stylesheets="@application.css" text="HOME" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="354.0" prefWidth="1178.0">
+               <children>
+                  <TableView layoutX="16.0" layoutY="4.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+                    <columns>
+                      <TableColumn editable="false" prefWidth="150.0" resizable="false" text="Id" />
+                      <TableColumn editable="false" prefWidth="200.0" resizable="false" text="Nome Struttura" />
+                        <TableColumn editable="false" prefWidth="550.0" resizable="false" text="Indirizzo" />
+                        <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Modifica" />
+                        <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Elimina" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </center>
+</BorderPane>
