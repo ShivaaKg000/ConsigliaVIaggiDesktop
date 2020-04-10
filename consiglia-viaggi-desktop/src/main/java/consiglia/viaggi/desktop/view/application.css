@@ -1,10 +1,41 @@
-#home {
-    -fx-background-color:darkturquoise ;
-    -fx-text-fill: white;
+.root{
+	-fx-background-color:rgb(134, 156, 137);
+}
+.button {
+    -fx-background-color:rgb(87, 130, 93);
+    -fx-text-fill: black;
     -fx-font-size: 18px;
 }
-#home:hover {
-	-fx-background-color:turquoise  ;
-    -fx-text-fill: white;
+.button:hover {
+	-fx-background-color:rgb(57, 128, 67);
+    -fx-text-fill: black;
     -fx-font-size: 18px;
- }
+}
+.split-pane{
+	-fx-background-color:rgb(134, 156, 137);
+}
+.split-pane-divider {
+	-fx-padding: 1;
+	-fx-background-color: black;
+}
+.text-input:focused {
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-background-color: 
+    	linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border), 
+    	linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%),-fx-control-inner-background);
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 3, 2;
+    -fx-prompt-text-fill: transparent;
+}
+
+.text-area:focused .content {
+    -fx-background-color: linear-gradient(from 0px 0px to 0px 4px, derive(-fx-control-inner-background, -8%), -fx-control-inner-background);
+    -fx-background-radius: 2;
+}
+.split-pane:focused,
+.table-view:focused {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-padding: 1;
+}

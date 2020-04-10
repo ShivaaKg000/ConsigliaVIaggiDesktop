@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="accommodationView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consiglia.viaggi.desktop.view.AccommodationView">
+<BorderPane fx:id="accommodationView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1180.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consiglia.viaggi.desktop.view.AccommodationView">
    <center>
 
    </center>
@@ -18,7 +18,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="249.0" prefWidth="1178.0">
                <children>
-                  <Button layoutX="860.0" layoutY="39.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="103.0" text="Cerca">
+                  <Button layoutX="851.0" layoutY="37.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="103.0" text="Cerca">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -28,7 +28,7 @@
                         <Font size="24.0" />
                      </font>
                   </TextField>
-                  <Button id="home" layoutX="10.0" layoutY="21.0" mnemonicParsing="false" onAction="#indietro" prefHeight="42.0" prefWidth="98.0" stylesheets="@application.css" text="HOME" />
+                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#indietro" prefHeight="18.0" prefWidth="78.0" stylesheets="@application.css" text="HOME" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="354.0" prefWidth="1178.0">

@@ -52,7 +52,6 @@ public class LoginView {
     }
 
     public void initialize() {
-    	errorLabel.setText("Insert UserName and Password");
     }
 
     public void loadMenuView(String UserName) throws IOException

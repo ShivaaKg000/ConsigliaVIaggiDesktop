@@ -1,42 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="reviewView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consiglia.viaggi.desktop.view.ReviewView">
+<BorderPane fx:id="reviewView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1180.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consiglia.viaggi.desktop.view.ReviewView">
    <center>
-      <SplitPane dividerPositions="0.15" orientation="VERTICAL" prefHeight="684.0" prefWidth="1224.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="700.0" prefWidth="1180.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="192.0" prefWidth="1180.0">
+          <GridPane>
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="163.66665649414062" minWidth="10.0" prefWidth="131.33331298828125" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="245.66668701171875" minWidth="10.0" prefWidth="245.66668701171875" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="246.0" minWidth="246.0" prefWidth="246.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="148.6666259765625" minWidth="10.0" prefWidth="144.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <TextField layoutX="344.0" layoutY="47.0" prefHeight="25.0" prefWidth="247.0" />
-                  <Button layoutX="1015.0" layoutY="80.0" mnemonicParsing="false" onAction="#cerca" prefHeight="74.0" prefWidth="113.0" text="Cerca">
+                  <Button mnemonicParsing="false" onAction="#indietro" prefHeight="40.0" prefWidth="100.0" text="Indietro" />
+                  <Label text="Id Recensione" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="Id Struttura" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="Nome Struttura" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="Contenuto" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Nome Utente" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <TextField prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Button mnemonicParsing="false" onAction="#cerca" prefHeight="40.0" prefWidth="100.0" text="Cerca" GridPane.columnIndex="6" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <RadioButton layoutX="1018.0" layoutY="50.0" mnemonicParsing="false" text="RadioButton" />
-                  <Label layoutX="253.0" layoutY="54.0" text="Id Recensione" />
-                  <TextField layoutX="344.0" layoutY="118.0" prefHeight="25.0" prefWidth="247.0" />
-                  <Label layoutX="253.0" layoutY="122.0" text="Id Struttura" />
-                  <TextField layoutX="344.0" layoutY="147.0" prefHeight="25.0" prefWidth="247.0" />
-                  <Label layoutX="253.0" layoutY="154.0" text="Nome Struttura" />
-                  <TextField layoutX="715.0" layoutY="47.0" prefHeight="25.0" prefWidth="254.0" />
-                  <Label layoutX="624.0" layoutY="54.0" text="Nome Utente" />
-                  <TextField layoutX="715.0" layoutY="94.0" prefHeight="78.0" prefWidth="254.0" />
-                  <Label layoutX="624.0" layoutY="100.0" text="Contenuto" />
-                  <Button layoutX="24.0" layoutY="17.0" mnemonicParsing="false" onAction="#indietro" text="Indietro" />
+                  <Label text="Stato" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TextField>
                </children>
-            </AnchorPane>
-          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="590.0" prefWidth="1180.0">
+            </GridPane>
+          <AnchorPane>
                <children>
                   <TableView fx:id="TableReview" layoutX="27.0" layoutY="30.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
                      <columnResizePolicy>
