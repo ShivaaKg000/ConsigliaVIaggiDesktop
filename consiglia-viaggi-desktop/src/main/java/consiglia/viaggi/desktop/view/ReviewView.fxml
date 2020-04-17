@@ -114,7 +114,7 @@
             </GridPane>
           <AnchorPane>
                <children>
-                  <TableView fx:id="TableReview" layoutX="27.0" layoutY="30.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+                  <TableView fx:id="tableReview" layoutX="27.0" layoutY="30.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>

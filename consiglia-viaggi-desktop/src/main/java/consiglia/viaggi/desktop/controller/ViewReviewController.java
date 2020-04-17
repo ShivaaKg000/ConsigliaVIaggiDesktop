@@ -1,6 +1,7 @@
 package consiglia.viaggi.desktop.controller;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,9 +10,16 @@ import consiglia.viaggi.desktop.Constants;
 import consiglia.viaggi.desktop.model.Review;
 import consiglia.viaggi.desktop.model.ReviewDao;
 import consiglia.viaggi.desktop.model.ReviewDaoStub;
+import consiglia.viaggi.desktop.view.ReviewView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 public class ViewReviewController {
 
@@ -105,4 +113,20 @@ public class ViewReviewController {
 	public ObservableList getObsarvableReviewList() {
 		return observableReviewList;
 	}
+	
+    public void createNewView(Stage stage,String fxmlResource) throws IOException
+    {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../view/"+fxmlResource));
+        Parent view = loader.load();
+        Scene viewscene = new Scene(view);
+        //Stage window = (Stage) menuView.getScene().getWindow();
+        stage.setScene(viewscene);
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setHeight(700);
+        stage.setWidth(1180);
+        stage.setY((screenBounds.getHeight() - 700) / 2);
+        stage.setX((screenBounds.getWidth() - 1180) / 2);
+        stage.show();
+    }
 }

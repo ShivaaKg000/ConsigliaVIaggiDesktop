@@ -6,6 +6,7 @@ import consiglia.viaggi.desktop.model.Review;
 import consiglia.viaggi.desktop.model.Status;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
@@ -22,7 +23,7 @@ import javafx.stage.Stage;
 public class ReviewView {
 	
 		@FXML private BorderPane reviewView;
-		@FXML private TableView<Review> TableReview;
+		@FXML private TableView<Review> tableReview;
 		@FXML private TableColumn<Review, String> author ;
 		@FXML private TableColumn<Review, String> nameAccommodation ;
 		@FXML private TableColumn<Review, Integer> idAccomodation ;
@@ -31,7 +32,7 @@ public class ReviewView {
 		
 		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
 		private  ViewReviewController viewReviewController;
-		
+		private Stage window;
 		private String UserName;
 
 		public void NomeUser(String Username){
@@ -40,6 +41,7 @@ public class ReviewView {
 
 		public void initialize()
 		{
+			window=(Stage)reviewView.getScene().getWindow();
 			viewReviewController = new ViewReviewController();
 			
 			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
@@ -50,12 +52,13 @@ public class ReviewView {
 			approved.setCellValueFactory(new PropertyValueFactory<Review, Status>("status"));
 			//approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));
 			setApprovedCellStyle(approved);
+			setTableClickEvent(tableReview);
 			
 			viewReviewController = new ViewReviewController();
 			
 			/*bind di reviewList all'observable nel controller*/
 			reviewList=viewReviewController.getObsarvableReviewList();
-			TableReview.setItems(reviewList);
+			tableReview.setItems(reviewList);
 			
 			/*set del listener per intercettare il notify dell'observable
 			reviewList.addListener(new InvalidationListener() {
@@ -77,6 +80,27 @@ public class ReviewView {
 		}
 
 		
+		private void setTableClickEvent(TableView<Review> table) {
+			table.setRowFactory(tv -> {
+	            TableRow<Review> row = new TableRow<>();
+	            row.setOnMouseClicked(event -> {
+	                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+	                    Review rowData = row.getItem();
+	                    System.out.println("Double click on: "+rowData.getId());
+	                    try {
+							viewReviewController.createNewView(window, "review_detail_view.fxml");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+	                }
+	            });
+	            return row ;
+	        });
+			
+		}
+
 		private void setApprovedCellStyle(TableColumn<Review, Status> approved) {
 			approved.setCellFactory(column -> {
 				return new TableCell<Review, Status>() {
