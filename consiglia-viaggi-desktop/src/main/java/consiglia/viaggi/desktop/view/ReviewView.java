@@ -41,8 +41,7 @@ public class ReviewView {
 
 		public void initialize()
 		{
-			window=(Stage)reviewView.getScene().getWindow();
-			viewReviewController = new ViewReviewController();
+			viewReviewController = ViewReviewController.getInstance();
 			
 			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
 			nameAccommodation.setCellValueFactory(new PropertyValueFactory<Review, String>("nameAccommodation"));
@@ -54,7 +53,6 @@ public class ReviewView {
 			setApprovedCellStyle(approved);
 			setTableClickEvent(tableReview);
 			
-			viewReviewController = new ViewReviewController();
 			
 			/*bind di reviewList all'observable nel controller*/
 			reviewList=viewReviewController.getObsarvableReviewList();
@@ -81,18 +79,14 @@ public class ReviewView {
 
 		
 		private void setTableClickEvent(TableView<Review> table) {
+			
 			table.setRowFactory(tv -> {
 	            TableRow<Review> row = new TableRow<>();
 	            row.setOnMouseClicked(event -> {
 	                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 	                    Review rowData = row.getItem();
 	                    System.out.println("Double click on: "+rowData.getId());
-	                    try {
-							viewReviewController.createNewView(window, "review_detail_view.fxml");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+	                    viewReviewController.reviewSelected(rowData.getId());
 					
 	                }
 	            });

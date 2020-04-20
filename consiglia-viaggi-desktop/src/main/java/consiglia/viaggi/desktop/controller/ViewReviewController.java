@@ -23,13 +23,19 @@ import javafx.stage.Stage;
 
 public class ViewReviewController {
 
+	
+	private static final ViewReviewController viewReviewController = new ViewReviewController();
     private ReviewDao reviewDao;
     private ObservableList observableReviewList;
     
-    public ViewReviewController() {
+    private ViewReviewController() {
 
         reviewDao= new ReviewDaoStub();
         observableReviewList= FXCollections.observableArrayList();		
+    }
+    
+    public static ViewReviewController getInstance() {
+    	return viewReviewController;
     }
 
     /*public List<Review> getReviewList(int accommodationId) {
@@ -113,20 +119,15 @@ public class ViewReviewController {
 	public ObservableList getObsarvableReviewList() {
 		return observableReviewList;
 	}
-	
-    public void createNewView(Stage stage,String fxmlResource) throws IOException
-    {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../view/"+fxmlResource));
-        Parent view = loader.load();
-        Scene viewscene = new Scene(view);
-        //Stage window = (Stage) menuView.getScene().getWindow();
-        stage.setScene(viewscene);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setHeight(700);
-        stage.setWidth(1180);
-        stage.setY((screenBounds.getHeight() - 700) / 2);
-        stage.setX((screenBounds.getWidth() - 1180) / 2);
-        stage.show();
-    }
+
+	public void reviewSelected(int reviewId) {
+		try {
+			NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }

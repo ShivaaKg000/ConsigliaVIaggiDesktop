@@ -2,6 +2,8 @@ package consiglia.viaggi.desktop.view;
 
 import java.io.IOException;
 
+import consiglia.viaggi.desktop.Constants;
+import consiglia.viaggi.desktop.controller.NavigationController;
 import javafx.stage.Screen;
 import javafx.geometry.Rectangle2D;
 import javafx.fxml.FXML;
@@ -48,20 +50,24 @@ public class MenuView {
 	}
     public void loadReviewView(String UserName) throws IOException
     {
-        FXMLLoader loader = new FXMLLoader();
+    	Stage window = (Stage) menuView.getScene().getWindow();
+    	NavigationController.getInstance().setCurrentStage(window);
+    	NavigationController.getInstance().navigateToView(Constants.REVIEW_VIEW);
+        /*FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("ReviewView.fxml"));
         Parent view = loader.load();
         Scene viewscene = new Scene(view);
         ReviewView controller = loader.getController();
         controller.NomeUser(UserName);
         Stage window = (Stage) menuView.getScene().getWindow();
+        ViewReviewController.getInstance().setStage(window);
         window.setScene(viewscene);
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         window.setHeight(700);
 		window.setWidth(1180);
 		window.setY((screenBounds.getHeight() - 700) / 2);
 		window.setX((screenBounds.getWidth() - 1180) / 2);
-        window.show();
+        window.show();*/
     }
     public void loadLoginView() throws IOException
     {
