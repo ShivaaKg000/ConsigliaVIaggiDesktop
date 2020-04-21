@@ -5,31 +5,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import consiglia.viaggi.desktop.Constants; 
 import consiglia.viaggi.desktop.model.Review;
 import consiglia.viaggi.desktop.model.ReviewDao;
 import consiglia.viaggi.desktop.model.ReviewDaoStub;
-import consiglia.viaggi.desktop.view.ReviewView;
+import consiglia.viaggi.desktop.view.ReviewDetailView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-
 public class ViewReviewController {
 
 	
 	private static final ViewReviewController viewReviewController = new ViewReviewController();
     private ReviewDao reviewDao;
-    private ObservableList observableReviewList;
+    private ObservableList<Review> observableReviewList;
+    private ExecutorService executor;
     
     private ViewReviewController() {
 
+    	
         reviewDao= new ReviewDaoStub();
         observableReviewList= FXCollections.observableArrayList();		
     }
@@ -38,12 +36,9 @@ public class ViewReviewController {
     	return viewReviewController;
     }
 
-    /*public List<Review> getReviewList(int accommodationId) {
-        List<Review> reviewList= reviewDao.getReviewList(accommodationId);
-        return reviewList;
-    }*/
-    
     public void loadReviewListAsync(int accommodationId) {
+    	
+    	observableReviewList.clear();
     	Task task = new Task() {
     		@Override
             public Void call() throws InterruptedException {
@@ -54,12 +49,18 @@ public class ViewReviewController {
 				return null;
             }
         };
+        initExecutor();
         Thread testThread = new Thread(task);
-        testThread.start();
+        executor.execute(testThread);
      
     }
     
-    public void addReviewtoListAsync(int reviewId) {
+    private ExecutorService initExecutor() {
+    	executor=Executors.newFixedThreadPool(4);
+		return null;
+	}
+
+	public void addReviewtoListAsync(int reviewId) {
     	Task task = new Task() {
     		@Override
             public Void call() throws InterruptedException {
@@ -70,8 +71,26 @@ public class ViewReviewController {
 				return null;
             }
         };
+        
+        Thread testThread = new Thread(task);
+        executor.execute(testThread);
+     
+    }
+    
+    public ObservableList<Review> getReviewAsync(int reviewId) {
+    	ObservableList<Review> observableReview= FXCollections.observableArrayList();
+    	Task task = new Task() {
+    		@Override
+            public Void call() throws InterruptedException {
+    			
+    			Review review= reviewDao.getReviewById(reviewId);
+    			observableReview.add(review);
+				return null;
+            }
+        };
         Thread testThread = new Thread(task);
         testThread.start();
+		return observableReview;
      
     }
 
@@ -121,12 +140,29 @@ public class ViewReviewController {
 	}
 
 	public void reviewSelected(int reviewId) {
-		try {
-			NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW);
+		try {	
+			
+			ReviewDetailView reviewDetailView=new ReviewDetailView();
+			reviewDetailView.setId(reviewId);
+			NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW,reviewDetailView);
+			System.out.println("review selected: "+reviewId);
+			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+
+	public void goBack() {
+		executor.shutdownNow();
+    	NavigationController.getInstance().navigateBack();
+		
+	}
+
+	public void approveReview(int reviewId) {
+		reviewDao.approveReview(reviewId);
 		
 	}
 

@@ -26,8 +26,8 @@ public class ReviewDaoStub implements ReviewDao{
     	try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Thread.currentThread().interrupt();
+			//e.printStackTrace();
 		}
         List<Review> reviewList=new ArrayList<Review>();
         for (int i=0; i<30;i++){
@@ -53,8 +53,8 @@ public class ReviewDaoStub implements ReviewDao{
     	try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Thread.currentThread().interrupt();
+			//e.printStackTrace();
 		}
         
         String sDate=(id)+"/12/2020";
@@ -70,4 +70,10 @@ public class ReviewDaoStub implements ReviewDao{
                 .build();
         
     }
+
+	@Override
+	public void approveReview(int reviewId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,10 +1,14 @@
 package consiglia.viaggi.desktop.view;
 
+import consiglia.viaggi.desktop.controller.ViewReviewController;
+import consiglia.viaggi.desktop.model.Review;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 
-public class ReviewDetailView {
+public class ReviewDetailView{
 
     @FXML
     private Label username_label;
@@ -29,6 +33,58 @@ public class ReviewDetailView {
 
     @FXML
     private Text rating_text;
+    @FXML
+    private TextArea review_content;
+    
+    @FXML
+    void backButtonClicked() {
 
+    	ViewReviewController.getInstance().goBack();
+    }
+    
+    private int reviewId;
+    private Review review;
+    
+    public void setId(int id) {
+		reviewId=id;
+		
+	}
+    
+    public void initialize() {
+    	System.out.println("review detail init: "+reviewId);
+    	ViewReviewController.getInstance().getReviewAsync(reviewId).addListener(new ListChangeListener<Review>() {
+
+			@Override
+			public void onChanged(Change<? extends Review> c) {
+				review=c.getList().get(0);
+				
+				updateReviewDetailGui(review);		
+				
+			}
+   		
+    	});
+    	
+    }
+
+
+    @FXML
+    void approveButtonClicked() {
+
+    	ViewReviewController.getInstance().addReviewtoListAsync(100);
+    	ViewReviewController.getInstance().approveReview(reviewId);
+    	
+    }
+    
+    private void updateReviewDetailGui(Review review) {
+		username_text.setText(review.getAuthor());
+		accommodation_text.setText(review.getNameAccommodation());
+		rating_text.setText(String.valueOf(review.getRating()));
+		review_content.setText(review.getReviewText());
+		
+	}
+    
+    
+
+	
 }
 

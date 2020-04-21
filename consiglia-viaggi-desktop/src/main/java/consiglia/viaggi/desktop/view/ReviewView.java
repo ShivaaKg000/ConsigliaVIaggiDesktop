@@ -32,12 +32,6 @@ public class ReviewView {
 		
 		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
 		private  ViewReviewController viewReviewController;
-		private Stage window;
-		private String UserName;
-
-		public void NomeUser(String Username){
-		    	UserName=Username;
-		}
 
 		public void initialize()
 		{
@@ -131,7 +125,8 @@ public class ReviewView {
 
 		@FXML
 		public void indietro() throws IOException{
-			loadMenuView(UserName);
+			//loadMenuView(UserName);
+			viewReviewController.goBack();
 		}
 		@FXML
 		public void cerca() { 

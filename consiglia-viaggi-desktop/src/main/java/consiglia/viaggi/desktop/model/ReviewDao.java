@@ -7,4 +7,5 @@ public interface ReviewDao {
      List<Review> getReviewList(int id);
      Review getReviewById(int id);
      boolean postReview(Review review);
+     void approveReview(int reviewId);
 }

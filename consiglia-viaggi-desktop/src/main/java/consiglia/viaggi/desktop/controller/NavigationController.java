@@ -1,6 +1,7 @@
 package consiglia.viaggi.desktop.controller;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -13,45 +14,60 @@ public class NavigationController {
 	
 	private static final NavigationController navigationController = new NavigationController();
 	private Stage currentStage;
+	private LinkedList<Scene> previousSceneStack = new LinkedList<>();
 
 	public static NavigationController getInstance() {
 		return navigationController;
 	}
 	
-	private NavigationController() {}
-	
-	public void createNewView(Stage stage,String fxmlResource) throws IOException
-    {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../view/"+fxmlResource));
+	private NavigationController() {
+		
+	}
+
+	public void navigateToView(String newViewFxml,Object controller) throws IOException
+    {		
+		Scene previousScene=currentStage.getScene();
+		previousSceneStack.addLast(previousScene);
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(newViewFxml));
+        loader.setController(controller);
+        
         Parent view = loader.load();
         Scene viewscene = new Scene(view);
-        //Stage window = (Stage) menuView.getScene().getWindow();
-        stage.setScene(viewscene);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setHeight(700);
-        stage.setWidth(1180);
-        stage.setY((screenBounds.getHeight() - 700) / 2);
-        stage.setX((screenBounds.getWidth() - 1180) / 2);
-        stage.show();
-    }
-	
-	public Stage navigateToView(String newView) throws IOException
-    {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(newView));
-        Parent view = loader.load();
-        Scene viewscene = new Scene(view);
-        //Stage window = (Stage) menuView.getScene().getWindow();
         currentStage.setScene(viewscene);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        //Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         currentStage.setHeight(700);
         currentStage.setWidth(1180);
-        currentStage.setY((screenBounds.getHeight() - 700) / 2);
-        currentStage.setX((screenBounds.getWidth() - 1180) / 2);
         currentStage.show();
-        return currentStage;
+        
     }
+	
+	public void navigateToView(String newViewFxml) throws IOException
+    {		
+		Scene previousScene=currentStage.getScene();
+		previousSceneStack.addLast(previousScene);
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(newViewFxml));
+        Parent view = loader.load();
+        Scene viewscene = new Scene(view);
+        currentStage.setScene(viewscene);
+        //Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        currentStage.setHeight(700);
+        currentStage.setWidth(1180);
+        //currentStage.setY((screenBounds.getHeight() - 700) / 2);
+        //currentStage.setX((screenBounds.getWidth() - 1180) / 2);      
+        currentStage.show();
+        
+    }
+	
+	public void navigateBack() {
+		if(!previousSceneStack.isEmpty()) {
+			currentStage.setScene(previousSceneStack.pollLast());
+			currentStage.show();
+		}
+			
+		
+	}
 
 	public Stage getCurrentStage() {
 		return currentStage;
@@ -59,6 +75,11 @@ public class NavigationController {
 
 	public void setCurrentStage(Stage currentStage) {
 		this.currentStage = currentStage;
+	}
+
+	public void showCurrentStage() {
+		currentStage.show();
+		
 	}
 
 }
