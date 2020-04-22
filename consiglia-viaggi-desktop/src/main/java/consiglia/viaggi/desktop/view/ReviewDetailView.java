@@ -30,29 +30,30 @@ public class ReviewDetailView{
 
     @FXML
     private Label rating_label;
-
+    
     @FXML
     private Text rating_text;
+    
     @FXML
     private TextArea review_content;
     
-    @FXML
-    void backButtonClicked() {
-
-    	ViewReviewController.getInstance().goBack();
-    }
-    
     private int reviewId;
     private Review review;
+    private ViewReviewController viewReviewController;
     
     public void setId(int id) {
 		reviewId=id;
 		
 	}
+    public void setViewReviewController(ViewReviewController viewReviewController) {
+    	this.viewReviewController=viewReviewController;
+		
+	}
     
     public void initialize() {
     	System.out.println("review detail init: "+reviewId);
-    	ViewReviewController.getInstance().getReviewAsync(reviewId).addListener(new ListChangeListener<Review>() {
+    	//viewReviewController= new ViewReviewController();
+    	viewReviewController.getReviewAsync(reviewId).addListener(new ListChangeListener<Review>() {
 
 			@Override
 			public void onChanged(Change<? extends Review> c) {
@@ -65,13 +66,19 @@ public class ReviewDetailView{
     	});
     	
     }
+    
+    @FXML
+    void backButtonClicked() {
+
+    	viewReviewController.goBack();
+    }
 
 
     @FXML
     void approveButtonClicked() {
 
-    	ViewReviewController.getInstance().addReviewtoListAsync(100);
-    	ViewReviewController.getInstance().approveReview(reviewId);
+    	viewReviewController.addReviewtoListAsync(100);
+    	viewReviewController.approveReview(reviewId);
     	
     }
     
@@ -82,6 +89,8 @@ public class ReviewDetailView{
 		review_content.setText(review.getReviewText());
 		
 	}
+
+	
     
     
 

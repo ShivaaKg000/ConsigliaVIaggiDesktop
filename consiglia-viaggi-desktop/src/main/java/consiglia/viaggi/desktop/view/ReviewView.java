@@ -35,7 +35,7 @@ public class ReviewView {
 
 		public void initialize()
 		{
-			viewReviewController = ViewReviewController.getInstance();
+			viewReviewController = new ViewReviewController();
 			
 			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
 			nameAccommodation.setCellValueFactory(new PropertyValueFactory<Review, String>("nameAccommodation"));

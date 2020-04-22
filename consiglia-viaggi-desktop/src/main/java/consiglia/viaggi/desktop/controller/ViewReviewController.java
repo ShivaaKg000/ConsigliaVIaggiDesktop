@@ -20,21 +20,17 @@ import javafx.fxml.FXMLLoader;
 public class ViewReviewController {
 
 	
-	private static final ViewReviewController viewReviewController = new ViewReviewController();
     private ReviewDao reviewDao;
     private ObservableList<Review> observableReviewList;
     private ExecutorService executor;
     
-    private ViewReviewController() {
+    public ViewReviewController() {
 
-    	
+    	executor=initExecutor(4);
         reviewDao= new ReviewDaoStub();
         observableReviewList= FXCollections.observableArrayList();		
     }
     
-    public static ViewReviewController getInstance() {
-    	return viewReviewController;
-    }
 
     public void loadReviewListAsync(int accommodationId) {
     	
@@ -49,15 +45,15 @@ public class ViewReviewController {
 				return null;
             }
         };
-        initExecutor();
+        initExecutor(4);
         Thread testThread = new Thread(task);
         executor.execute(testThread);
      
     }
     
-    private ExecutorService initExecutor() {
-    	executor=Executors.newFixedThreadPool(4);
-		return null;
+    private ExecutorService initExecutor(int threadPullNumber) {
+    	return Executors.newFixedThreadPool(threadPullNumber);
+		
 	}
 
 	public void addReviewtoListAsync(int reviewId) {
@@ -144,6 +140,7 @@ public class ViewReviewController {
 			
 			ReviewDetailView reviewDetailView=new ReviewDetailView();
 			reviewDetailView.setId(reviewId);
+			reviewDetailView.setViewReviewController(this);
 			NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW,reviewDetailView);
 			System.out.println("review selected: "+reviewId);
 			
