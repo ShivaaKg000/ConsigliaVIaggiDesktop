@@ -140,7 +140,7 @@ public class ReviewView {
 	        Parent view = loader.load();
 	        Scene viewscene = new Scene(view);
 	        MenuView controller = loader.getController();
-	        controller.NomeUser(UserName);
+	        controller.nomeUser(UserName);
 	        Stage window = (Stage) reviewView.getScene().getWindow();
 	        window.setScene(viewscene);
 	        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

@@ -2,7 +2,9 @@ package consiglia.viaggi.desktop.view;
 
 import java.io.IOException;
 
+import consiglia.viaggi.desktop.Constants;
 import consiglia.viaggi.desktop.controller.LoginController;
+import consiglia.viaggi.desktop.controller.NavigationController;
 import consiglia.viaggi.desktop.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,9 +56,13 @@ public class LoginView {
     public void initialize() {
     }
 
-    public void loadMenuView(String UserName) throws IOException
+    public void loadMenuView(String userName) throws IOException
     {
-        FXMLLoader loader = new FXMLLoader();
+    	
+    	MenuView controller= new MenuView();
+    	controller.nomeUser(userName);
+    	NavigationController.getInstance().navigateToView(Constants.MENU_VIEW, controller);
+        /*FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("MenuView.fxml"));
         Parent view = loader.load();
         Scene viewscene = new Scene(view);
@@ -66,7 +72,7 @@ public class LoginView {
         window.setScene(viewscene);
         window.setHeight(480);
         window.setWidth(640);
-        window.show();
+        window.show();*/
     }
 
 }

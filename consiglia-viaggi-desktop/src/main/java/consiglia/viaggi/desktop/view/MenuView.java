@@ -12,12 +12,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class MenuView {
 
 	@FXML
-    private Label benvenuto;
+    private Text welcomeText;
     @FXML
     private BorderPane menuView;
     @FXML
@@ -25,13 +26,14 @@ public class MenuView {
     @FXML
     private Parent accommodationView;
 
-    public String UserName;
+    public String userName;
     
-    public void NomeUser(String Username){
-    	this.UserName=Username;
-    	benvenuto.setText("Benvenuto, "+this.UserName);
+    public void nomeUser(String username){
+    	this.userName=username;
+    	
     }
     public void initialize() {
+    	welcomeText.setText("Benvenuto, "+this.userName);
     }
     
     @FXML
@@ -41,12 +43,12 @@ public class MenuView {
     @FXML
     private void recensioni() throws IOException
     {
-    	loadReviewView(this.UserName);
+    	loadReviewView(this.userName);
 	}
     @FXML
     private void strutture() throws IOException
     {
-    	loadAccommodationView(this.UserName);
+    	loadAccommodationView(this.userName);
 	}
     public void loadReviewView(String UserName) throws IOException
     {
@@ -57,35 +59,19 @@ public class MenuView {
     }
     public void loadLoginView() throws IOException
     {
-        FXMLLoader loader2 = new FXMLLoader();
-        loader2.setLocation(getClass().getResource("LoginView.fxml"));
-        Parent view2 = loader2.load();
-        Scene viewscene = new Scene(view2);
-        Stage window = (Stage) menuView.getScene().getWindow();
-        window.setScene(viewscene);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        window.setHeight(480);
-        window.setWidth(640);
-        window.setY((screenBounds.getHeight() - 480) / 2);
-		window.setX((screenBounds.getWidth() - 640) / 2);
-        window.show();
+    	logOut();
+    	NavigationController.getInstance().navigateBack();
+        
     }
 
-    public void loadAccommodationView(String UserName) throws IOException
+    private void logOut() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void loadAccommodationView(String UserName) throws IOException
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("AccommodationView.fxml"));
-        Parent view = loader.load();
-        Scene viewscene = new Scene(view);
-        AccommodationView controller = loader.getController();
-        controller.NomeUser(UserName);
-        Stage window = (Stage) menuView.getScene().getWindow();
-        window.setScene(viewscene);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        window.setHeight(700);
-		window.setWidth(1180);
-		window.setY((screenBounds.getHeight() - 700) / 2);
-		window.setX((screenBounds.getWidth() - 1180) / 2);
-        window.show();
+		
+		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_VIEW);
+        
     }
 }

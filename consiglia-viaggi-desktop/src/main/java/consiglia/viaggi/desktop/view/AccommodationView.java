@@ -2,6 +2,7 @@ package consiglia.viaggi.desktop.view;
 
 import java.io.IOException;
 
+import consiglia.viaggi.desktop.controller.NavigationController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -30,12 +31,14 @@ public class AccommodationView {
 
 	@FXML
 	public void indietro() throws IOException {
-		FXMLLoader loader = new FXMLLoader();
+		
+		NavigationController.getInstance().navigateBack();
+		/*FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("MenuView.fxml"));
         Parent view = loader.load();
         Scene viewscene = new Scene(view);
         MenuView controller = loader.getController();
-        controller.NomeUser(UserName);
+        controller.nomeUser(UserName);
         Stage window = (Stage) accommodationView.getScene().getWindow();
         window.setScene(viewscene);
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -43,7 +46,7 @@ public class AccommodationView {
 		window.setWidth(640);
 		window.setY((screenBounds.getHeight() - 480) / 2);
 		window.setX((screenBounds.getWidth() - 640) / 2);
-        window.show();
+        window.show();*/
 	}
 
 }

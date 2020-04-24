@@ -1,5 +1,6 @@
 package consiglia.viaggi.desktop;
 
+import consiglia.viaggi.desktop.controller.NavigationController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -12,12 +13,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("view/LoginView.fxml"));
-			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("view/application.css").toExternalForm());
-			stage.setScene(scene);
-			stage.setHeight(480);
-			stage.setWidth(640);
+			
+			NavigationController.getInstance().setCurrentStage(stage);
+			
+			NavigationController.getInstance().navigateToView(Constants.LOGIN_VIEW);
 		    stage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -12,11 +12,13 @@ import javafx.stage.Stage;
 
 public class NavigationController {
 	
-	private static final NavigationController navigationController = new NavigationController();
+	private static NavigationController navigationController;
 	private Stage currentStage;
 	private LinkedList<Scene> previousSceneStack = new LinkedList<>();
 
 	public static NavigationController getInstance() {
+		if(navigationController==null)
+			navigationController= new NavigationController();
 		return navigationController;
 	}
 	
