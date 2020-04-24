@@ -2,6 +2,7 @@ package consiglia.viaggi.desktop.view;
 
 import consiglia.viaggi.desktop.controller.ViewReviewController;
 import consiglia.viaggi.desktop.model.Review;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -52,7 +53,13 @@ public class ReviewDetailView{
     
     public void initialize() {
     	System.out.println("review detail init: "+reviewId);
-    	//viewReviewController= new ViewReviewController();
+    	if(viewReviewController==null) {
+    	
+    		System.out.println("view review controller is null");
+    		viewReviewController= new ViewReviewController();
+    	}
+    	
+    	//ObservableObjectValue<Review> asd;
     	viewReviewController.getReviewAsync(reviewId).addListener(new ListChangeListener<Review>() {
 
 			@Override
