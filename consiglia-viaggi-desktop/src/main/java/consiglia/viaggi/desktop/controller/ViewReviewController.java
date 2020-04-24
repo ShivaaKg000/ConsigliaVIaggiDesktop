@@ -2,6 +2,7 @@ package consiglia.viaggi.desktop.controller;
 
 
 import java.io.IOException;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,10 +14,11 @@ import consiglia.viaggi.desktop.model.Review;
 import consiglia.viaggi.desktop.model.ReviewDao;
 import consiglia.viaggi.desktop.model.ReviewDaoStub;
 import consiglia.viaggi.desktop.view.ReviewDetailView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.fxml.FXMLLoader;
 public class ViewReviewController {
 
 	
@@ -73,14 +75,14 @@ public class ViewReviewController {
      
     }
     
-    public ObservableList<Review> getReviewAsync(int reviewId) {
-    	ObservableList<Review> observableReview= FXCollections.observableArrayList();
+    public ObjectProperty<Review> getReviewAsync(int reviewId) {
+    	ObjectProperty<Review>  observableReview = new SimpleObjectProperty<Review>();
     	Task task = new Task() {
     		@Override
             public Void call() throws InterruptedException {
     			
     			Review review= reviewDao.getReviewById(reviewId);
-    			observableReview.add(review);
+    			observableReview.set(review);
 				return null;
             }
         };

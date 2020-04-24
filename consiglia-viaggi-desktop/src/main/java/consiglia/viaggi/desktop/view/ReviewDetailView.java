@@ -2,7 +2,9 @@ package consiglia.viaggi.desktop.view;
 
 import consiglia.viaggi.desktop.controller.ViewReviewController;
 import consiglia.viaggi.desktop.model.Review;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableObjectValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -39,7 +41,6 @@ public class ReviewDetailView{
     private TextArea review_content;
     
     private int reviewId;
-    private Review review;
     private ViewReviewController viewReviewController;
     
     public void setId(int id) {
@@ -59,14 +60,12 @@ public class ReviewDetailView{
     		viewReviewController= new ViewReviewController();
     	}
     	
-    	//ObservableObjectValue<Review> asd;
-    	viewReviewController.getReviewAsync(reviewId).addListener(new ListChangeListener<Review>() {
+    	viewReviewController.getReviewAsync(reviewId).addListener(new ChangeListener<Review>() {
 
 			@Override
-			public void onChanged(Change<? extends Review> c) {
-				review=c.getList().get(0);
-				
-				updateReviewDetailGui(review);		
+			public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
+				// TODO Auto-generated method stub
+				updateReviewDetailGui(newValue);	
 				
 			}
    		
