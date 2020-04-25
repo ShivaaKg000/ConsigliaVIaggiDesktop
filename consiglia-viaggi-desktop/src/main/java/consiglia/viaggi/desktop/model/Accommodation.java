@@ -3,7 +3,7 @@ package consiglia.viaggi.desktop.model;
 import java.util.Comparator;
 import java.util.List;
 
-public class Accommodation implements Comparable{
+public class Accommodation implements Comparable<Accommodation>{
 
     private Integer id;
     private String name;
@@ -18,35 +18,27 @@ public class Accommodation implements Comparable{
     public Integer getId() {
         return id;
     }
-
     public String getDescription() {
         return description;
     }
-
     public String getName() {
         return name;
     }
-
     public String getLogoUrl() {
         return logoUrl;
     }
-
     public List<String> getImages() {
         return images;
     }
-
     public Float getRating() {
         return rating;
     }
-
     public Subcategory getSubcategory() {
         return subcategory;
     }
-
     public Category getCategory() {
         return category;
     }
-
     public Location getAccommodationLocation() {
         return accommodationLocation;
     }
@@ -56,7 +48,6 @@ public class Accommodation implements Comparable{
     public Double getLongitude() {
         return accommodationLocation.getLongitude();
     }
-
     public String getAddress(){
         return accommodationLocation.getAddress();
     }
@@ -74,12 +65,12 @@ public class Accommodation implements Comparable{
     }
 
     @Override
-    public int compareTo(Object o) {
-        if((o.getClass()!= Accommodation.class) ) {//check se funziona
+    public int compareTo(Accommodation o) {
+        /*if((o.getClass()!= Accommodation.class) ) { //check se funziona
             return -10;
-        }
+        }*/
             Accommodation accommodation = (Accommodation) o;
-            return Float.compare(rating, accommodation.getRating());
+            return Float.compare(this.rating, accommodation.getRating());
 
     }
 

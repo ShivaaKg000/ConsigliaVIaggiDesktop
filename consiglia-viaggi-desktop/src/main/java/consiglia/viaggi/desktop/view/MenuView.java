@@ -48,7 +48,7 @@ public class MenuView {
     @FXML
     private void strutture() throws IOException
     {
-    	loadAccommodationView(this.userName);
+    	loadAccommodationView();
 	}
     public void loadReviewView(String UserName) throws IOException
     {
@@ -68,7 +68,7 @@ public class MenuView {
 		// TODO Auto-generated method stub
 		
 	}
-	public void loadAccommodationView(String UserName) throws IOException
+	public void loadAccommodationView() throws IOException
     {
 		
 		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_VIEW);

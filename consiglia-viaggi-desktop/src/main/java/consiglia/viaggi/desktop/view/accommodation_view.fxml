@@ -33,13 +33,13 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="354.0" prefWidth="1178.0">
                <children>
-                  <TableView layoutX="16.0" layoutY="4.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+                  <TableView fx:id="tableAccommodation" layoutX="16.0" layoutY="4.0" prefWidth="1100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
                     <columns>
-                      <TableColumn editable="false" prefWidth="150.0" resizable="false" text="Id" />
-                      <TableColumn editable="false" prefWidth="200.0" resizable="false" text="Nome Struttura" />
-                        <TableColumn editable="false" prefWidth="550.0" resizable="false" text="Indirizzo" />
-                        <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Modifica" />
-                        <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Elimina" />
+                      <TableColumn fx:id="id" editable="false" prefWidth="150.0" resizable="false" text="Id" />
+                      <TableColumn fx:id="name" editable="false" prefWidth="200.0" resizable="false" text="Nome Struttura" />
+                      <TableColumn fx:id="description" editable="false" prefWidth="550.0" resizable="false" text="Indirizzo" />
+                      <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Modifica" />
+                      <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Elimina" />
                     </columns>
                   </TableView>
                </children>

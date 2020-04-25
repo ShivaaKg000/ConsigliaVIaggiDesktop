@@ -133,7 +133,7 @@ public class ViewReviewController {
         return copyList;
     }
 
-	public ObservableList getObsarvableReviewList() {
+	public ObservableList<Review> getObsarvableReviewList() {
 		return observableReviewList;
 	}
 
