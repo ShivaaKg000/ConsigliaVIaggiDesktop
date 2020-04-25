@@ -5,6 +5,9 @@ import java.io.IOException;
 import consiglia.viaggi.desktop.controller.NavigationController;
 import consiglia.viaggi.desktop.controller.ViewAccommodationController;
 import consiglia.viaggi.desktop.model.Accommodation;
+import consiglia.viaggi.desktop.model.Category;
+import consiglia.viaggi.desktop.model.Location;
+import consiglia.viaggi.desktop.model.Subcategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +23,10 @@ public class AccommodationView {
 	@FXML 	private TableColumn<Accommodation, Integer> id ;
 	@FXML 	private TableColumn<Accommodation, String> name ;
 	@FXML 	private TableColumn<Accommodation, String> description ;
+	@FXML 	private TableColumn<Accommodation, Category> category ;
+	@FXML 	private TableColumn<Accommodation, Subcategory> subcategory;
+	//@FXML 	private TableColumn<Accommodation, String> city;
+	
 	
 	private  ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
 	private  ViewAccommodationController viewAccommodationController;
@@ -32,11 +39,14 @@ public class AccommodationView {
 		id.setCellValueFactory(new PropertyValueFactory<Accommodation,Integer>("id"));
 		name.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("name"));
 		description.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("description"));
+		category.setCellValueFactory(new PropertyValueFactory<Accommodation, Category>("category"));
+		subcategory.setCellValueFactory(new PropertyValueFactory<Accommodation,Subcategory>("subcategory"));
+		//accommodationLocation.setCellValueFactory(new PropertyValueFactory<Accommodation,String>("city"));
+		
 		
 		accommodationList=viewAccommodationController.getObsarvableAccommodationList();
-		
-		tableAccommodation.setItems(accommodationList);
 		viewAccommodationController.loadAccommodationListAsync(1);
+		tableAccommodation.setItems(accommodationList);
 	}
 
 	@FXML
