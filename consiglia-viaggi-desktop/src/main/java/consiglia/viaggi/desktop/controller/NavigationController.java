@@ -38,8 +38,7 @@ public class NavigationController {
         Scene viewscene = new Scene(view);
         currentStage.setScene(viewscene);
         //Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        currentStage.setHeight(700);
-        currentStage.setWidth(1180);
+        
         currentStage.show();
         
     }
@@ -77,6 +76,8 @@ public class NavigationController {
 
 	public void setCurrentStage(Stage currentStage) {
 		this.currentStage = currentStage;
+		this.currentStage.setHeight(700);
+		this.currentStage.setWidth(1180);
 	}
 
 	public void showCurrentStage() {
