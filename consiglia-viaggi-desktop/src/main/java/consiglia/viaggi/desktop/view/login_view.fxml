@@ -32,7 +32,7 @@
                <children>
                   <ImageView fitWidth="420.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="file:/D:/Uni/Workspace/git/ConsigliaVIaggiDesktop/consiglia-viaggi-desktop/src/main/resources/images/login_bg.png" />
+                        <Image url="file:src/main/resources/images/login_bg.png" />
                      </image>
                   </ImageView>
                </children>
