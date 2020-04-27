@@ -66,12 +66,8 @@ public class Accommodation implements Comparable<Accommodation>{
 
     @Override
     public int compareTo(Accommodation o) {
-        /*if((o.getClass()!= Accommodation.class) ) { //check se funziona
-            return -10;
-        }*/
             Accommodation accommodation = (Accommodation) o;
             return Float.compare(this.rating, accommodation.getRating());
-
     }
 
 

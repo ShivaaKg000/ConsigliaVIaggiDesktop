@@ -25,8 +25,7 @@ public class AccommodationView {
 	@FXML 	private TableColumn<Accommodation, String> description ;
 	@FXML 	private TableColumn<Accommodation, Category> category ;
 	@FXML 	private TableColumn<Accommodation, Subcategory> subcategory;
-	//@FXML 	private TableColumn<Accommodation, String> city;
-	
+	@FXML 	private TableColumn<Accommodation, Location> accommodationLocation;
 	
 	private  ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
 	private  ViewAccommodationController viewAccommodationController;
@@ -41,8 +40,7 @@ public class AccommodationView {
 		description.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("description"));
 		category.setCellValueFactory(new PropertyValueFactory<Accommodation, Category>("category"));
 		subcategory.setCellValueFactory(new PropertyValueFactory<Accommodation,Subcategory>("subcategory"));
-		//accommodationLocation.setCellValueFactory(new PropertyValueFactory<Accommodation,String>("city"));
-		
+		accommodationLocation.setCellValueFactory(new PropertyValueFactory<Accommodation,Location>("accommodationLocation"));
 		
 		accommodationList=viewAccommodationController.getObsarvableAccommodationList();
 		viewAccommodationController.loadAccommodationListAsync(1);
