@@ -23,6 +23,7 @@ public final class Constants  {
     public static final String  LOGIN_VIEW= "../view/login_view.fxml";
     public static final String  MENU_VIEW= "../view/menu_view.fxml";
     public static final String  ACCOMMODATION_VIEW= "../view/accommodation_view.fxml";
+	public static final String  ACCOMMODATION_DETAIL_VIEW = "../view/accommodation_detail.fxml";
 
 
     private Constants(){

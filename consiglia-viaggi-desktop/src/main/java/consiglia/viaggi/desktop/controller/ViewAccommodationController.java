@@ -1,12 +1,16 @@
 package consiglia.viaggi.desktop.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import consiglia.viaggi.desktop.Constants;
 import consiglia.viaggi.desktop.model.Accommodation;
 import consiglia.viaggi.desktop.model.AccommodationDao;
 import consiglia.viaggi.desktop.model.AccommodationDaoStub;
+import consiglia.viaggi.desktop.view.AccommodationDetailView;
+import consiglia.viaggi.desktop.view.ReviewDetailView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -88,5 +92,25 @@ public class ViewAccommodationController {
 		return observableAccommodation;
      
     }
+    
+    public void accommodationSelected(int accommodationId) {
+		try {	
+			
+			AccommodationDetailView accommodationDetailView=new AccommodationDetailView();
+			accommodationDetailView.setId(accommodationId);
+			accommodationDetailView.setViewAccommodationController(this);
+			NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+    public void goBack() {
+		executor.shutdownNow();
+    	NavigationController.getInstance().navigateBack();
+		
+	}
     
 }

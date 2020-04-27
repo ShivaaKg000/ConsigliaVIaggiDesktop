@@ -51,6 +51,9 @@ public class Accommodation implements Comparable<Accommodation>{
     public String getAddress(){
         return accommodationLocation.getAddress();
     }
+    public String getCity(){
+        return accommodationLocation.getCity();
+    }
 
     private Accommodation(Builder builder) {
         this.id = builder.id;
