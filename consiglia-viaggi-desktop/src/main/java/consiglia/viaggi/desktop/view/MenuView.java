@@ -4,13 +4,8 @@ import java.io.IOException;
 
 import consiglia.viaggi.desktop.Constants;
 import consiglia.viaggi.desktop.controller.NavigationController;
-import javafx.stage.Screen;
-import javafx.geometry.Rectangle2D;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;

@@ -43,10 +43,13 @@ public class AccommodationDetailView {
 		text_id.setText(String.valueOf(accommodation.getId()));
 		text_name.setText(accommodation.getName());
 	}
-	 @FXML
-	    void back() {
+	
+	@FXML
+    void backButtonClicked() {
+	  viewAccommodationController.goBack();
+    }
 
-	    	viewAccommodationController.goBack();
-	    }
+    	
+    
 
 }

@@ -19,7 +19,7 @@
   <content>
     <AnchorPane styleClass="root" stylesheets="@application.css">
          <children>
-            <Button layoutX="20.0" layoutY="14.0" mnemonicParsing="false" text="Indietro" />
+            <Button layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButtonClicked" text="Indietro" />
             <HBox layoutX="20.0" layoutY="59.0" prefHeight="425.0" prefWidth="668.0">
                <children>
                   <GridPane prefHeight="347.0" prefWidth="347.0">
