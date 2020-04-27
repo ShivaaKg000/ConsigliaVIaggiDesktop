@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import consiglia.viaggi.desktop.model.Accommodation;
 import consiglia.viaggi.desktop.model.AccommodationDao;
 import consiglia.viaggi.desktop.model.AccommodationDaoStub;
-import consiglia.viaggi.desktop.model.Review;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -89,4 +88,5 @@ public class ViewAccommodationController {
 		return observableAccommodation;
      
     }
+    
 }
