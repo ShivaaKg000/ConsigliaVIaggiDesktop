@@ -1,9 +1,8 @@
 package consigliaViaggiDesktop.model;
 
-import java.util.Comparator;
 import java.util.List;
 
-public class Accommodation implements Comparable<Accommodation>{
+public class Accommodation{
 
     private Integer id;
     private String name;
@@ -66,13 +65,6 @@ public class Accommodation implements Comparable<Accommodation>{
         this.category = builder.category;
         this.accommodationLocation=builder.accommodationLocation;
     }
-
-    @Override
-    public int compareTo(Accommodation o) {
-            Accommodation accommodation = (Accommodation) o;
-            return Float.compare(this.rating, accommodation.getRating());
-    }
-
 
     static class Builder {
 
@@ -137,13 +129,6 @@ public class Accommodation implements Comparable<Accommodation>{
 
         public Accommodation create() {
             return new Accommodation(this);
-        }
-    }
-
-    public static class ReviewRatingComparator implements Comparator<Accommodation> {
-        @Override
-        public int compare(Accommodation ac1, Accommodation ac2) {
-            return Float.compare(ac1.getRating(), ac2.getRating());
         }
     }
 

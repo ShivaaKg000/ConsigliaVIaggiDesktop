@@ -1,5 +1,7 @@
 package consigliaViaggiDesktop.model;
 
-public enum Category {
-    HOTEL,RESTAURANT,ATTRACTION
+public enum Category{
+	HOTEL,
+	RESTOURANT,
+	ATTRACTION
 }

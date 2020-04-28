@@ -58,8 +58,6 @@ public class AccommodationDetailView {
    		
     	});
     	
-    	
-    	
 	}
 	
 	private void updateAccommodationDetailGui(Accommodation accommodation) {

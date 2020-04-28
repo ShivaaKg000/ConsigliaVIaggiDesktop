@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.AccommodationDao;
@@ -101,7 +100,6 @@ public class ViewAccommodationController {
 			NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

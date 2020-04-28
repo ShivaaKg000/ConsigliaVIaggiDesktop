@@ -43,7 +43,7 @@
                         <TableColumn fx:id="description" editable="false" prefWidth="450.0" resizable="false" text="Descrizione" />
                         <TableColumn fx:id="category" editable="false" prefWidth="100.0" resizable="false" text="Categoria" />
                         <TableColumn fx:id="subcategory" editable="false" prefWidth="100.0" resizable="true" text="Sottocategoria" />
-                        <TableColumn fx:id="city" editable="false" prefWidth="100.0" resizable="true" text="CittàCiro	Ciro" />
+                        <TableColumn fx:id="city" editable="false" prefWidth="100.0" resizable="true" text="Città" />
                      </columns>
                   </TableView>
                </children>

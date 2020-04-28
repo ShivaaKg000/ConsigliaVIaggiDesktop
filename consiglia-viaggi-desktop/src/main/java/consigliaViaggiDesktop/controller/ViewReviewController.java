@@ -100,18 +100,6 @@ public class ViewReviewController {
         return sublist;
     }
 
-    public List<Review> orderReviewListByDate(List<Review> reviewList){
-            Collections.sort(reviewList, Collections.reverseOrder());
-        return reviewList;
-    }
-    public List<Review> orderReviewListByRating(List<Review> reviewList, int order){
-        if(order== Constants.ASCENDING)
-            Collections.sort(reviewList, new Review.ReviewRatingComparator());
-        else if (order == Constants.DESCENDING)
-            Collections.sort(reviewList, Collections.reverseOrder (new Review.ReviewRatingComparator()));
-        return reviewList;
-    }
-
     public List<Review> filterReviewList(List<Review> reviewList, float minRating, float maxRating) {
 
         List<Review> filteredList = new ArrayList<Review>();

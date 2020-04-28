@@ -12,50 +12,30 @@ import javafx.scene.text.Text;
 
 public class ReviewDetailView{
 
-    @FXML
-    private Label username_label;
-
-    @FXML
-    private Text username_text;
-
-    @FXML
-    private Label accommodation_label;
-
-    @FXML
-    private Text accommodation_text;
-
-    @FXML
-    private Label address_label;
-
-    @FXML
-    private Text address_text;
-
-    @FXML
-    private Label rating_label;
-    
-    @FXML
-    private Text rating_text;
-    
-    @FXML
-    private TextArea review_content;
+    @FXML	private Label username_label;
+    @FXML	private Text username_text;
+    @FXML	private Label accommodation_label;
+    @FXML   private Text accommodation_text;
+    @FXML	private Label address_label;
+    @FXML   private Text address_text;
+    @FXML	private Label rating_label;
+    @FXML	private Text rating_text;
+    @FXML	private TextArea review_content;
     
     private int reviewId;
     private ViewReviewController viewReviewController;
     
     public void setId(int id) {
 		reviewId=id;
-		
 	}
+    
     public void setViewReviewController(ViewReviewController viewReviewController) {
     	this.viewReviewController=viewReviewController;
-		
 	}
     
     public void initialize() {
-    	System.out.println("review detail init: "+reviewId);
-    	if(viewReviewController==null) {
     	
-    		System.out.println("view review controller is null");
+    	if(viewReviewController==null) {
     		viewReviewController= new ViewReviewController();
     	}
     	
@@ -63,9 +43,7 @@ public class ReviewDetailView{
 
 			@Override
 			public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
-				// TODO Auto-generated method stub
-				updateReviewDetailGui(newValue);	
-				
+				updateReviewDetailGui(newValue);		
 			}
    		
     	});
@@ -99,15 +77,8 @@ public class ReviewDetailView{
 				
 			}
 			   
-			});
-		
-		
+		});
 	}
-
-	
-    
-    
-
 	
 }
 
