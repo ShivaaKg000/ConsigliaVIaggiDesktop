@@ -51,8 +51,8 @@ public class NavigationController {
         Scene viewscene = new Scene(view);
         currentStage.setScene(viewscene);
         //Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        currentStage.setHeight(700);
-        currentStage.setWidth(1180);
+        currentStage.setHeight(768);
+        currentStage.setWidth(1366);
         //currentStage.setY((screenBounds.getHeight() - 700) / 2);
         //currentStage.setX((screenBounds.getWidth() - 1180) / 2);      
         currentStage.show();
