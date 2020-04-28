@@ -4,6 +4,7 @@ import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.Subcategory;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -62,14 +63,22 @@ public class AccommodationDetailView {
 	}
 	
 	private void updateAccommodationDetailGui(Accommodation accommodation) {
+		Platform.runLater(new Runnable(){
+
+			@Override
+			public void run() {
+				text_id.setText(String.valueOf(accommodation.getId()));
+				text_name.setText(accommodation.getName());
+				text_description.setText(accommodation.getDescription());
+				text_path.setText(accommodation.getLogoUrl());
+				text_rating.setText(String.valueOf(accommodation.getRating()));
+				choice_category.setValue(accommodation.getCategory());
+				choice_subcategory.setValue(accommodation.getSubcategory());
+				
+			}
+			   
+			});
 		
-		text_id.setText(String.valueOf(accommodation.getId()));
-		text_name.setText(accommodation.getName());
-		text_description.setText(accommodation.getDescription());
-		text_path.setText(accommodation.getLogoUrl());
-		text_rating.setText(String.valueOf(accommodation.getRating()));
-		choice_category.setValue(accommodation.getCategory());
-		choice_subcategory.setValue(accommodation.getSubcategory());
 	}
 	
 	@FXML

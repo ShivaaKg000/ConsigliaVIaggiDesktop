@@ -2,6 +2,7 @@ package consigliaViaggiDesktop.view;
 
 import consigliaViaggiDesktop.controller.ViewReviewController;
 import consigliaViaggiDesktop.model.Review;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -87,10 +88,19 @@ public class ReviewDetailView{
     }
     
     private void updateReviewDetailGui(Review review) {
-		username_text.setText(review.getAuthor());
-		accommodation_text.setText(review.getNameAccommodation());
-		rating_text.setText(String.valueOf(review.getRating()));
-		review_content.setText(review.getReviewText());
+    	Platform.runLater(new Runnable(){
+
+			@Override
+			public void run() {
+				username_text.setText(review.getAuthor());
+				accommodation_text.setText(review.getNameAccommodation());
+				rating_text.setText(String.valueOf(review.getRating()));
+				review_content.setText(review.getReviewText());
+				
+			}
+			   
+			});
+		
 		
 	}
 

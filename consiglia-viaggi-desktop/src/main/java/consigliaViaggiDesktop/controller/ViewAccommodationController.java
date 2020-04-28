@@ -82,7 +82,7 @@ public class ViewAccommodationController {
             public Void call() throws InterruptedException {
     			
     			Accommodation accommodation= accommodationDao.getAccommodationById(id);
-    			observableAccommodation.set(accommodation);
+    			observableAccommodation.setValue(accommodation);
 				return null;
             }
         };
