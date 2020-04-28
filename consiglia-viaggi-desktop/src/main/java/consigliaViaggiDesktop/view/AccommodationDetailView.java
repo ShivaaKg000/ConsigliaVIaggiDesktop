@@ -11,6 +11,8 @@ public class AccommodationDetailView {
 
 	@FXML private Text text_id;
 	@FXML private Text text_name;
+	@FXML private Text text_description;
+	
 	
 	private int accommodationId;
 	private ViewAccommodationController viewAccommodationController;
@@ -42,6 +44,7 @@ public class AccommodationDetailView {
 	private void updateAccommodationDetailGui(Accommodation accommodation) {
 		text_id.setText(String.valueOf(accommodation.getId()));
 		text_name.setText(accommodation.getName());
+		text_description.setText(accommodation.getDescription());
 	}
 	
 	@FXML
