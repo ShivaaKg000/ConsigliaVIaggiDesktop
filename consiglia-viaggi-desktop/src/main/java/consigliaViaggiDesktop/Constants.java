@@ -18,12 +18,12 @@ public final class Constants  {
     public static final int WORST_RATING_ORDER = 2;
     
     /*View fxml resource path from navigation controller*/
-    public static final String  REVIEW_DETAIL_VIEW= "../../fxml/review_detail_view.fxml";
-    public static final String  REVIEW_VIEW= "../../fxml/review_view.fxml";
-    public static final String  LOGIN_VIEW= "../../fxml/login_view.fxml";
-    public static final String  MENU_VIEW= "../../fxml/menu_view.fxml";
-    public static final String  ACCOMMODATION_VIEW= "../../fxml/accommodation_view.fxml";
-	public static final String  ACCOMMODATION_DETAIL_VIEW = "../../fxml/accommodation_detail.fxml";
+    public static final String  REVIEW_DETAIL_VIEW= "/fxml/review_detail_view.fxml";
+    public static final String  REVIEW_VIEW= "/fxml/review_view.fxml";
+    public static final String  LOGIN_VIEW= "/fxml/login_view.fxml";
+    public static final String  MENU_VIEW= "/fxml/menu_view.fxml";
+    public static final String  ACCOMMODATION_VIEW= "/fxml/accommodation_view.fxml";
+	public static final String  ACCOMMODATION_DETAIL_VIEW = "/fxml/accommodation_detail.fxml";
 
 
     private Constants(){

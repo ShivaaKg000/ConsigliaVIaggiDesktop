@@ -32,7 +32,7 @@
                <children>
                   <ImageView fitWidth="420.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="../images/login_bg.png" />
+                        <Image url="@/images/login_bg.png" />
                      </image>
                   </ImageView>
                </children>

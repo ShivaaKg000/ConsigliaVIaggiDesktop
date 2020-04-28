@@ -46,7 +46,6 @@ public class NavigationController {
 		Scene previousScene=currentStage.getScene();
 		previousSceneStack.addLast(previousScene);
 		FXMLLoader loader = new FXMLLoader();
-		System.out.println(getClass().getResource("../../fxml/login_view.fxml"));
 		loader.setLocation(getClass().getResource(newViewFxml));
         Parent view = loader.load();
         Scene viewscene = new Scene(view);
