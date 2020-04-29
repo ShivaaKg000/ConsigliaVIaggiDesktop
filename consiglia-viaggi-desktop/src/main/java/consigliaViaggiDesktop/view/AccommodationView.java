@@ -77,7 +77,7 @@ public class AccommodationView {
 	}
 	
 	@FXML
-	public void indietro() throws IOException {
+	public void backButtonClicked() {
 		NavigationController.getInstance().navigateBack();
 	}
 
