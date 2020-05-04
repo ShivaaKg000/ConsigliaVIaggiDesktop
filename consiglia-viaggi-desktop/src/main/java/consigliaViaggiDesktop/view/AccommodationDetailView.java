@@ -27,7 +27,7 @@ public class AccommodationDetailView {
 	private int accommodationId;
 	private ViewAccommodationController viewAccommodationController;
 	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
-	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList(Subcategory.class.getEnumConstants());
+	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 	
 	
 	
@@ -43,6 +43,7 @@ public class AccommodationDetailView {
 		
 		choice_category.setItems(category_list);
 		choice_subcategory.setItems(subcategory_list);
+
 		
 		if(viewAccommodationController==null) {
     		viewAccommodationController= new ViewAccommodationController();
@@ -71,6 +72,8 @@ public class AccommodationDetailView {
 				text_path.setText(accommodation.getLogoUrl());
 				text_rating.setText(String.valueOf(accommodation.getRating()));
 				choice_category.setValue(accommodation.getCategory());
+				subcategory_list=dynamicSubCategoryChoice();
+				choice_subcategory.setItems(subcategory_list);
 				choice_subcategory.setValue(accommodation.getSubcategory());
 				
 			}
@@ -78,7 +81,22 @@ public class AccommodationDetailView {
 			});
 		
 	}
-	
+
+	private ObservableList<Subcategory> dynamicSubCategoryChoice() {
+
+
+		switch (choice_category.getValue()){
+			case HOTEL:
+				return FXCollections.observableArrayList(Subcategory.hotels);
+			case RESTAURANT:
+				return FXCollections.observableArrayList(Subcategory.restaurants);
+			case ATTRACTION:
+				return FXCollections.observableArrayList(Subcategory.attractions);
+			default:
+				return FXCollections.observableArrayList();
+		}
+	}
+
 	@FXML
     void backButtonClicked() {
 	  viewAccommodationController.goBack();
