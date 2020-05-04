@@ -29,7 +29,7 @@
 	-fx-background-color:#ffffff;
 	
 }
-.border-pane{
+.main-bg{
 	-fx-background-image: url('../images/main_bg.png');
 	-fx-background-size:cover;
 	-fx-background-repeat:no-repeat;

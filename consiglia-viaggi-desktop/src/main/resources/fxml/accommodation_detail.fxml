@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -13,73 +15,88 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="root" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="720.0" minViewportWidth="1280.0" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="root" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane styleClass="root" stylesheets="@../css/application.css">
+      <HBox alignment="CENTER" styleClass="main-bg">
          <children>
-            <Button layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButtonClicked" text="Indietro" />
-            <HBox layoutX="20.0" layoutY="59.0" prefHeight="425.0" prefWidth="668.0">
+          <AnchorPane stylesheets="@../css/application.css" HBox.hgrow="ALWAYS">
                <children>
-                  <GridPane prefHeight="347.0" prefWidth="347.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="147.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="324.0" minHeight="10.0" prefHeight="303.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <Button layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButtonClicked" text="Indietro" />
+                  <HBox layoutX="107.0" layoutY="14.0" prefHeight="425.0" prefWidth="668.0">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <GridPane prefHeight="347.0" prefWidth="347.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints maxHeight="147.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="324.0" minHeight="10.0" prefHeight="303.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <Label alignment="TOP_LEFT" text="ID:" />
-                              <Text fx:id="text_id" strokeType="OUTSIDE" strokeWidth="0.0" text="id" />
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="TOP_LEFT" text="ID:" />
+                                    <Text fx:id="text_id" strokeType="OUTSIDE" strokeWidth="0.0" text="id" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label alignment="TOP_LEFT" text="Nome :" />
+                                    <Text fx:id="text_name" strokeType="OUTSIDE" strokeWidth="0.0" text="nome" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label alignment="TOP_LEFT" text="Categora" />
+                                    <ChoiceBox fx:id="choice_category" prefWidth="150.0" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label alignment="TOP_LEFT" text="Sottocategoria" />
+                                    <ChoiceBox fx:id="choice_subcategory" prefWidth="150.0" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label text="Immagine:" />
+                                    <ImageView fitHeight="80.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Text fx:id="text_path" strokeType="OUTSIDE" strokeWidth="0.0" text="Path." />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label alignment="TOP_LEFT" text="Descrizione:" />
+                                    <Text fx:id="text_description" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                    <Label text="Rating" />
+                                    <Text fx:id="text_rating" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                 </children>
+                              </VBox>
                            </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                        </GridPane>
+                        <VBox prefHeight="279.0" prefWidth="239.0">
                            <children>
-                              <Label alignment="TOP_LEFT" text="Nome :" />
-                              <Text fx:id="text_name" strokeType="OUTSIDE" strokeWidth="0.0" text="nome" />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                           <children>
-                              <Label alignment="TOP_LEFT" text="Categora" />
-                              <ChoiceBox fx:id="choice_category" prefWidth="150.0" />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <Label alignment="TOP_LEFT" text="Sottocategoria" />
-                              <ChoiceBox fx:id="choice_subcategory" prefWidth="150.0" />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
-                           <children>
-                              <Label text="Immagine:" />
-                              <ImageView fitHeight="80.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-                              <Text fx:id="text_path" strokeType="OUTSIDE" strokeWidth="0.0" text="Path." />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <children>
-                              <Label alignment="TOP_LEFT" text="Descrizione:" />
-                              <Text fx:id="text_description" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                              <Label text="Rating" />
-                              <Text fx:id="text_rating" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                              <Label text="Posizione" />
+                              <ImageView fitHeight="252.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </VBox>
                      </children>
-                  </GridPane>
-                  <VBox prefHeight="279.0" prefWidth="239.0">
-                     <children>
-                        <Label text="Posizione" />
-                        <ImageView fitHeight="252.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true" />
-                     </children>
-                  </VBox>
+                  </HBox>
                </children>
-            </HBox>
-         </children></AnchorPane>
+               <styleClass>
+                  <String fx:value="white-box" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </AnchorPane>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
   </content>
 </ScrollPane>
