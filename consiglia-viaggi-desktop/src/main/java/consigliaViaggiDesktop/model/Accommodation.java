@@ -1,14 +1,12 @@
 package consigliaViaggiDesktop.model;
 
-import java.util.List;
-
 public class Accommodation{
 
     private Integer id;
     private String name;
     private String description;
     private String logoUrl;
-    private List<String> images;
+    private String images;
     private Float rating;
     private Subcategory subcategory;
     private Category category;
@@ -26,7 +24,7 @@ public class Accommodation{
     public String getLogoUrl() {
         return logoUrl;
     }
-    public List<String> getImages() {
+    public String getImages() {
         return images;
     }
     public Float getRating() {
@@ -63,7 +61,12 @@ public class Accommodation{
         this.rating = builder.rating;
         this.subcategory = builder.subcategory;
         this.category = builder.category;
-        this.accommodationLocation=builder.accommodationLocation;
+        this.accommodationLocation= new Location.Builder()
+                .setAddress(builder.address)
+                .setCity(builder.city)
+                .setLatitude(builder.latitude)
+                .setLongitude(builder.longitude)
+                .build();
     }
 
     static class Builder {
@@ -72,11 +75,15 @@ public class Accommodation{
         private String description;
         private String name;
         private String logoUrl;
-        private List<String> images;
+        private String images;
         private Float rating;
         private Subcategory subcategory;
         private Category category;
-        private Location accommodationLocation;
+
+        private String city;
+        private String address;
+        private Double latitude;
+        private Double longitude;
 
 
         public Builder setId(Integer id) {
@@ -100,7 +107,7 @@ public class Accommodation{
         }
 
 
-        public Builder setImages(List<String> images) {
+        public Builder setImages(String images) {
             this.images = images;
             return this;
         }
@@ -122,8 +129,20 @@ public class Accommodation{
             return this;
         }
 
-        public Builder setAccommodationLocation(Location accommodationLocation) {
-            this.accommodationLocation = accommodationLocation;
+        public Builder setLatitude(Double latitude) {
+            this.latitude = latitude;
+            return this;
+        }
+        public Builder setLongitude(Double longitude) {
+            this.longitude = longitude;
+            return this;
+        }
+        public Builder setCity(String city) {
+            this.city = city;
+            return this;
+        }
+        public Builder setAddress(String address) {
+            this.address = address;
             return this;
         }
 

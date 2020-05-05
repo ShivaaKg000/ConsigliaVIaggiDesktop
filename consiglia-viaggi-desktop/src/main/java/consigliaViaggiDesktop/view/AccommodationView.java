@@ -55,7 +55,7 @@ public class AccommodationView {
 		setTableClickEvent(tableAccommodation);
 		
 		accommodationList=viewAccommodationController.getObsarvableAccommodationList();
-		viewAccommodationController.loadAccommodationListAsync(1);
+		viewAccommodationController.loadAccommodationListAsync("Napoli");
 		tableAccommodation.setItems(accommodationList);
 		
 	}

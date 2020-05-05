@@ -7,12 +7,12 @@ import java.util.List;
 public class AccommodationDaoStub implements AccommodationDao{
 	
 	@Override
-    public List<Accommodation> getAccommodationList(int id) {
-        List<Accommodation> accommodationList=createAccommodationList(id);
+    public List<Accommodation> getAccommodationList(String city) {
+        List<Accommodation> accommodationList=createAccommodationList(city);
         return accommodationList;
     }
 	
-	private List<Accommodation> createAccommodationList(int id) {
+	private List<Accommodation> createAccommodationList(String city) {
     	try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -29,11 +29,10 @@ public class AccommodationDaoStub implements AccommodationDao{
                 	.setRating((float) (1 + Math.random() * (5 - 1)))
                     .setCategory(Category.HOTEL)
                     .setSubcategory(Subcategory.HOSTEL)
-                    .setAccommodationLocation(new Location.Builder().setAddress("Vialemanidalnaso")
-                    												.setCity("NAPOLI")
-                    												.build()
-                    							)
+					.setAddress("Vialemanidalnaso")
+					.setCity(city)
                     .create());
+
         }
         return accommodationList;
     }
@@ -59,10 +58,8 @@ public class AccommodationDaoStub implements AccommodationDao{
             	.setRating((float) (1 + Math.random() * (5 - 1)))
                 .setCategory(Category.HOTEL)
                 .setSubcategory(Subcategory.HOSTEL)
-                .setAccommodationLocation(new Location.Builder().setAddress("Vialemanidalnaso")
-                												.setCity("NAPOLI")
-                												.build()
-                							)
+                .setAddress("Vialemanidalnaso")
+				.setCity("NAPOLI")
                 .create();
         
     }

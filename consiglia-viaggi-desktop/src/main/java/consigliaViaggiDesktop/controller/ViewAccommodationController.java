@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.AccommodationDao;
+import consigliaViaggiDesktop.model.AccommodationDaoJson;
 import consigliaViaggiDesktop.model.AccommodationDaoStub;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.ObjectProperty;
@@ -26,6 +27,7 @@ public class ViewAccommodationController {
 
     	executor=initExecutor(4);
     	accommodationDao= new AccommodationDaoStub();
+		//accommodationDao= new AccommodationDaoJson(); 
         observableAccommodationList= FXCollections.observableArrayList();		
     }
     
@@ -33,14 +35,14 @@ public class ViewAccommodationController {
 		return observableAccommodationList;
 	}
 
-    public void loadAccommodationListAsync(int id) {
+    public void loadAccommodationListAsync(String city) {
     	
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
             public Void call() throws InterruptedException {
     			
-    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(id);
+    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(city);
     			observableAccommodationList.addAll(accommodationList);
     			observableAccommodationList.notifyAll();
 				return null;

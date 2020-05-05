@@ -25,6 +25,10 @@ public final class Constants  {
     public static final String  ACCOMMODATION_VIEW= "/fxml/accommodation_view.fxml";
 	public static final String  ACCOMMODATION_DETAIL_VIEW = "/fxml/accommodation_detail.fxml";
 
+	/*JSON URLs*/
+    public static final String GET_ACCOMMODATION_LIST_URL = "http://localhost:8080/accommodation";
+    public static final String GET_ACCOMMODATION_BY_ID_URL = "http://localhost:8080/accommodationById";
+
 
     private Constants(){
         //this prevents even the native class from
