@@ -27,7 +27,7 @@ public class ViewAccommodationController {
 
     	executor=initExecutor(4);
     	accommodationDao= new AccommodationDaoStub();
-		//accommodationDao= new AccommodationDaoJson(); 
+		//accommodationDao= new AccommodationDaoJson();
         observableAccommodationList= FXCollections.observableArrayList();		
     }
     

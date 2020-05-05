@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class AccommodationDaoJson implements AccommodationDao {
@@ -85,12 +84,12 @@ public class AccommodationDaoJson implements AccommodationDao {
 		if (jsonTree .isJsonArray()) {
 
 			JsonArray array= jsonTree.getAsJsonArray();
-			Iterator<JsonElement> iterator = array.iterator();
-			while(iterator.hasNext()) {
 
-				JsonObject accommodationJson = (JsonObject) iterator.next();
-				accommodationCollection.add(parseAccommodation(accommodationJson));
-			}
+            for (JsonElement jo : array) {
+                JsonObject accommodationJson = (JsonObject)jo ;
+                accommodationCollection.add(parseAccommodation(accommodationJson));
+
+            }
 		}
 
 		return accommodationCollection;
