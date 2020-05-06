@@ -35,7 +35,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	}
 
 	private Accommodation getAccommodationJSON(int id)  {
-		String urlString= Constants.GET_ACCOMMODATION_BY_ID_URL+"?id="+id;
+		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+id;
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 
@@ -52,7 +52,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	}
 
 	private Collection<Accommodation> getAccommodationListJSON(String city)  {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"?city="+city;
+		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.CITY_PARAM+city;
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 
@@ -69,7 +69,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	}
 
 	private Collection<Accommodation> getAccommodationListJSONParsing(String city)  {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"?city="+city;
+		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.CITY_PARAM+city;
 
 
 		BufferedReader bufferedReader = null;

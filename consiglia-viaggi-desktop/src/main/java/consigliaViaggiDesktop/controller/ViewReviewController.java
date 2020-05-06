@@ -28,8 +28,8 @@ public class ViewReviewController {
     public ViewReviewController() {
 
     	executor=initExecutor(4);
-        reviewDao= new ReviewDaoJSON();
-        //reviewDao= new ReviewDaoStub();
+        //reviewDao= new ReviewDaoJSON();
+        reviewDao= new ReviewDaoStub();
         observableReviewList= FXCollections.observableArrayList();		
     }
     

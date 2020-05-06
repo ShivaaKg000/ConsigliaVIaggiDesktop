@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.AccommodationDao;
+import consigliaViaggiDesktop.model.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.AccommodationDaoStub;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.ObjectProperty;
@@ -26,7 +27,7 @@ public class ViewAccommodationController {
 
     	executor=initExecutor(4);
     	accommodationDao= new AccommodationDaoStub();
-		//accommodationDao= new AccommodationDaoJson();
+		//accommodationDao= new AccommodationDaoJSON();
         observableAccommodationList= FXCollections.observableArrayList();		
     }
     

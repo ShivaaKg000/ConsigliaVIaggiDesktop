@@ -27,9 +27,11 @@ public final class Constants  {
 
 	/*JSON URLs*/
     public static final String GET_ACCOMMODATION_LIST_URL = "http://localhost:8080/accommodation";
-    public static final String GET_ACCOMMODATION_BY_ID_URL = "http://localhost:8080/accommodationById";
-    public static final String GET_REVIEW_BY_ID_URL = "http://localhost:8080/accommodationById";
     public static final String GET_REVIEW_LIST_URL = "http://localhost:8080/review";
+    public static final String CITY_PARAM ="?city=";
+    public static final String ACCOMMODATION_ID_PARAM ="?accommodationId=";
+    public static final String REVIEW_ID_PARAM ="?reviewId=";
+
 
 
     private Constants(){

@@ -23,7 +23,7 @@ public class ReviewDaoJSON implements ReviewDao{
 
     @Override
     public Review getReviewById(int id) {
-        return null;
+        return getReviewJSON(id);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ReviewDaoJSON implements ReviewDao{
     }
 
     private Collection<Review> getReviewListJSON(int accommodationId)  {
-        String urlString= Constants.GET_REVIEW_LIST_URL+"?accommodation="+accommodationId;
+        String urlString= Constants.GET_REVIEW_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+accommodationId;
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
 
@@ -51,6 +51,22 @@ public class ReviewDaoJSON implements ReviewDao{
         Type collectionType = new TypeToken<Collection<Review>>(){}.getType();
         Collection<Review> reviewCollection = gson.fromJson(bufferedReader, collectionType);
         return reviewCollection;
+    }
+
+    private Review getReviewJSON(int reviewId)  {
+        String urlString= Constants.GET_REVIEW_LIST_URL+Constants.REVIEW_ID_PARAM+reviewId;
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = getJSONFromUrl(urlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Review review = gson.fromJson(bufferedReader,Review.class);
+        return review;
     }
 
     private BufferedReader getJSONFromUrl(String urlString) throws MalformedURLException {
