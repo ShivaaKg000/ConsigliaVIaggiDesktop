@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.AccommodationDao;
-import consigliaViaggiDesktop.model.AccommodationDaoJson;
 import consigliaViaggiDesktop.model.AccommodationDaoStub;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.ObjectProperty;

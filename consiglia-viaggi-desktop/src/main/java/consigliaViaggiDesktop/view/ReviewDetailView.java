@@ -71,7 +71,7 @@ public class ReviewDetailView{
 			@Override
 			public void run() {
 				username_text.setText(review.getAuthor());
-				accommodation_text.setText(review.getNameAccommodation());
+				accommodation_text.setText(review.getAccommodationName());
 				rating_text.setText(String.valueOf(review.getRating()));
 				review_content.setText(review.getReviewText());
 				

@@ -142,8 +142,8 @@
                            </columnResizePolicy>
                            <columns>
                               <TableColumn fx:id="author" prefWidth="45.0" text="Autore" />
-                              <TableColumn fx:id="nameAccommodation" prefWidth="45.0" text="Nome Struttura" />
-                              <TableColumn fx:id="idAccomodation" prefWidth="45.0" text="Id Struttura" />
+                              <TableColumn fx:id="accommodationName" prefWidth="45.0" text="Nome Struttura" />
+                              <TableColumn fx:id="accommodationId" prefWidth="45.0" text="Id Struttura" />
                               <TableColumn fx:id="reviewText" prefWidth="45.0" text="Testo" />
                               <TableColumn fx:id="approved" prefWidth="45.0" text="Stato" />
                            </columns>

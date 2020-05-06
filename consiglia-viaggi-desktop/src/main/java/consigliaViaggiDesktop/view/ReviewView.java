@@ -25,8 +25,8 @@ public class ReviewView {
 		@FXML private BorderPane reviewView;
 		@FXML private TableView<Review> tableReview;
 		@FXML private TableColumn<Review, String> author ;
-		@FXML private TableColumn<Review, String> nameAccommodation ;
-		@FXML private TableColumn<Review, Integer> idAccomodation ;
+		@FXML private TableColumn<Review, String> accommodationName;
+		@FXML private TableColumn<Review, Integer> accommodationId;
 		@FXML private TableColumn<Review, String> reviewText ;
 		@FXML private TableColumn<Review, Status> approved ;
 		
@@ -38,8 +38,8 @@ public class ReviewView {
 			viewReviewController = new ViewReviewController();
 			
 			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
-			nameAccommodation.setCellValueFactory(new PropertyValueFactory<Review, String>("nameAccommodation"));
-			idAccomodation.setCellValueFactory(new PropertyValueFactory<Review, Integer>("idAccommodation"));
+			accommodationName.setCellValueFactory(new PropertyValueFactory<Review, String>("accommodationName"));
+			accommodationId.setCellValueFactory(new PropertyValueFactory<Review, Integer>("accommodationId"));
 			reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
 			
 			approved.setCellValueFactory(new PropertyValueFactory<Review, Status>("status"));

@@ -3,7 +3,6 @@ package consigliaViaggiDesktop.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,6 +10,7 @@ import java.util.concurrent.Executors;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Review;
 import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.ReviewDaoJSON;
 import consigliaViaggiDesktop.model.ReviewDaoStub;
 import consigliaViaggiDesktop.view.ReviewDetailView;
 import javafx.beans.property.ObjectProperty;
@@ -28,7 +28,8 @@ public class ViewReviewController {
     public ViewReviewController() {
 
     	executor=initExecutor(4);
-        reviewDao= new ReviewDaoStub();
+        reviewDao= new ReviewDaoJSON();
+        //reviewDao= new ReviewDaoStub();
         observableReviewList= FXCollections.observableArrayList();		
     }
     

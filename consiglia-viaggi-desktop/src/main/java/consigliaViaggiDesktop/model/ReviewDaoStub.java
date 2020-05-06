@@ -34,8 +34,8 @@ public class ReviewDaoStub implements ReviewDao{
             String sDate=(i+1)+"/12/2020";
             reviewList.add(new Review.Builder()
             		.setId(i)
-            		.setIdAccommodation(i)
-            		.setNameAccommodation("Da Peppino")
+            		.setAccommodationId(i)
+            		.setAccommodationName("Da Peppino")
                     .setAuthor("Paolo")
                     .setReviewText("Peppino � na schifezz "+i)
                     .setRating((float) (1 + Math.random() * (5 - 1)))
@@ -60,8 +60,8 @@ public class ReviewDaoStub implements ReviewDao{
         String sDate=(id)+"/12/2020";
         return new Review.Builder()
         		.setId(id)
-        		.setIdAccommodation(id)
-        		.setNameAccommodation("Da Peppino")
+        		.setAccommodationId(id)
+        		.setAccommodationName("Da Peppino")
                 .setAuthor("Paolo")
                 .setReviewText("Peppino � na schifezz "+id)
                 .setRating((float) (1 + Math.random() * (5 - 1)))

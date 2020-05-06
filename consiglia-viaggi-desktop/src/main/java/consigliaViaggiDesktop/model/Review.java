@@ -4,8 +4,8 @@ package consigliaViaggiDesktop.model;
 public class Review{
 
 	private int id;
-	private int idAccommodation;
-	private String nameAccommodation;
+	private int accommodationId;
+	private String accommodationName;
 	private String author;
     private String reviewText;
     private float rating;
@@ -14,8 +14,8 @@ public class Review{
    
     public Review(Builder builder) {
     	this.id=builder.id;
-    	this.idAccommodation=builder.idAccommodation;
-    	this.nameAccommodation=builder.nameAccommodation;
+    	this.accommodationId =builder.accommodationId;
+    	this.accommodationName =builder.accommodationName;
         this.author=builder.author;
         this.reviewText=builder.reviewText;
         this.rating=builder.rating;
@@ -27,12 +27,12 @@ public class Review{
     public int getId() {
 		return id;
 	}
-    public int getIdAccommodation() {
-  		return idAccommodation;
+    public int getAccommodationId() {
+  		return accommodationId;
   	}
       
-    public String getNameAccommodation() {
-  		return nameAccommodation;
+    public String getAccommodationName() {
+  		return accommodationName;
   	}
     public String getAuthor() {
         return author;
@@ -57,8 +57,8 @@ public class Review{
 	static class Builder {
 
     	private int id;
-    	private int idAccommodation;
-    	private String nameAccommodation;
+    	private int accommodationId;
+    	private String accommodationName;
         private String data;
         private String author;
         private String reviewText;
@@ -74,13 +74,13 @@ public class Review{
             return this;
         }
         
-        public Builder setIdAccommodation(int idAccommodation) {
-            this.idAccommodation = idAccommodation;
+        public Builder setAccommodationId(int accommodationId) {
+            this.accommodationId = accommodationId;
             return this;
         }
         
-        public Builder setNameAccommodation(String nameAccommodation) {
-			this.nameAccommodation = nameAccommodation;
+        public Builder setAccommodationName(String accommodationName) {
+			this.accommodationName = accommodationName;
 			return this;
 		}
         

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AccommodationDaoJson implements AccommodationDao {
+public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
 	public List<Accommodation> getAccommodationList(String city)  {
