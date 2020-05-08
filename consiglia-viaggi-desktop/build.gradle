@@ -29,6 +29,8 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.6'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    //GMaps
+    compile group: 'com.lynden', name: 'GMapsFX', version: '2.10.0'
 }
 
 application {
