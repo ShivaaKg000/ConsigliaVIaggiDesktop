@@ -36,8 +36,6 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	private Accommodation getAccommodationJSON(int id)  {
 		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+id;
-		GsonBuilder builder = new GsonBuilder();
-		Gson gson = builder.create();
 
 		BufferedReader bufferedReader = null;
 		try {
