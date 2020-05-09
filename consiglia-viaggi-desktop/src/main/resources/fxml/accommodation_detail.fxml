@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -37,6 +38,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
+                                    <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Salva" AnchorPane.rightAnchor="0.0" />
                                     <Button mnemonicParsing="false" onAction="#backButtonClicked">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -79,32 +81,36 @@
                                              <children>
                                                 <HBox alignment="CENTER">
                                                    <children>
-                                                      <VBox alignment="CENTER" minWidth="700.0" prefWidth="850.0" style="-fx-border-color: grey;">
+                                                      <VBox alignment="CENTER" minWidth="700.0" prefWidth="850.0" style="-fx-border-color: #B8B8B8; -fx-border-radius: 5; -fx-border-width: 2;">
                                                          <children>
                                                             <HBox alignment="CENTER" spacing="30.0">
                                                                <children>
                                                                   <HBox alignment="TOP_CENTER" spacing="20.0">
                                                                      <children>
                                                                         <Label nodeOrientation="RIGHT_TO_LEFT" text="Latitudine:">
-                                                                           <graphic>
-                                                                              <Text fx:id="latitudeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                                                           </graphic>
                                                                            <font>
                                                                               <Font size="14.0" />
                                                                            </font>
+                                                                           <graphic>
+                                                                              <TextField fx:id="latitudeTextField" nodeOrientation="LEFT_TO_RIGHT" />
+                                                                           </graphic>
                                                                         </Label>
                                                                         <Label nodeOrientation="RIGHT_TO_LEFT" text="Longitudine:">
-                                                                           <graphic>
-                                                                              <Text fx:id="longitudeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                                                           </graphic>
                                                                            <font>
                                                                               <Font size="14.0" />
                                                                            </font>
+                                                                           <graphic>
+                                                                              <TextField fx:id="longitudeTextField" nodeOrientation="LEFT_TO_RIGHT" />
+                                                                           </graphic>
                                                                         </Label>
                                                                      </children>
                                                                   </HBox>
                                                                </children>
+                                                               <padding>
+                                                                  <Insets bottom="5.0" />
+                                                               </padding>
                                                             </HBox>
+                                                            <Separator prefWidth="200.0" />
                                                             <HBox alignment="TOP_CENTER">
                                                                <children>
                                                                   <HBox minWidth="400.0" HBox.hgrow="NEVER">
@@ -173,14 +179,7 @@
                                                                      </children>
                                                                   </HBox>
                                                                   <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                        <Label nodeOrientation="RIGHT_TO_LEFT" text="Immagine:">
-                                                                           <font>
-                                                                              <Font size="14.0" />
-                                                                           </font>
-                                                                        <graphic>
-                                                                           <Button fx:id="file_chooser_button" mnemonicParsing="false" onAction="#openFileChooser" text="Seleziona" />
-                                                                        </graphic>
-                                                                        </Label>
+                                                                     <Button fx:id="file_chooser_button" mnemonicParsing="false" onAction="#openFileChooser" text="Immagine" />
                                                                         <ImageView fx:id="accommodation_image" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
                                                                            <image>
                                                                               <Image url="@/images/login_bg.png" />
@@ -207,21 +206,24 @@
                                                                   <Font size="18.0" />
                                                                </font>
                                                             </Label>
-                                                            <TextArea fx:id="text_description" minHeight="80.0" promptText="descrizione" VBox.vgrow="ALWAYS" />
+                                                            <TextArea fx:id="text_description" minHeight="80.0" promptText="descrizione" VBox.vgrow="ALWAYS">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" />
+                                                               </VBox.margin></TextArea>
                                                          </children>
                                                       </VBox>
                                                    </children>
                                                 </HBox>
                                              </children>
                                              <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                <Insets bottom="10.0" />
                                              </padding>
                                           </HBox>
                                        </children>
                                     </VBox>
                                  </children>
                                  <padding>
-                                    <Insets top="20.0" />
+                                    <Insets top="10.0" />
                                  </padding>
                               </HBox>
                            </children>

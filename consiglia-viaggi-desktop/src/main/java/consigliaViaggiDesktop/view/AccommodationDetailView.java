@@ -35,14 +35,15 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AccommodationDetailView implements MapComponentInitializedListener {
 
 	@FXML private Text text_id;
-	@FXML private Text latitudeText;
-	@FXML private Text longitudeText;
+	@FXML private TextField latitudeTextField;
+	@FXML private TextField longitudeTextField;
 	@FXML private TextField text_name;
 	@FXML private TextField text_address;
 	@FXML private TextArea text_description;
@@ -129,8 +130,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			@Override
 			public void run() {
 				text_id.setText(String.valueOf(accommodation.getId()));
-				latitudeText.setText(accommodation.getLatitude().toString());
-				longitudeText.setText(accommodation.getLongitude().toString());
+				latitudeTextField.setText(accommodation.getLatitude().toString());
+				longitudeTextField.setText(accommodation.getLongitude().toString());
 				text_name.setText(accommodation.getName());
 				text_description.setText(accommodation.getDescription());
 				text_address.setText(accommodation.getAddress());
@@ -244,6 +245,15 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	}
 
+	@FXML
+	void saveButtonAction(ActionEvent event) {
+		if(buildAlert("Confirmation Dialog","Salvare le modifiche?")){
+			/*salva dati*/
+		}
+
+	}
+
+
 	private static void configureFileChooser(final FileChooser fileChooser) {
 		fileChooser.setTitle("Scegli immagine");
 		fileChooser.setInitialDirectory(
@@ -256,16 +266,15 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		);
 	}
 
-	private void openFile(File file) {
-		try {
-			desktop.open(file);
-		} catch (IOException ex) {
-
-			Logger.getLogger(
-					AccommodationDetailView.class.getName()).log(
-					Level.SEVERE, null, ex
-			);
+	private boolean buildAlert(String title,String header){
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			return true;
+		} else {
+			return false;
 		}
 	}
-
 }
