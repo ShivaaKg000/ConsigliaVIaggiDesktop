@@ -60,6 +60,8 @@ public class AccommodationDaoStub implements AccommodationDao{
                 .setSubcategory(Subcategory.HOSTEL)
                 .setAddress("Vialemanidalnaso")
 				.setCity("NAPOLI")
+				.setLatitude(40.851799)
+				.setLongitude(14.268120)
                 .create();
         
     }

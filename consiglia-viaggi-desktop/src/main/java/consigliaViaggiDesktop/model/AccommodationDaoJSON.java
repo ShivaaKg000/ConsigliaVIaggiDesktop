@@ -37,6 +37,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	private Accommodation getAccommodationJSON(int id)  {
 		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+id;
+
 		BufferedReader bufferedReader = null;
 		try {
 			bufferedReader = getJSONFromUrl(urlString);
@@ -60,6 +61,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+
 		Type collectionType = new TypeToken<Collection<Accommodation>>(){}.getType();
 		// if(bufferReader!=null) ... ??
 		return gson.<Collection<Accommodation>>fromJson(bufferedReader, collectionType);
@@ -67,6 +69,8 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	private Collection<Accommodation> getAccommodationListJSONParsing(String city)  {
 		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.CITY_PARAM+city;
+
+
 		BufferedReader bufferedReader = null;
 		try {
 			bufferedReader = getJSONFromUrl(urlString);
