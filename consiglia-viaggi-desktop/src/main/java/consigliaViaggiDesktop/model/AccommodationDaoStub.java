@@ -41,7 +41,12 @@ public class AccommodationDaoStub implements AccommodationDao{
     public Accommodation getAccommodationById(int id) {
     	return createAccommodation(id);  
     }
-	
+
+	@Override
+	public void createAccommodation(Accommodation accommodation) {
+
+	}
+
 	private Accommodation createAccommodation(int id) {
     	try {
 			Thread.sleep(3000);

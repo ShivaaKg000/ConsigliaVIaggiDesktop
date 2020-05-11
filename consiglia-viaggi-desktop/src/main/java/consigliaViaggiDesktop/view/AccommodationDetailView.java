@@ -11,6 +11,9 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.Subcategory;
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -30,10 +32,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
+import java.awt.ScrollPane;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.util.ConcurrentModificationException;
 import java.util.Optional;
 
 public class AccommodationDetailView implements MapComponentInitializedListener {
@@ -50,8 +51,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private AnchorPane map_pane;
 	@FXML private TextField addressTextField;
 	@FXML private AnchorPane imageViewAnchorPane;
+	@FXML private HBox mainHbox;
 
+	private BooleanProperty mapInitialized;
 	private Desktop desktop = Desktop.getDesktop();
+	private Accommodation selectedAccommodation;
 	GoogleMapView mapView;
 	private GoogleMap map;
 	private GeocodingService geocodingService;
@@ -75,6 +79,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	public void initialize(){
 
 		/*Map edit*/
+		mapInitialized = new SimpleBooleanProperty();
 		mapView = new GoogleMapView("it-IT", "AIzaSyCMh5QgPKHyXr_swIaV5JXdDkwaABIXbGU");
 		AnchorPane.setBottomAnchor(mapView, 0.0);
 		AnchorPane.setTopAnchor(mapView, 0.0);
@@ -112,12 +117,13 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			@Override
 			public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
+				selectedAccommodation=newValue;
 				updateAccommodationDetailGui(newValue);	
 				
 			}
    		
     	});
-    	
+
 	}
 	
 	private void updateAccommodationDetailGui(Accommodation accommodation) {
@@ -139,15 +145,17 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				choice_subcategory.setValue(accommodation.getSubcategory());
 				setAccommodationImage(accommodation.getImages());
 
-				//Add markers to the map
-				LatLong accommodationLocation = new LatLong(accommodation.getLatitude(), accommodation.getLongitude());
-				MarkerOptions markerOptions1 = new MarkerOptions();
-				markerOptions1.position(accommodationLocation);
-
-				Marker accommodationMarker = new Marker(markerOptions1);
-
-				if(map!=null)
-					map.addMarker( accommodationMarker );
+				if(mapInitialized.getValue()){
+					addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
+				}else {
+					mapInitialized.addListener(new ChangeListener<Boolean>() {
+						@Override
+						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+							if (newValue)
+								addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
+						}
+					});
+				}
 
 			}
 			   
@@ -178,7 +186,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	@Override
 	public void mapInitialized() {
-
 		geocodingService = new GeocodingService();
 		//Set the initial properties of the map.
 		MapOptions mapOptions = new MapOptions();
@@ -195,7 +202,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				.zoom(12);
 
 		map = mapView.createMap(mapOptions);
-
+		mapInitialized.setValue(true);
 
 	}
 
@@ -243,12 +250,25 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	}
 
+	private void addMapMarker(String name,Double lat, Double lon){
+		LatLong accommodationLocation = new LatLong(lat,lon);
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(accommodationLocation);
+		markerOptions.title(name);
+		markerOptions.visible(true);
+
+		Marker accommodationMarker = new Marker(markerOptions);
+		map.addMarker(accommodationMarker);
+		map.setCenter(accommodationLocation);
+	}
+
 	private void setAccommodationImage(String url){
+		System.out.println("\n imageUrl: "+url);
 		BackgroundImage myBackgroundImage= new BackgroundImage(
 				new Image(url,200,200,true,true),
 				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
 				BackgroundSize.DEFAULT);
-		System.out.println(url);
+
 		imageViewAnchorPane.setBackground(new Background(myBackgroundImage));
 	}
 
@@ -257,7 +277,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		final FileChooser fileChooser = new FileChooser();
 		configureFileChooser(fileChooser);
 
-		File file = fileChooser.showOpenDialog(map_pane.getScene().getWindow());
+		File file = fileChooser.showOpenDialog(mainHbox.getScene().getWindow());
 		if (file != null) {
 			try {
 				setAccommodationImage(file.toURI().toURL().toExternalForm());

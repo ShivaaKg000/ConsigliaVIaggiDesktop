@@ -28,10 +28,14 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	}
 
+	@Override
+	public void createAccommodation(Accommodation accommodation) {
+		createAccommodationJSON(accommodation);
+	}
+
 	//???????????????????????????????????????????????????????????????????????????????????????
-	private void createAccommodationJSON(Accommodation accommodation) throws IOException {
-		GsonBuilder builder = new GsonBuilder();
-		Gson gson = builder.create();
+	private void createAccommodationJSON(Accommodation accommodation) {
+		String jsonAccommodation=encodeAccommodation(accommodation);
 
 	}
 
@@ -100,6 +104,8 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		Double longitude= accommodationJson.get("longitude").getAsDouble();
 		String address = accommodationJson.get("address").getAsString();
 		float rating = accommodationJson.get("rating").getAsFloat();
+		String city= accommodationJson.get("city").getAsString();
+		String image = accommodationJson.get("images").getAsString();
 		Category category = Category.valueOf(accommodationJson.get("category").getAsString());
 		Subcategory subcategory = Subcategory.valueOf(accommodationJson.get("subCategory").getAsString());
 		String logoURL="";
@@ -109,6 +115,8 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return new Accommodation.Builder()
 				.setName(name)
 				.setId(id)
+				.setCity(city)
+				.setImages(image)
 				.setDescription(description)
 				.setLatitude(latitude)
 				.setLongitude(longitude)
@@ -119,6 +127,13 @@ public class AccommodationDaoJSON implements AccommodationDao {
 				.setLogoUrl(logoURL)
 				.create();
 
+	}
+
+	private String encodeAccommodation(Accommodation accommodation){
+		Gson gson = new Gson();
+		String json = gson.toJson(accommodation);
+		System.out.println(json);
+		return json;
 	}
 
 	private BufferedReader getJSONFromUrl(String urlString) throws MalformedURLException {
