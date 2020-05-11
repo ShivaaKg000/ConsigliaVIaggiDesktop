@@ -4,8 +4,8 @@ import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.object.*;
 import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
-import com.lynden.gmapsfx.service.geocoding.GeocodingResult;
 import com.lynden.gmapsfx.service.geocoding.GeocodingService;
+import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
@@ -18,26 +18,23 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.util.ConcurrentModificationException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AccommodationDetailView implements MapComponentInitializedListener {
 
@@ -52,8 +49,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private ComboBox<Subcategory> choice_subcategory;
 	@FXML private AnchorPane map_pane;
 	@FXML private TextField addressTextField;
-	@FXML private Button file_chooser_button;
-	@FXML private ImageView accommodation_image;
+	@FXML private AnchorPane imageViewAnchorPane;
 
 	private Desktop desktop = Desktop.getDesktop();
 	GoogleMapView mapView;
@@ -141,6 +137,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
 				choice_subcategory.setItems(subcategory_list);
 				choice_subcategory.setValue(accommodation.getSubcategory());
+				setAccommodationImage(accommodation.getImages());
 
 				//Add markers to the map
 				LatLong accommodationLocation = new LatLong(accommodation.getLatitude(), accommodation.getLongitude());
@@ -227,25 +224,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	}
 
 	@FXML
-	void openFileChooser(ActionEvent event) {
-		/*FileChooser*/
-		final FileChooser fileChooser = new FileChooser();
-		configureFileChooser(fileChooser);
-
-		File file = fileChooser.showOpenDialog(map_pane.getScene().getWindow());
-		if (file != null) {
-			try {
-				System.out.println(file.toURI().toURL().toExternalForm());
-				accommodation_image.setImage(new Image(file.toURI().toURL().toExternalForm()));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-	}
-
-	@FXML
 	void saveButtonAction(ActionEvent event) {
 		if(buildAlert("Confirmation Dialog","Salvare le modifiche?")){
 			/*salva dati*/
@@ -253,6 +231,42 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	}
 
+	@FXML
+	void accommodationImageSelected(MouseEvent event) {
+		openImageFileChooser();
+	}
+
+	@FXML
+	void clearImageButtonClicked(ActionEvent event) {
+
+		setAccommodationImage(Constants.IMG_PLACEHOLDER);
+
+	}
+
+	private void setAccommodationImage(String url){
+		BackgroundImage myBackgroundImage= new BackgroundImage(
+				new Image(url,200,200,true,true),
+				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+				BackgroundSize.DEFAULT);
+		System.out.println(url);
+		imageViewAnchorPane.setBackground(new Background(myBackgroundImage));
+	}
+
+	private void openImageFileChooser(){
+		/*FileChooser*/
+		final FileChooser fileChooser = new FileChooser();
+		configureFileChooser(fileChooser);
+
+		File file = fileChooser.showOpenDialog(map_pane.getScene().getWindow());
+		if (file != null) {
+			try {
+				setAccommodationImage(file.toURI().toURL().toExternalForm());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
 
 	private static void configureFileChooser(final FileChooser fileChooser) {
 		fileChooser.setTitle("Scegli immagine");

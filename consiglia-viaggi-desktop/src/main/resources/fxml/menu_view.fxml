@@ -26,12 +26,12 @@
                                     <Font name="Roboto Regular" size="18.0" />
                                  </font>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#recensioni" prefHeight="50.0" prefWidth="150.0" text="Recensioni">
+                              <Button mnemonicParsing="false" onAction="#recensioni" prefHeight="50.0" prefWidth="150.0" styleClass="default-button" text="Recensioni">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#strutture" prefHeight="50.0" prefWidth="150.0" text="Strutture">
+                              <Button mnemonicParsing="false" onAction="#strutture" prefHeight="50.0" prefWidth="150.0" styleClass="default-button" text="Strutture">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
@@ -62,7 +62,7 @@
                   </Text>
                </top>
                <bottom>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="150.0" text="Logout" BorderPane.alignment="CENTER_RIGHT">
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="150.0" styleClass="default-button" text="Logout" BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>
                         <Insets bottom="20.0" right="20.0" />
                      </BorderPane.margin>

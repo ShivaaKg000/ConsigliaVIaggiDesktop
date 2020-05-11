@@ -62,6 +62,7 @@ public class AccommodationDaoStub implements AccommodationDao{
 				.setCity("NAPOLI")
 				.setLatitude(40.851799)
 				.setLongitude(14.268120)
+				.setImages("https://wips.plug.it/cips/buonissimo.org/cms/2020/03/pizza-senza-lievito.jpg")
                 .create();
         
     }

@@ -16,6 +16,7 @@ public final class Constants  {
     public static final int DEFAULT_ORDER = 0;
     public static final int BEST_RATING_ORDER = 1;
     public static final int WORST_RATING_ORDER = 2;
+    public static final String  IMG_PLACEHOLDER = "/images/placeholder.png";
     
     /*View fxml resource path from navigation controller*/
     public static final String  REVIEW_DETAIL_VIEW= "/fxml/review_detail_view.fxml";

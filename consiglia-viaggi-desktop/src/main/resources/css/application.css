@@ -37,13 +37,28 @@
 	-fx-background-color:#ffffff;
 }
 
-.button {
+#imageViewAnchorPane:hover{
+    -fx-effect: innershadow( gaussian, rgba( 0, 0, 0, 0.5 ), 15, 0, 0, 0 );
+}
+
+.clear-image-button{
+	-fx-background-color:#28e0ffff;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+.clear-image-button:hover {
+	-fx-background-color:#88eeffff;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+.default-button {
 	-fx-background-color:#28e0ffff;
     -fx-text-fill: white;
     -fx-font-size: 18px;
     
 }
-.button:hover {
+.default-button:hover {
 	-fx-background-color:#88eeffff;
     -fx-text-fill: white;
     -fx-font-size: 18px;
