@@ -12,6 +12,8 @@ import consigliaViaggiDesktop.model.AccommodationDaoStub;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -92,6 +94,21 @@ public class ViewAccommodationController {
 		return observableAccommodation;
      
     }
+
+	public StringProperty createAccommodationAsync(Accommodation accommodation) {
+		StringProperty  response = new SimpleStringProperty();
+		Task task = new Task() {
+			@Override
+			public Void call() throws InterruptedException {
+				accommodationDao.createAccommodation(accommodation);
+				return null;
+			}
+		};
+		Thread testThread = new Thread(task);
+		testThread.start();
+		return response;
+
+	}
     
     public void accommodationSelected(int accommodationId) {
 		try {	

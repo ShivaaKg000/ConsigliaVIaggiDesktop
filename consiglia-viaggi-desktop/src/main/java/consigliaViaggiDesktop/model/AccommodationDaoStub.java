@@ -43,8 +43,9 @@ public class AccommodationDaoStub implements AccommodationDao{
     }
 
 	@Override
-	public void createAccommodation(Accommodation accommodation) {
+	public String createAccommodation(Accommodation accommodation) {
 
+		return null;
 	}
 
 	private Accommodation createAccommodation(int id) {

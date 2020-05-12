@@ -29,14 +29,15 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	}
 
 	@Override
-	public void createAccommodation(Accommodation accommodation) {
-		createAccommodationJSON(accommodation);
+	public String createAccommodation(Accommodation accommodation) {
+		return String.valueOf(createAccommodationJSON(accommodation));
+
 	}
 
 	//???????????????????????????????????????????????????????????????????????????????????????
-	private void createAccommodationJSON(Accommodation accommodation) {
-		String jsonAccommodation=encodeAccommodation(accommodation);
-
+	private JsonObject createAccommodationJSON(Accommodation accommodation) {
+		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
+		return jsonAccommodation;
 	}
 
 	private Accommodation getAccommodationJSON(int id)  {
@@ -129,11 +130,29 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	}
 
-	private String encodeAccommodation(Accommodation accommodation){
+	private JsonObject encodeAccommodation(Accommodation accommodation){
 		Gson gson = new Gson();
-		String json = gson.toJson(accommodation);
-		System.out.println(json);
-		return json;
+		JsonObject accommodationJson = JsonParser.parseString(gson.toJson(accommodation)).getAsJsonObject();
+		accommodationJson.remove("accommodationLocation");
+		accommodationJson.addProperty("city",accommodation.getCity());
+		accommodationJson.addProperty("latitude",accommodation.getLatitude());
+		accommodationJson.addProperty("longitude",accommodation.getLongitude());
+		accommodationJson.addProperty("address",accommodation.getAddress());
+		System.out.println("\nAuto encoded: "+accommodationJson);
+
+		/*JsonObject accommodationJson =  new JsonObject();
+		accommodationJson.addProperty("name",accommodation.getName());
+		accommodationJson.addProperty("description",accommodation.getDescription());
+		accommodationJson.addProperty("images",accommodation.getImages());
+		accommodationJson.addProperty("rating",accommodation.getRating());
+		accommodationJson.addProperty("subcategory", String.valueOf(accommodation.getSubcategory()));
+		accommodationJson.addProperty("category",String.valueOf(accommodation.getCategory()));
+		accommodationJson.addProperty("city",accommodation.getCity());
+		accommodationJson.addProperty("latitude",accommodation.getLatitude());
+		accommodationJson.addProperty("longitude",accommodation.getLongitude());
+		accommodationJson.addProperty("address",accommodation.getAddress());
+		System.out.println("\nManually encoded: "+accommodationJson);*/
+		return accommodationJson;
 	}
 
 	private BufferedReader getJSONFromUrl(String urlString) throws MalformedURLException {

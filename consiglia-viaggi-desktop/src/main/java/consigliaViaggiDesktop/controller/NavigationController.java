@@ -2,10 +2,13 @@ package consigliaViaggiDesktop.controller;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Optional;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 public class NavigationController {
@@ -61,6 +64,18 @@ public class NavigationController {
 		}
 			
 		
+	}
+
+	public boolean buildAlert(String title,String header){
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public Stage getCurrentStage() {

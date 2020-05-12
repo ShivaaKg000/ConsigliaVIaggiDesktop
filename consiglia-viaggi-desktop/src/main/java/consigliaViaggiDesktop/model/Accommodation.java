@@ -69,7 +69,7 @@ public class Accommodation{
                 .build();
     }
 
-    static class Builder {
+    public static class Builder {
 
         private Integer id;
         private String description;

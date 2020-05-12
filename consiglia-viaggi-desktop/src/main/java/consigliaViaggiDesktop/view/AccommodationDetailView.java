@@ -6,6 +6,7 @@ import com.lynden.gmapsfx.javascript.object.*;
 import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
 import com.lynden.gmapsfx.service.geocoding.GeocodingService;
 import consigliaViaggiDesktop.Constants;
+import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
@@ -93,21 +94,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		choice_category.setItems(category_list);
 		choice_subcategory.setItems(subcategory_list);
-
-		/*choice_category listener*/
-		choice_category.getSelectionModel().selectedIndexProperty().addListener(
-				new ChangeListener<Number>() {
-					@Override
-					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-						System.out.print("selected "+category_list.get((Integer) newValue));
-						subcategory_list.clear();
-						subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
-
-					}
-				}
-
-		);
-		/*choice_category listener end*/
 		
 		if(viewAccommodationController==null) {
     		viewAccommodationController= new ViewAccommodationController();
@@ -145,6 +131,21 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				choice_subcategory.setValue(accommodation.getSubcategory());
 				setAccommodationImage(accommodation.getImages());
 
+				/*choice_category listener*/
+				choice_category.getSelectionModel().selectedIndexProperty().addListener(
+						new ChangeListener<Number>() {
+							@Override
+							public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+								System.out.print("selected "+category_list.get((Integer) newValue));
+								subcategory_list.clear();
+								subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
+
+							}
+						}
+
+				);
+				/*choice_category listener end*/
+
 				if(mapInitialized.getValue()){
 					addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
 				}else {
@@ -164,7 +165,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	}
 
 	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
-
 
 		switch (category){
 			case HOTEL:
@@ -232,13 +232,30 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	@FXML
 	void saveButtonAction(ActionEvent event) {
-		if(buildAlert("Confirmation Dialog","Salvare le modifiche?")){
-			/*salva dati*/
+		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Salvare le modifiche?")){
+			StringProperty response= viewAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
+
 		}
 
 	}
 
-	@FXML
+    private Accommodation createNewAccommodationFromNewFields() {
+        return new Accommodation.Builder()
+                .setName(text_name.getText())
+                .setImages("")
+                .setCity("")
+                .setAddress(text_address.getText())
+                .setLongitude(Double.valueOf(longitudeTextField.getText()))
+                .setLatitude(Double.valueOf(latitudeTextField.getText()))
+                .setDescription(text_description.getText())
+                .setCategory(choice_category.getValue())
+                .setSubcategory(choice_subcategory.getValue())
+                .setRating(Float.parseFloat(text_rating.getText()))
+                .create();
+
+    }
+
+    @FXML
 	void accommodationImageSelected(MouseEvent event) {
 		openImageFileChooser();
 	}
@@ -300,15 +317,4 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		);
 	}
 
-	private boolean buildAlert(String title,String header){
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle(title);
-		alert.setHeaderText(header);
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
