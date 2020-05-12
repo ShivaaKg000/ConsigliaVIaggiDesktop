@@ -7,8 +7,8 @@ import java.util.List;
 public class AccommodationDaoStub implements AccommodationDao{
 	
 	@Override
-    public List<Accommodation> getAccommodationList(String city) {
-        List<Accommodation> accommodationList=createAccommodationList(city);
+    public List<Accommodation> getAccommodationList(String category, String subCategory,String searchParam) {
+        List<Accommodation> accommodationList=createAccommodationList(searchParam);
         return accommodationList;
     }
 	

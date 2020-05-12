@@ -16,8 +16,8 @@ import java.util.List;
 public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
-	public List<Accommodation> getAccommodationList(String city)  {
-		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(city);
+	public List<Accommodation> getAccommodationList(String category, String subCategory,String searchParam)  {
+		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(searchParam);
 		System.out.print(accommodationList);
 		return accommodationList;
 	}
@@ -34,9 +34,9 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	}
 
-	//???????????????????????????????????????????????????????????????????????????????????????
 	private JsonObject createAccommodationJSON(Accommodation accommodation) {
 		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
+
 		return jsonAccommodation;
 	}
 
@@ -133,6 +133,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	private JsonObject encodeAccommodation(Accommodation accommodation){
 		Gson gson = new Gson();
 		JsonObject accommodationJson = JsonParser.parseString(gson.toJson(accommodation)).getAsJsonObject();
+		System.out.println("\nAuto encoded: "+accommodationJson);
 		accommodationJson.remove("accommodationLocation");
 		accommodationJson.addProperty("city",accommodation.getCity());
 		accommodationJson.addProperty("latitude",accommodation.getLatitude());
@@ -140,18 +141,6 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		accommodationJson.addProperty("address",accommodation.getAddress());
 		System.out.println("\nAuto encoded: "+accommodationJson);
 
-		/*JsonObject accommodationJson =  new JsonObject();
-		accommodationJson.addProperty("name",accommodation.getName());
-		accommodationJson.addProperty("description",accommodation.getDescription());
-		accommodationJson.addProperty("images",accommodation.getImages());
-		accommodationJson.addProperty("rating",accommodation.getRating());
-		accommodationJson.addProperty("subcategory", String.valueOf(accommodation.getSubcategory()));
-		accommodationJson.addProperty("category",String.valueOf(accommodation.getCategory()));
-		accommodationJson.addProperty("city",accommodation.getCity());
-		accommodationJson.addProperty("latitude",accommodation.getLatitude());
-		accommodationJson.addProperty("longitude",accommodation.getLongitude());
-		accommodationJson.addProperty("address",accommodation.getAddress());
-		System.out.println("\nManually encoded: "+accommodationJson);*/
 		return accommodationJson;
 	}
 

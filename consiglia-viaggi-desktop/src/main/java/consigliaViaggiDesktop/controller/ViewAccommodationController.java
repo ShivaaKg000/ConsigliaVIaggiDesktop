@@ -28,23 +28,23 @@ public class ViewAccommodationController {
     public ViewAccommodationController() {
 
     	executor=initExecutor(4);
-    	accommodationDao= new AccommodationDaoStub();
-		//accommodationDao= new AccommodationDaoJSON();
+    	//accommodationDao= new AccommodationDaoStub();
+		accommodationDao= new AccommodationDaoJSON();
         observableAccommodationList= FXCollections.observableArrayList();		
     }
     
-    public ObservableList<Accommodation> getObsarvableAccommodationList() {
+    /*public ObservableList<Accommodation> getObsarvableAccommodationList() {
 		return observableAccommodationList;
-	}
+	}*/
 
-    public void loadAccommodationListAsync(String city) {
+    public ObservableList<Accommodation> loadAccommodationListAsync(String category, String subCategory,String searchParam) {
     	
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
             public Void call() throws InterruptedException {
     			
-    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(city);
+    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(category,subCategory,searchParam);
     			observableAccommodationList.addAll(accommodationList);
     			observableAccommodationList.notifyAll();
 				return null;
@@ -53,7 +53,8 @@ public class ViewAccommodationController {
         initExecutor(4);
         Thread testThread = new Thread(task);
         executor.execute(testThread);
-     
+
+        return observableAccommodationList;
     }
     
     private ExecutorService initExecutor(int threadPullNumber) {
