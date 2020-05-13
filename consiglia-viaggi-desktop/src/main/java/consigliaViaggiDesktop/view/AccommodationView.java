@@ -1,8 +1,4 @@
 package consigliaViaggiDesktop.view;
-
-import java.awt.*;
-import java.io.IOException;
-
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
@@ -23,6 +19,8 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 
@@ -128,6 +126,17 @@ public class AccommodationView {
 
 	@FXML
 	void searchButtonClick(ActionEvent event) {
+		searchAccommodation();
+	}
+	@FXML
+	void searchTextFieldKeyPressed(KeyEvent event) {
+
+		if(event.getCode().toString().equals("ENTER")){
+			searchAccommodation();
+		}
+	}
+
+	void searchAccommodation(){
 		String cat="";
 		String subCat="";
 		if(categoryChoiseBox.getValue()!=null)

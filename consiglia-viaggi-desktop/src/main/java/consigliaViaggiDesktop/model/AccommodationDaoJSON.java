@@ -6,10 +6,13 @@ import consigliaViaggiDesktop.Constants;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,23 +56,6 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
 		JsonObject accommodationJSON = jsonTree.getAsJsonObject();
 		return parseAccommodation(accommodationJSON);
-	}
-
-	private Collection<Accommodation> getAccommodationListJSON(String city)  {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.CITY_PARAM+city;
-		GsonBuilder builder = new GsonBuilder();
-		Gson gson = builder.create();
-
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-
-		Type collectionType = new TypeToken<Collection<Accommodation>>(){}.getType();
-		// if(bufferReader!=null) ... ??
-		return gson.<Collection<Accommodation>>fromJson(bufferedReader, collectionType);
 	}
 
 	private Collection<Accommodation> getAccommodationListJSONParsing(String city)  {
@@ -148,9 +134,13 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		URL url = new URL(urlString);
 		HttpURLConnection connection = null;
 		try {
+			String auth = "admin" + ":" + "password";
+			byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8));
+			String authHeaderValue = "Basic " + new String(encodedAuth);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-			connection.connect();
+			connection.setRequestProperty("Authorization", authHeaderValue);
+			connection.getResponseCode();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
