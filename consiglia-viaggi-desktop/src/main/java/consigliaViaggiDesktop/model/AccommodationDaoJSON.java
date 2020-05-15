@@ -1,18 +1,12 @@
 package consigliaViaggiDesktop.model;
-
-import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 
 import java.io.*;
-import java.lang.reflect.Type;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
@@ -134,12 +128,12 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		URL url = new URL(urlString);
 		HttpURLConnection connection = null;
 		try {
-			String auth = "admin" + ":" + "password";
+			/*String auth = "admin" + ":" + "password";
 			byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8));
-			String authHeaderValue = "Basic " + new String(encodedAuth);
+			String authHeaderValue = "Basic " + new String(encodedAuth);*/
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Authorization", authHeaderValue);
+			//connection.setRequestProperty("Authorization", authHeaderValue);
 			connection.getResponseCode();
 		} catch (IOException e) {
 			e.printStackTrace();

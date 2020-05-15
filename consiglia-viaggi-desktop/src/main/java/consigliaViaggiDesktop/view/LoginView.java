@@ -31,11 +31,11 @@ public class LoginView {
     	String userName = userNameField.getText();
         String password = passwordField.getText();
 
-        if (LoginController.authenticate(userName, password))
+        if (LoginController.getInstance().authenticate(userName, password))
         {
-            User user =new User(userName);
+
             errorLabel.setText("");
-            loadMenuView(user.getUserName());
+            loadMenuView("");
         }
         else
         {
@@ -58,17 +58,7 @@ public class LoginView {
     	MenuView controller= new MenuView();
     	controller.nomeUser(userName);
     	NavigationController.getInstance().navigateToView(Constants.MENU_VIEW, controller);
-        /*FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("MenuView.fxml"));
-        Parent view = loader.load();
-        Scene viewscene = new Scene(view);
-        MenuView controller = loader.getController();
-        controller.NomeUser(UserName);
-        Stage window = (Stage) login.getScene().getWindow();
-        window.setScene(viewscene);
-        window.setHeight(480);
-        window.setWidth(640);
-        window.show();*/
+
     }
 
 }
