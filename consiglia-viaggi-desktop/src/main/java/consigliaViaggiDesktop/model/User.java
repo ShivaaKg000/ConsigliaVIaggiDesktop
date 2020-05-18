@@ -3,7 +3,12 @@ package consigliaViaggiDesktop.model;
 public class User {
 
 	private final String userName ;
-	private String authToken;
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    private String authToken;
 
     public User(String userName) {
         this.userName = userName ;

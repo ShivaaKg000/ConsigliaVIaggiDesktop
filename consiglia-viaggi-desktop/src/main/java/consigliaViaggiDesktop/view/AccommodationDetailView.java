@@ -234,6 +234,12 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	void saveButtonAction(ActionEvent event) {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Salvare le modifiche?")){
 			StringProperty response= viewAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
+			response.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					System.out.print("Accommodation Created: "+newValue);
+				}
+			});
 
 		}
 
@@ -243,7 +249,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
         return new Accommodation.Builder()
                 .setName(text_name.getText())
                 .setImages("")
-                .setCity("")
+                .setCity("Napoli")
                 .setAddress(text_address.getText())
                 .setLongitude(Double.valueOf(longitudeTextField.getText()))
                 .setLatitude(Double.valueOf(latitudeTextField.getText()))

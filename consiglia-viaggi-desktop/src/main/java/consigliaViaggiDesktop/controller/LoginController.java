@@ -1,5 +1,6 @@
 package consigliaViaggiDesktop.controller;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -14,12 +15,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class LoginController {
 
 	private static LoginController loginController;
-
 	private User currentUser;
+
+	public String getCurrentUserAuthenticationToken(){
+		return currentUser.getAuthToken();
+	}
 
 	public static LoginController getInstance(){
 		if(loginController ==null)
@@ -30,16 +35,17 @@ public class LoginController {
 	public boolean authenticate(String username, String pwd)
 	{
 		try {
-			BufferedReader reader = getJSONFromUrl(Constants.LOGIN_URL,username,pwd);
-			System.out.print(reader);
-
-
-			JsonElement jsonTree  = JsonParser.parseReader(reader);
-			JsonObject jsonResponse = jsonTree.getAsJsonObject();
-			String token = jsonResponse.get("token").getAsString();
+			BufferedReader reader = getJsonFromLoginUrl(username,pwd);
+			String token = getTokenFromJson(reader);
+			System.out.print(token);
 			if(token!=null) {
-				System.out.print(jsonResponse);
-				saveUserInstance(token, username);
+				if(checkIfAdmin(token)){
+					saveUserInstance(token, username);
+				}else{
+					//not an Admin
+					return false;
+				}
+
 			}
 
 		} catch (MalformedURLException e) {
@@ -47,20 +53,26 @@ public class LoginController {
 		} catch (IOException e) {
 			return false;
 		}
+
 		return true;
 	}
 
 	private void saveUserInstance(String token, String username) {
-
 		currentUser=new User(username);
 		currentUser.setToken(token);
 
 	}
 
 
-	private BufferedReader getJSONFromUrl(String urlString,String user,String pwd) throws IOException {
-		URL url = new URL(urlString);
+	private String getTokenFromJson(BufferedReader reader){
+		JsonElement jsonTree  = JsonParser.parseReader(reader);
+		JsonObject jsonResponse = jsonTree.getAsJsonObject();
+		return jsonResponse.get("token").getAsString();
+	}
+	private BufferedReader getJsonFromLoginUrl(String user, String pwd) throws IOException {
+		URL url = new URL(Constants.LOGIN_URL);
 		HttpURLConnection connection = null;
+		int responseCode;
 		try {
 			String jsonInputString = "{\"username\":\"" + user + "\", \"password\": \"" + pwd + "\"}";
 			System.out.print(jsonInputString);
@@ -70,22 +82,41 @@ public class LoginController {
 			connection.setRequestProperty("Content-Type", "application/json; utf-8");
 			try (OutputStream os = connection.getOutputStream()) {
 				byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-
 				os.write(input, 0, input.length);
-				os.close();
+
 			}
-			connection.getResponseCode();
+			responseCode=connection.getResponseCode();
+//			if(responseCode==401){} if 401 rise some notAuthorized Exception?
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		BufferedReader json = null;
-		try {
+		if (connection != null) {
 			json = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		} catch (IOException e) {
-			throw e;
 		}
-		return json;
+		return json; //potrebbe essere null
+	}
+
+	private boolean checkIfAdmin(String jwtToken){
+		Base64.Decoder decoder = java.util.Base64.getUrlDecoder();
+		String[] parts = jwtToken.split("\\."); // split out the "parts" (header, payload and signature)
+		//String headerJson = new String(decoder.decode(parts[0]));
+		String payload = new String(decoder.decode(parts[1]));
+		//String signatureJson = new String(decoder.decode(parts[2]));
+		JsonObject jsonPayload = JsonParser.parseString(payload).getAsJsonObject();
+		JsonArray roles=jsonPayload.getAsJsonArray("roles");
+		for (JsonElement role :roles) {
+			JsonObject roleAsObject=(JsonObject) role;
+			if(roleAsObject.get("authority").getAsString().equals(Constants.ROLE_ADMIN)){
+				System.out.print("\nIs Admin");
+				return true;
+			}
+
+
+		}
+		System.out.print("\nNot Admin");
+		return false;
 	}
 	
 	

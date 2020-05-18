@@ -101,7 +101,8 @@ public class ViewAccommodationController {
 		Task task = new Task() {
 			@Override
 			public Void call() throws InterruptedException {
-				accommodationDao.createAccommodation(accommodation);
+				response.setValue(accommodationDao.createAccommodation(accommodation));
+				response.notifyAll();
 				return null;
 			}
 		};

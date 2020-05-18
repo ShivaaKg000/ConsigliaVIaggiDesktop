@@ -16,6 +16,7 @@ public final class Constants  {
     public static final int DEFAULT_ORDER = 0;
     public static final int BEST_RATING_ORDER = 1;
     public static final int WORST_RATING_ORDER = 2;
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String  IMG_PLACEHOLDER = "/images/placeholder.png";
     
     /*View fxml resource path from navigation controller*/
@@ -27,12 +28,16 @@ public final class Constants  {
 	public static final String  ACCOMMODATION_DETAIL_VIEW = "/fxml/accommodation_detail.fxml";
 
 	/*JSON URLs*/
-    public static final String GET_ACCOMMODATION_LIST_URL = "http://localhost:5000/accommodation";
-    public static final String GET_REVIEW_LIST_URL = "http://localhost:5000/review";
-    public static final String LOGIN_URL = "http://localhost:5000/authenticate";
+    public static final String SERVER_URL="http://localhost:5000/";
+    public static final String GET_ACCOMMODATION_LIST_URL = SERVER_URL+"accommodation";
+    public static final String CREATE_ACCOMMODATION_URL = SERVER_URL+"accommodation/create";
+    public static final String GET_REVIEW_LIST_URL = SERVER_URL+"review";
+    public static final String LOGIN_URL = SERVER_URL+"authenticate";
     public static final String CITY_PARAM ="?city=";
     public static final String ACCOMMODATION_ID_PARAM ="?accommodationId=";
     public static final String REVIEW_ID_PARAM ="?reviewId=";
+
+
 
 
 
