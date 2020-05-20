@@ -72,8 +72,14 @@ public class ReviewDaoStub implements ReviewDao{
     }
 
 	@Override
-	public void approveReview(int reviewId) {
+	public Review approveReview(int reviewId) {
 		// TODO Auto-generated method stub
-		
-	}
+
+        return null;
+    }
+
+    @Override
+    public Review rejectReview(int reviewId) {
+        return null;
+    }
 }

@@ -67,7 +67,6 @@ public class ReviewView {
 			/*richiesta al controller di fare l'update della lista in background*/
 			viewReviewController.loadReviewListAsync(1);
 			/*test modifica lista aggiungendo una nuova riga*/
-			viewReviewController.addReviewtoListAsync(58);
 				
 		}
 
@@ -124,9 +123,9 @@ public class ReviewView {
 		}
 
 		@FXML
-		public void indietro() throws IOException{
+		public void indietro(){
 			//loadMenuView(UserName);
-			viewReviewController.goBack();
+			viewReviewController.goBackToMenu();
 		}
 		@FXML
 		public void cerca() { 

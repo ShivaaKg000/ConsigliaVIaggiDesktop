@@ -107,7 +107,7 @@ public class AccommodationView {
 	
 	@FXML
 	public void backButtonClicked() {
-		NavigationController.getInstance().navigateBack();
+		viewAccommodationController.goBackToMenu();
 	}
 
 	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {

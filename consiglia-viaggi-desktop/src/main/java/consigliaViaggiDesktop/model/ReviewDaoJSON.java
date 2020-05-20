@@ -1,9 +1,9 @@
 package consigliaViaggiDesktop.model;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
+import consigliaViaggiDesktop.controller.LoginController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,15 @@ import java.util.Collection;
 import java.util.List;
 
 public class ReviewDaoJSON implements ReviewDao{
+
+    GsonBuilder builder;
+    Gson gson;
+
+    public ReviewDaoJSON(){
+        builder = new GsonBuilder();
+        gson = builder.create();
+    }
+
     @Override
     public List<Review> getReviewList(int id) {
         return (List<Review>) getReviewListJSON(id);
@@ -23,7 +32,7 @@ public class ReviewDaoJSON implements ReviewDao{
 
     @Override
     public Review getReviewById(int id) {
-        return getReviewJSON(id);
+        return getReviewJsonById(id);
     }
 
     @Override
@@ -32,8 +41,29 @@ public class ReviewDaoJSON implements ReviewDao{
     }
 
     @Override
-    public void approveReview(int reviewId) {
+    public Review approveReview(int reviewId) {
+        try {
+            Review review=editReview(reviewId,Status.APPROVED);
+            if(review!=null){
+                return review;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    @Override
+    public Review rejectReview(int reviewId) {
+        try {
+            Review review=editReview(reviewId,Status.REJECTED);
+            if(review!=null){
+                return review;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new Review.Builder().build();
     }
 
     private Collection<Review> getReviewListJSON(int accommodationId)  {
@@ -53,7 +83,7 @@ public class ReviewDaoJSON implements ReviewDao{
         return reviewCollection;
     }
 
-    private Review getReviewJSON(int reviewId)  {
+    private Review getReviewJsonById(int reviewId)  {
         String urlString= Constants.GET_REVIEW_LIST_URL+Constants.REVIEW_ID_PARAM+reviewId;
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -87,5 +117,29 @@ public class ReviewDaoJSON implements ReviewDao{
         }
 
         return json;
+    }
+
+    private Review editReview(int id, Status status) throws IOException {
+        URL url = new URL(Constants.APPROVE_REVIEW+id+Constants.STATUS_PARAM+status);
+        HttpURLConnection connection = null;
+        int responseCode=0;
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Authorization","Bearer "+ LoginController.getInstance().getCurrentUserAuthenticationToken());
+        connection.setRequestProperty("Content-Type","application/json");
+        responseCode=connection.getResponseCode();
+
+        BufferedReader jsonResponse = null;
+        if (responseCode== HttpURLConnection.HTTP_OK) {
+            jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            return gson.fromJson(jsonResponse,Review.class);
+        }
+        if(connection.getResponseCode()==401){
+            System.out.print("\nResponse: Non autorizzato"); //bisogna implementare qualcosa
+            //return JsonParser.parseString("\"error\":\"non autorizzato\"").getAsJsonObject();
+        }
+        // if json null???
+        return null;
     }
 }

@@ -1,9 +1,7 @@
 package consigliaViaggiDesktop.model;
-import com.google.common.net.HttpHeaders;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
-import javafx.beans.property.StringProperty;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -11,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,7 +39,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		JsonObject response;
 		try {
 			return postAccommodation(jsonAccommodation);
-		} catch (MalformedURLException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		response= JsonParser.parseString("\"error\":\"error\"").getAsJsonObject();
@@ -159,41 +156,39 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		// if json null???
 		return json;
 	}
-	private JsonElement postAccommodation(JsonObject accommodationJson) throws MalformedURLException {
+
+	private JsonElement postAccommodation(JsonObject accommodationJson) throws IOException {
 		URL url = new URL(Constants.CREATE_ACCOMMODATION_URL);
 		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setDoOutput(true);
-			connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
-			connection.setRequestProperty("Content-Type","application/json");
-			try (OutputStream os = connection.getOutputStream()) {
-				System.out.print( accommodationJson.toString());
-				byte[] input = accommodationJson.toString().getBytes(StandardCharsets.UTF_8);
-				os.write(input, 0, input.length);
+		int responseCode=0;
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("POST");
+		connection.setDoOutput(true);
+		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
+		connection.setRequestProperty("Content-Type","application/json");
+		try (OutputStream os = connection.getOutputStream()) {
+			System.out.print( accommodationJson.toString());
+			byte[] input = accommodationJson.toString().getBytes(StandardCharsets.UTF_8);
+			os.write(input, 0, input.length);
 
-			}catch (Exception e){
-				e.printStackTrace();
-			}
-			if(connection.getResponseCode()==401){
-				System.out.print("\nResponse: Non autorizzato"); //bisogna implementare qualcosa
-				return JsonParser.parseString("\"error\":\"error\"").getAsJsonObject();
-			}
-		} catch (IOException e) {
+		}catch (Exception e){
 			e.printStackTrace();
 		}
-		BufferedReader json  = null;
-		try {
-			json = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		} catch (IOException e) {
-			e.printStackTrace();
+		responseCode=connection.getResponseCode();
+
+		BufferedReader jsonResponse = null;
+		if (responseCode== HttpURLConnection.HTTP_OK) {
+			jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		}
+		if(connection.getResponseCode()==401){
+			System.out.print("\nResponse: Non autorizzato"); //bisogna implementare qualcosa
+			return JsonParser.parseString("\"error\":\"error\"").getAsJsonObject();
 		}
 		// if json null???
-		return convertToJsonObject(json);
+		return convertToJsonElement(jsonResponse);
 	}
 
-	private JsonElement convertToJsonObject(BufferedReader json) {
+	private JsonElement convertToJsonElement(BufferedReader json) {
 
 		JsonElement object = JsonParser.parseReader(json);
 		if(object.isJsonObject()){

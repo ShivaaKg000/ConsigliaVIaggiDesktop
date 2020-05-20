@@ -2,8 +2,8 @@ package consigliaViaggiDesktop.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
+
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.AccommodationDao;
@@ -58,8 +58,9 @@ public class ViewAccommodationController {
     }
     
     private ExecutorService initExecutor(int threadPullNumber) {
-    	return Executors.newFixedThreadPool(threadPullNumber);
-		
+		return new ThreadPoolExecutor(threadPullNumber, threadPullNumber, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+
+
 	}
 
     public void addAccommodationtoListAsync(int id) {
@@ -126,9 +127,13 @@ public class ViewAccommodationController {
 		
 	}
     public void goBack() {
-		executor.shutdownNow();
     	NavigationController.getInstance().navigateBack();
 		
+	}
+	public void goBackToMenu() {
+		executor.shutdownNow();
+		NavigationController.getInstance().navigateBack();
+
 	}
     
 }

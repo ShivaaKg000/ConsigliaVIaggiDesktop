@@ -31,6 +31,8 @@ public final class Constants  {
     public static final String SERVER_URL="http://localhost:5000/";
     public static final String GET_ACCOMMODATION_LIST_URL = SERVER_URL+"accommodation";
     public static final String CREATE_ACCOMMODATION_URL = SERVER_URL+"accommodation/create";
+    public static final String APPROVE_REVIEW = SERVER_URL+"review/edit/";
+    public static final String STATUS_PARAM ="?status=";
     public static final String GET_REVIEW_LIST_URL = SERVER_URL+"review";
     public static final String LOGIN_URL = SERVER_URL+"authenticate";
     public static final String CITY_PARAM ="?city=";

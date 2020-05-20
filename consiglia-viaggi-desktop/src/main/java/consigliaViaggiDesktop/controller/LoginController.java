@@ -6,13 +6,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.User;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -35,26 +33,25 @@ public class LoginController {
 	public boolean authenticate(String username, String pwd)
 	{
 		try {
-			BufferedReader reader = getJsonFromLoginUrl(username,pwd);
-			String token = getTokenFromJson(reader);
-			System.out.print(token);
-			if(token!=null) {
-				if(checkIfAdmin(token)){
-					saveUserInstance(token, username);
-				}else{
-					//not an Admin
-					return false;
+			BufferedReader jsonResponse = getJsonResponseFromLoginUrl(username,pwd);
+			if(jsonResponse!=null) {
+				String token = getTokenFromJsonResponse(jsonResponse);
+				System.out.print(token);
+				if (token != null) {
+					if (checkIfAdmin(token)) {
+						saveUserInstance(token, username);
+						return true;
+					} else {
+						//not an Admin
+						return false;
+					}
 				}
-
 			}
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
 			return false;
 		}
-
-		return true;
+		return false;
 	}
 
 	private void saveUserInstance(String token, String username) {
@@ -64,38 +61,35 @@ public class LoginController {
 	}
 
 
-	private String getTokenFromJson(BufferedReader reader){
+	private String getTokenFromJsonResponse(BufferedReader reader){
 		JsonElement jsonTree  = JsonParser.parseReader(reader);
 		JsonObject jsonResponse = jsonTree.getAsJsonObject();
 		return jsonResponse.get("token").getAsString();
 	}
-	private BufferedReader getJsonFromLoginUrl(String user, String pwd) throws IOException {
+
+	private BufferedReader getJsonResponseFromLoginUrl(String user, String pwd) throws IOException {
 		URL url = new URL(Constants.LOGIN_URL);
 		HttpURLConnection connection = null;
-		int responseCode;
-		try {
-			String jsonInputString = "{\"username\":\"" + user + "\", \"password\": \"" + pwd + "\"}";
-			System.out.print(jsonInputString);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setDoOutput(true);
-			connection.setRequestProperty("Content-Type", "application/json; utf-8");
-			try (OutputStream os = connection.getOutputStream()) {
-				byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-				os.write(input, 0, input.length);
+		int responseCode = 0;
 
-			}
-			responseCode=connection.getResponseCode();
-//			if(responseCode==401){} if 401 rise some notAuthorized Exception?
+		String jsonInputString = "{\"username\":\"" + user + "\", \"password\": \"" + pwd + "\"}";
+		System.out.print(jsonInputString);
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("POST");
+		connection.setDoOutput(true);
+		connection.setRequestProperty("Content-Type", "application/json; utf-8");
+		try (OutputStream os = connection.getOutputStream()) {
+			byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+			os.write(input, 0, input.length);
 
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		BufferedReader json = null;
-		if (connection != null) {
-			json = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		responseCode=connection.getResponseCode();
+
+		BufferedReader jsonResponse = null;
+		if (responseCode== HttpURLConnection.HTTP_OK) {
+			jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		}
-		return json; //potrebbe essere null
+		return jsonResponse; //potrebbe essere null
 	}
 
 	private boolean checkIfAdmin(String jwtToken){
@@ -112,8 +106,6 @@ public class LoginController {
 				System.out.print("\nIs Admin");
 				return true;
 			}
-
-
 		}
 		System.out.print("\nNot Admin");
 		return false;
