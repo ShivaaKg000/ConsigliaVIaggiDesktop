@@ -8,7 +8,7 @@ public class Accommodation{
     private String logoUrl;
     private String images;
     private Float rating;
-    private Subcategory subcategory;
+    private Subcategory subCategory;
     private Category category;
     private Location accommodationLocation;
 
@@ -30,8 +30,8 @@ public class Accommodation{
     public Float getRating() {
         return rating;
     }
-    public Subcategory getSubcategory() {
-        return subcategory;
+    public Subcategory getSubCategory() {
+        return subCategory;
     }
     public Category getCategory() {
         return category;
@@ -59,7 +59,7 @@ public class Accommodation{
         this.logoUrl = builder.logoUrl;
         this.images = builder.images;
         this.rating = builder.rating;
-        this.subcategory = builder.subcategory;
+        this.subCategory = builder.subcategory;
         this.category = builder.category;
         this.accommodationLocation= new Location.Builder()
                 .setAddress(builder.address)

@@ -167,7 +167,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
 		connection.setRequestProperty("Content-Type","application/json");
 		try (OutputStream os = connection.getOutputStream()) {
-			System.out.print( accommodationJson.toString());
+			System.out.print( "accommodationJson: "+accommodationJson.toString());
 			byte[] input = accommodationJson.toString().getBytes(StandardCharsets.UTF_8);
 			os.write(input, 0, input.length);
 
@@ -177,7 +177,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		responseCode=connection.getResponseCode();
 
 		BufferedReader jsonResponse = null;
-		if (responseCode== HttpURLConnection.HTTP_OK) {
+		if (responseCode== HttpURLConnection.HTTP_CREATED) {
 			jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		}
 		if(connection.getResponseCode()==401){

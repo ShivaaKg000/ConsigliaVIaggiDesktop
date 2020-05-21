@@ -56,7 +56,7 @@
                               <TableColumn fx:id="name" editable="false" prefWidth="215.0" resizable="false" text="Nome Struttura" />
                               <TableColumn fx:id="description" editable="false" prefWidth="300.0" resizable="false" text="Descrizione" />
                               <TableColumn fx:id="category" editable="false" prefWidth="139.0" resizable="false" text="Categoria" />
-                              <TableColumn fx:id="subcategory" editable="false" prefWidth="143.0" resizable="true" text="Sottocategoria" />
+                              <TableColumn fx:id="subCategory" editable="false" prefWidth="143.0" resizable="true" text="Sottocategoria" />
                               <TableColumn fx:id="city" editable="false" minWidth="120.0" prefWidth="120.0" resizable="false" text="Città" />
                            </columns>
                            <columnResizePolicy>

@@ -1,5 +1,4 @@
 package consigliaViaggiDesktop.view;
-import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
@@ -19,7 +18,6 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
@@ -32,7 +30,7 @@ public class AccommodationView {
 	@FXML 	private TableColumn<Accommodation, String> name ;
 	@FXML 	private TableColumn<Accommodation, String> description ;
 	@FXML 	private TableColumn<Accommodation, Category> category ;
-	@FXML 	private TableColumn<Accommodation, Subcategory> subcategory;
+	@FXML 	private TableColumn<Accommodation, Subcategory> subCategory;
 	@FXML 	private TableColumn<Accommodation, String> city;
 	@FXML 	private ChoiceBox<Category> categoryChoiseBox;
 	@FXML 	private ChoiceBox<Subcategory> subCategoryChoiseBox;
@@ -70,7 +68,7 @@ public class AccommodationView {
 		name.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("name"));
 		description.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("description"));
 		category.setCellValueFactory(new PropertyValueFactory<Accommodation, Category>("category"));
-		subcategory.setCellValueFactory(new PropertyValueFactory<Accommodation,Subcategory>("subcategory"));
+		subCategory.setCellValueFactory(new PropertyValueFactory<Accommodation,Subcategory>("subCategory"));
 		city.setCellValueFactory(new Callback<CellDataFeatures<Accommodation, String>, ObservableValue<String>>() {
 		     public ObservableValue<String> call(CellDataFeatures<Accommodation, String> accommodation) {
 		         StringProperty location=new SimpleStringProperty();

@@ -33,6 +33,8 @@ dependencies {
     compile group: 'com.lynden', name: 'GMapsFX', version: '2.10.0'
 }
 
+apply plugin: "org.openjfx.javafxplugin"
+
 application {
     // Define the main class for the application.
     mainClassName = 'consiglia.viaggi.desktop.App'

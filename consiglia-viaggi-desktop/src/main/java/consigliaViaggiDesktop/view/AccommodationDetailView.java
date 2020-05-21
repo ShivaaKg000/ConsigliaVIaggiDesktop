@@ -12,7 +12,6 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.Subcategory;
 import javafx.application.Platform;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -33,10 +32,8 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
-import java.awt.ScrollPane;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.Optional;
 
 public class AccommodationDetailView implements MapComponentInitializedListener {
 
@@ -57,7 +54,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private BooleanProperty mapInitialized;
 	private Desktop desktop = Desktop.getDesktop();
 	private Accommodation selectedAccommodation;
-	GoogleMapView mapView;
+	private GoogleMapView mapView;
 	private GoogleMap map;
 	private GeocodingService geocodingService;
 	private StringProperty address = new SimpleStringProperty();
@@ -81,6 +78,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
+		//mapView = new GoogleMapView("it-IT", "");
 		mapView = new GoogleMapView("it-IT", "AIzaSyCMh5QgPKHyXr_swIaV5JXdDkwaABIXbGU");
 		AnchorPane.setBottomAnchor(mapView, 0.0);
 		AnchorPane.setTopAnchor(mapView, 0.0);
@@ -128,7 +126,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				choice_category.setValue(accommodation.getCategory());
 				subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
 				choice_subcategory.setItems(subcategory_list);
-				choice_subcategory.setValue(accommodation.getSubcategory());
+				choice_subcategory.setValue(accommodation.getSubCategory());
 				setAccommodationImage(accommodation.getImages());
 
 				/*choice_category listener*/
