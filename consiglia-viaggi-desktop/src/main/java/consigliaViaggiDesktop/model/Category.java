@@ -11,6 +11,12 @@ public enum Category{
 		this.label=label;
 	}
 
+
+	public static boolean is(String category){
+		return (category.equals(RESTAURANT.toString())||
+				category.equals(ATTRACTION.toString())||
+				category.equals(HOTEL.toString()));
+	}
 	public String getCategoryName(){
 		return label;
 	}

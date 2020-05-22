@@ -28,6 +28,15 @@ public enum Subcategory {
         subCategoryName=subCat;
     }
 
+    public static boolean is(String subCategory) {
+
+        for(Category a: Category.values()){
+            if( a.name().equals(subCategory) ) return true;
+        }
+        return false;
+    }
+
+
     public String getCategoryName() {
         return categoryName;
     }

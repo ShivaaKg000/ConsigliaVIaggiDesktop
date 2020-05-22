@@ -36,6 +36,9 @@ public final class Constants  {
     public static final String GET_REVIEW_LIST_URL = SERVER_URL+"review";
     public static final String LOGIN_URL = SERVER_URL+"authenticate";
     public static final String CITY_PARAM ="?city=";
+    public static final String GENERIC_PARAM ="?generic=";
+    public static final String CATEGORY_PARAM ="?category=";
+    public static final String SUBCATEGORY_PARAM ="?subcategory=";
     public static final String ACCOMMODATION_ID_PARAM ="?accommodationId=";
     public static final String REVIEW_ID_PARAM ="?reviewId=";
 
