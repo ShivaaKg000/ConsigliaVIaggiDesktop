@@ -37,14 +37,14 @@ public class ViewAccommodationController {
 		return observableAccommodationList;
 	}*/
 
-    public ObservableList<Accommodation> loadAccommodationListAsync(String category, String subCategory,String searchParam) {
+    public ObservableList<Accommodation> loadAccommodationListAsync(String category, String subCategory,String searchParam,int page) {
     	
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
             public Void call() throws InterruptedException {
     			
-    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(category,subCategory,searchParam);
+    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(category,subCategory,searchParam,0);
     			observableAccommodationList.addAll(accommodationList);
     			observableAccommodationList.notifyAll();
 				return null;

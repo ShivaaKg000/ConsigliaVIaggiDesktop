@@ -11,12 +11,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -41,6 +39,7 @@ public class AccommodationView {
 
 	private  ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
 	private ViewAccommodationController viewAccommodationController;
+	private int page=0;
 
 	
 	public void initialize(){
@@ -82,7 +81,7 @@ public class AccommodationView {
 		accommodationList=viewAccommodationController.loadAccommodationListAsync(
 				"",
 				"",
-				"Napoli");
+				"",page);
 		tableAccommodation.setItems(accommodationList);
 		
 	}
@@ -146,7 +145,21 @@ public class AccommodationView {
 		accommodationList=viewAccommodationController.loadAccommodationListAsync(
 				cat,
 				subCat,
-				searchParamTextEdit.getText());
+				searchParamTextEdit.getText(),
+				page);
+	}
+
+	private ScrollBar getVerticalScrollbar(TableView<?> table) {
+		ScrollBar result = null;
+		for (Node n : table.lookupAll(".scroll-bar:vertical")) {
+			if (n instanceof ScrollBar) {
+				ScrollBar bar = (ScrollBar) n;
+				if (bar.getOrientation().equals(Orientation.VERTICAL)) {
+					result = bar;
+				}
+			}
+		}
+		return result;
 	}
 
 }

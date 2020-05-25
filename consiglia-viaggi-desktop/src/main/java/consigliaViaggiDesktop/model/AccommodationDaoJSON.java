@@ -4,9 +4,7 @@ import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,76 +13,13 @@ import java.util.List;
 public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
-	public List<Accommodation> getAccommodationList(String category, String subCategory,String searchParam)  {
+	public List<Accommodation> getAccommodationList(String category, String subCategory,String searchParam, int page)  {
 
-		List<Accommodation> accommodationList=null;
-
-		if(Category.is(category) && !Subcategory.is(subCategory)){
-			if(searchParam.length()>3)
-				accommodationList= (List<Accommodation>) getAccommodationListGenericAndCategoryJSONParsing(searchParam,category);
-			else accommodationList= (List<Accommodation>) getAccommodationListCategoryJSONParsing(category);
-		}
-		else if(Category.is(category) && Subcategory.is(subCategory)){
-			if(searchParam.length()>3){
-				accommodationList= (List<Accommodation>) getAccommodationListGenericAndSubCategoryJSONParsing(searchParam,subCategory);
-			}
-			else
-				accommodationList= (List<Accommodation>) getAccommodationListSubCategoryJSONParsing(subCategory);
-		}
-		else accommodationList= (List<Accommodation>) getAccommodationListGenericJSONParsing(searchParam);
-
+		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(searchParam,category,subCategory, page);
 		System.out.print(accommodationList);
 		return accommodationList;
 	}
 
-	private Collection<Accommodation> getAccommodationListGenericAndCategoryJSONParsing(String generic,String category)
-	{
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"/cat/"+generic+"/"+category;
-
-
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
-		Collection<Accommodation> accommodationCollection = new ArrayList<>();
-		if (jsonTree .isJsonArray()) {
-			JsonArray array= jsonTree.getAsJsonArray();
-			for (JsonElement jo : array) {
-				JsonObject accommodationJson = (JsonObject)jo ;
-				accommodationCollection.add(parseAccommodation(accommodationJson));
-			}
-		}
-
-		return accommodationCollection;
-	}
-
-
-	private Collection<Accommodation> getAccommodationListGenericAndSubCategoryJSONParsing(String generic,String subcategory)
-	{
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"/sub/"+generic+"/"+subcategory;
-
-
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
-		Collection<Accommodation> accommodationCollection = new ArrayList<>();
-		if (jsonTree .isJsonArray()) {
-			JsonArray array= jsonTree.getAsJsonArray();
-			for (JsonElement jo : array) {
-				JsonObject accommodationJson = (JsonObject)jo ;
-				accommodationCollection.add(parseAccommodation(accommodationJson));
-			}
-		}
-
-		return accommodationCollection;
-	}
 	@Override
 	public Accommodation getAccommodationById(int id) {
 		return getAccommodationJSON(id);
@@ -96,6 +31,8 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return String.valueOf(createAccommodationJSON(accommodation));
 
 	}
+
+
 
 	private JsonElement createAccommodationJSON(Accommodation accommodation) {
 		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
@@ -125,10 +62,11 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return parseAccommodation(accommodationJSON);
 	}
 
-	private Collection<Accommodation> getAccommodationListJSONParsing(String city)  {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.CITY_PARAM+city;
+	private Collection<Accommodation> getAccommodationListJSONParsing(String query,String category,String subCategory, int page)  {
+		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.QUERY_PARAM+ URLEncoder.encode(query, StandardCharsets.UTF_8)+Constants.CATEGORY_PARAM+category
+				+Constants.SUBCATEGORY_PARAM+subCategory+Constants.PAGE_PARAM+page;
 
-
+		System.out.print("\n"+urlString);
 		BufferedReader bufferedReader = null;
 		try {
 			bufferedReader = getJSONFromUrl(urlString);
@@ -144,80 +82,13 @@ public class AccommodationDaoJSON implements AccommodationDao {
                 JsonObject accommodationJson = (JsonObject)jo ;
                 accommodationCollection.add(parseAccommodation(accommodationJson));
             }
+			System.out.print(accommodationCollection);
 		}
 
 		return accommodationCollection;
 	}
 
-	private Collection<Accommodation> getAccommodationListCategoryJSONParsing(String category)  {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.CATEGORY_PARAM+category;
-
-
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
-		Collection<Accommodation> accommodationCollection = new ArrayList<>();
-		if (jsonTree .isJsonArray()) {
-			JsonArray array= jsonTree.getAsJsonArray();
-			for (JsonElement jo : array) {
-				JsonObject accommodationJson = (JsonObject)jo ;
-				accommodationCollection.add(parseAccommodation(accommodationJson));
-			}
-		}
-
-		return accommodationCollection;
-	}
-
-	private Collection<Accommodation> getAccommodationListSubCategoryJSONParsing(String subcategory)
-	{
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.SUBCATEGORY_PARAM+subcategory;
-
-
-		BufferedReader bufferedReader = null;
-			try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
-		Collection<Accommodation> accommodationCollection = new ArrayList<>();
-			if (jsonTree .isJsonArray()) {
-			JsonArray array= jsonTree.getAsJsonArray();
-			for (JsonElement jo : array) {
-				JsonObject accommodationJson = (JsonObject)jo ;
-				accommodationCollection.add(parseAccommodation(accommodationJson));
-			}
-		}
-
-		return accommodationCollection;
-}
-
-	private Collection<Accommodation> getAccommodationListGenericJSONParsing(String generic)
-	{
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.GENERIC_PARAM+generic;
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
-		Collection<Accommodation> accommodationCollection = new ArrayList<>();
-		if (jsonTree .isJsonArray()) {
-			JsonArray array= jsonTree.getAsJsonArray();
-			for (JsonElement jo : array) {
-				JsonObject accommodationJson = (JsonObject)jo ;
-				accommodationCollection.add(parseAccommodation(accommodationJson));
-			}
-		}
-
-		return accommodationCollection;
-	}
-private Accommodation parseAccommodation(JsonObject accommodationJson){
+	private Accommodation parseAccommodation(JsonObject accommodationJson){
 		String name = accommodationJson.get("name").getAsString();
 		int id = accommodationJson.get("id").getAsInt();
 		String description = accommodationJson.get("description").getAsString();

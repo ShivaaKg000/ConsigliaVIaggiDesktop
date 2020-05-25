@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AccommodationDaoStub implements AccommodationDao{
-	
+public class AccommodationDaoStub /*implements AccommodationDao*/{
+/*
 	@Override
     public List<Accommodation> getAccommodationList(String category, String subCategory,String searchParam) {
         List<Accommodation> accommodationList=createAccommodationList(searchParam);
@@ -72,4 +72,6 @@ public class AccommodationDaoStub implements AccommodationDao{
                 .create();
         
     }
+
+ */
 }
