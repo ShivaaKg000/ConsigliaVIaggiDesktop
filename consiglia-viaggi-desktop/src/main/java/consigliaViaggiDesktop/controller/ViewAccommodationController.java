@@ -6,13 +6,11 @@ import java.util.concurrent.*;
 
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.Accommodation;
-import consigliaViaggiDesktop.model.AccommodationDao;
+import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
+import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -23,25 +21,29 @@ public class ViewAccommodationController {
     private AccommodationDao accommodationDao;
     private ObservableList<Accommodation> observableAccommodationList;
     private ExecutorService executor;
-    
+    private String currentSearchParam,currentCategory,currentSubCategory;
+    int currentpage;
+
+
     public ViewAccommodationController() {
 
     	executor=initExecutor(4);
-    	//accommodationDao= new AccommodationDaoStub();
-		accommodationDao= new AccommodationDaoJSON();
+    	accommodationDao= new AccommodationDaoJSON();
         observableAccommodationList= FXCollections.observableArrayList();		
     }
-    
-    /*public ObservableList<Accommodation> getObsarvableAccommodationList() {
-		return observableAccommodationList;
-	}*/
+
 
     public ObservableList<Accommodation> loadAccommodationListAsync(String category, String subCategory,String searchParam,int page) {
-    	
+
+    	currentCategory=category;
+    	currentSubCategory=subCategory;
+    	currentSearchParam=searchParam;
+    	currentpage=page;
+
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
-            public Void call() throws InterruptedException {
+            public Void call() {
     			
     			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(category,subCategory,searchParam,0);
     			observableAccommodationList.addAll(accommodationList);
@@ -61,23 +63,6 @@ public class ViewAccommodationController {
 
 
 	}
-
-    public void addAccommodationtoListAsync(int id) {
-    	Task task = new Task() {
-    		@Override
-            public Void call() throws InterruptedException {
-    			
-    			Accommodation accommodation= accommodationDao.getAccommodationById(id);
-    			observableAccommodationList.add(accommodation);
-    			observableAccommodationList.notifyAll();
-				return null;
-            }
-        };
-        
-        Thread testThread = new Thread(task);
-        executor.execute(testThread);
-     
-    }
     
     public ObjectProperty<Accommodation> getAccommodationAsync(int id) {
     	ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<Accommodation>();
@@ -96,12 +81,20 @@ public class ViewAccommodationController {
      
     }
 
-	public StringProperty createAccommodationAsync(Accommodation accommodation) {
-		StringProperty  response = new SimpleStringProperty();
+	public ObjectProperty<Accommodation> createAccommodationAsync(Accommodation accommodation) {
+		ObjectProperty<Accommodation>  response = new SimpleObjectProperty();
 		Task task = new Task() {
 			@Override
 			public Void call() throws InterruptedException {
-				response.setValue(accommodationDao.createAccommodation(accommodation));
+				try {
+					response.set(accommodationDao.createAccommodation(accommodation));
+					NavigationController.getInstance().buildInfoBox("Creazione","Struttura creata con successo! (Id:"+response.get().getId()+")");
+					refreshAccommodationList();
+				} catch (IOException e) {
+					NavigationController.getInstance().buildInfoBox("Creazione",e.getMessage());
+				} catch (DaoException e) {
+					NavigationController.getInstance().buildInfoBox("Creazione",e.getErrorMessage());
+				}
 				response.notifyAll();
 				return null;
 			}
@@ -109,30 +102,71 @@ public class ViewAccommodationController {
 		Thread testThread = new Thread(task);
 		testThread.start();
 		return response;
-
 	}
     
-    public void accommodationSelected(int accommodationId) {
-		try {	
-			
-			AccommodationDetailView accommodationDetailView=new AccommodationDetailView();
-			accommodationDetailView.setId(accommodationId);
-			accommodationDetailView.setViewAccommodationController(this);
-			NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+    public void loadAccommodationDetailView(int accommodationId) {
+
+		AccommodationDetailView accommodationDetailView=new AccommodationDetailView();
+		accommodationDetailView.setId(accommodationId);
+		accommodationDetailView.setViewAccommodationController(this);
+		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
+
 	}
-    public void goBack() {
+
+	public void goBack() {
     	NavigationController.getInstance().navigateBack();
 		
 	}
+
 	public void goBackToMenu() {
 		executor.shutdownNow();
 		NavigationController.getInstance().navigateBack();
 
 	}
-    
+
+	public void deleteAccommodation(int accommodationId) {
+		try {
+			accommodationDao.deleteAccommodation(accommodationId);
+			NavigationController.getInstance().buildInfoBox("Cancellazione","Struttura eliminata con successo ");
+		} catch (IOException e) {
+			NavigationController.getInstance().buildInfoBox("Cancellazione","Errore sconosciuto");
+		} catch (DaoException e) {
+			NavigationController.getInstance().buildInfoBox("Cancellazione",e.getErrorMessage());
+		}
+
+
+	}
+
+	public void loadCreateAccommodationDetailView() {
+		AccommodationDetailView accommodationDetailView=new AccommodationDetailView();
+		accommodationDetailView.setViewAccommodationController(this);
+		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
+	}
+
+	public BooleanProperty editAccommodationAsync(Accommodation editedAccommodation) {
+		BooleanProperty result= new SimpleBooleanProperty();
+		Task task = new Task() {
+			@Override
+			public Void call(){
+				try {
+					result.set(accommodationDao.editAccommodation(editedAccommodation));
+					NavigationController.getInstance().buildInfoBox("Modifica","Modifica avvenuta con successo!");
+					refreshAccommodationList();
+				} catch (IOException e) {
+					NavigationController.getInstance().buildInfoBox("Modifica",e.getMessage());
+				} catch (DaoException e) {
+					NavigationController.getInstance().buildInfoBox("Modifica",e.getErrorMessage());
+				}
+				return null;
+			}
+		};
+		Thread testThread = new Thread(task);
+		testThread.start();
+		return result;
+	}
+
+	public void refreshAccommodationList(){
+		loadAccommodationListAsync(currentCategory,currentSubCategory,currentSearchParam,currentpage);
+	}
+
 }

@@ -4,8 +4,9 @@ public class DaoException extends Exception {
 
     public final static int FAIL_TO_INSERT = 1;
     public final static int UPDATE_FAILED = 2;
-    public final static int SQL_ERROR = 3;
+    public final static int ERROR = 3;
     public final static int FORBIDDEN_ACCESS = 4;
+    public static final int NOT_FOUND = 5 ;
 
     private String errorMessage;
     private int errorCode;

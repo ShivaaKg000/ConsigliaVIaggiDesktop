@@ -11,8 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -45,8 +43,9 @@ public class AccommodationView {
 	public void initialize(){
 		
 		viewAccommodationController = new ViewAccommodationController();
-
+		
 		categoryChoiseBox.setItems(category_list);
+
 		subCategoryChoiseBox.setItems(subcategory_list);
 		/*choice_category listener*/
 		categoryChoiseBox.getSelectionModel().selectedIndexProperty().addListener(
@@ -93,7 +92,7 @@ public class AccommodationView {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Accommodation rowData = row.getItem();
-                    viewAccommodationController.accommodationSelected(rowData.getId());
+                    viewAccommodationController.loadAccommodationDetailView(rowData.getId());
 				
                 }
             });
@@ -101,7 +100,12 @@ public class AccommodationView {
         });
 		
 	}
-	
+
+	@FXML
+	public void createButtonAction(){
+		viewAccommodationController.loadCreateAccommodationDetailView();
+	}
+
 	@FXML
 	public void backButtonClicked() {
 		viewAccommodationController.goBackToMenu();
@@ -147,19 +151,6 @@ public class AccommodationView {
 				subCat,
 				searchParamTextEdit.getText(),
 				page);
-	}
-
-	private ScrollBar getVerticalScrollbar(TableView<?> table) {
-		ScrollBar result = null;
-		for (Node n : table.lookupAll(".scroll-bar:vertical")) {
-			if (n instanceof ScrollBar) {
-				ScrollBar bar = (ScrollBar) n;
-				if (bar.getOrientation().equals(Orientation.VERTICAL)) {
-					result = bar;
-				}
-			}
-		}
-		return result;
 	}
 
 }

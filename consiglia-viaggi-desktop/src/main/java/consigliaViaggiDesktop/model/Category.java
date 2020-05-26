@@ -7,7 +7,7 @@ public enum Category{
 
 	public final String label;
 
-	private Category(final String label){
+	Category(final String label){
 		this.label=label;
 	}
 

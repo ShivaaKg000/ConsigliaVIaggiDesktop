@@ -126,21 +126,14 @@ public class ViewReviewController {
 	}
 
 	public void reviewSelected(int reviewId) {
-		try {	
-			
-			ReviewDetailView reviewDetailView=new ReviewDetailView();
-			reviewDetailView.setId(reviewId);
-			reviewDetailView.setViewReviewController(this);
-			NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW,reviewDetailView);
-			System.out.println("review selected: "+reviewId);
-			
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+        ReviewDetailView reviewDetailView=new ReviewDetailView();
+        reviewDetailView.setId(reviewId);
+        reviewDetailView.setViewReviewController(this);
+        NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW,reviewDetailView);
+        System.out.println("review selected: "+reviewId);
+
+    }
 
 	public void goBack() {
     	NavigationController.getInstance().navigateBack();

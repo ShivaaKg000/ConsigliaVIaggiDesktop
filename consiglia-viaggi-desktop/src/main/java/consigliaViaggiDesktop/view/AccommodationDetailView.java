@@ -12,10 +12,7 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.Subcategory;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -58,21 +55,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private GoogleMap map;
 	private GeocodingService geocodingService;
 	private StringProperty address = new SimpleStringProperty();
-	
-	private int accommodationId;
+	private Integer accommodationId;
+
 	private ViewAccommodationController viewAccommodationController;
 	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
-	
-	
-	
-	public void setId(int id) {
-		accommodationId=id;
-	}
-	public void setViewAccommodationController(ViewAccommodationController viewAccommodationController) {
-    	this.viewAccommodationController=viewAccommodationController;
-		
-	}
 
 	public void initialize(){
 
@@ -92,117 +79,43 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		choice_category.setItems(category_list);
 		choice_subcategory.setItems(subcategory_list);
-		
-		if(viewAccommodationController==null) {
-    		viewAccommodationController= new ViewAccommodationController();
-    	}
 
-    	viewAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
+		/*choice_category listener*/
+		choice_category.getSelectionModel().selectedIndexProperty().addListener(
+				new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+						System.out.print("selected "+category_list.get((Integer) newValue));
+						subcategory_list.clear();
+						subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
+
+					}
+				}
+
+		);
+		/*choice_category listener end*/
+
+		if(viewAccommodationController==null) {
+			viewAccommodationController= new ViewAccommodationController();
+		}
+		if(accommodationId!=null)
+			viewAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
 				selectedAccommodation=newValue;
-				updateAccommodationDetailGui(newValue);	
-				
-			}
-   		
-    	});
-
-	}
-	
-	private void updateAccommodationDetailGui(Accommodation accommodation) {
-		Platform.runLater(new Runnable(){
-
-			@Override
-			public void run() {
-				text_id.setText(String.valueOf(accommodation.getId()));
-				latitudeTextField.setText(accommodation.getLatitude().toString());
-				longitudeTextField.setText(accommodation.getLongitude().toString());
-				text_name.setText(accommodation.getName());
-				text_description.setText(accommodation.getDescription());
-				text_address.setText(accommodation.getAddress());
-				//text_path.setText(accommodation.getLogoUrl());
-				text_rating.setText(String.valueOf(accommodation.getRating()));
-				choice_category.setValue(accommodation.getCategory());
-				subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
-				choice_subcategory.setItems(subcategory_list);
-				choice_subcategory.setValue(accommodation.getSubCategory());
-				setAccommodationImage(accommodation.getImages());
-
-				/*choice_category listener*/
-				choice_category.getSelectionModel().selectedIndexProperty().addListener(
-						new ChangeListener<Number>() {
-							@Override
-							public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-								System.out.print("selected "+category_list.get((Integer) newValue));
-								subcategory_list.clear();
-								subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
-
-							}
-						}
-
-				);
-				/*choice_category listener end*/
-
-				if(mapInitialized.getValue()){
-					addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
-				}else {
-					mapInitialized.addListener(new ChangeListener<Boolean>() {
-						@Override
-						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-							if (newValue)
-								addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
-						}
-					});
-				}
+				updateAccommodationDetailGui(newValue);
 
 			}
-			   
-			});
-		
-	}
 
-	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
+		});
 
-		switch (category){
-			case HOTEL:
-				return FXCollections.observableArrayList(Subcategory.hotels);
-			case RESTAURANT:
-				return FXCollections.observableArrayList(Subcategory.restaurants);
-			case ATTRACTION:
-				return FXCollections.observableArrayList(Subcategory.attractions);
-			default:
-				return FXCollections.observableArrayList();
-		}
 	}
 
 	@FXML
 	void backButtonClicked() {
 	  viewAccommodationController.goBack();
     }
-
-
-	@Override
-	public void mapInitialized() {
-		geocodingService = new GeocodingService();
-		//Set the initial properties of the map.
-		MapOptions mapOptions = new MapOptions();
-
-		mapOptions.center(new LatLong(40.851799, 14.268120))
-				.mapType(MapTypeIdEnum.ROADMAP)
-				
-				.overviewMapControl(false)
-				.panControl(false)
-				.rotateControl(false)
-				.scaleControl(false)
-				.streetViewControl(false)
-				.zoomControl(false)
-				.zoom(12);
-
-		map = mapView.createMap(mapOptions);
-		mapInitialized.setValue(true);
-
-	}
 
 	@FXML
 	public void addressTextFieldAction(ActionEvent event) {
@@ -231,33 +144,26 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML
 	void saveButtonAction(ActionEvent event) {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Salvare le modifiche?")){
-			StringProperty response= viewAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
-			response.addListener(new ChangeListener<String>() {
+			if(accommodationId==null){
+				ObjectProperty<Accommodation> response= viewAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
+				response.addListener(new ChangeListener<Accommodation>() {
 				@Override
-				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-					System.out.print("Accommodation Created: "+newValue);
-				}
-			});
+				public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
+					updateAccommodationDetailGui(newValue);
+					}
+				});
+			}
+			else{
+				BooleanProperty response= viewAccommodationController.editAccommodationAsync(editAccommodationFromNewFields());
+				response.addListener(new ChangeListener<Boolean>() {
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 
+					}
+				});
+			}
 		}
-
 	}
-
-    private Accommodation createNewAccommodationFromNewFields() {
-        return new Accommodation.Builder()
-                .setName(text_name.getText())
-                .setImages("")
-                .setCity("Napoli")
-                .setAddress(text_address.getText())
-                .setLongitude(Double.valueOf(longitudeTextField.getText()))
-                .setLatitude(Double.valueOf(latitudeTextField.getText()))
-                .setDescription(text_description.getText())
-                .setCategory(choice_category.getValue())
-                .setSubcategory(choice_subcategory.getValue())
-                .setRating(Float.parseFloat(text_rating.getText()))
-                .create();
-
-    }
 
     @FXML
 	void accommodationImageSelected(MouseEvent event) {
@@ -269,6 +175,140 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		setAccommodationImage(Constants.IMG_PLACEHOLDER);
 
+	}
+
+	@FXML
+	void deleteButtonAction(ActionEvent event){
+		viewAccommodationController.deleteAccommodation(accommodationId);
+	}
+
+	@Override
+	public void mapInitialized() {
+		geocodingService = new GeocodingService();
+		//Set the initial properties of the map.
+		MapOptions mapOptions = new MapOptions();
+
+		mapOptions.center(new LatLong(40.851799, 14.268120))
+				.mapType(MapTypeIdEnum.ROADMAP)
+
+				.overviewMapControl(false)
+				.panControl(false)
+				.rotateControl(false)
+				.scaleControl(false)
+				.streetViewControl(false)
+				.zoomControl(false)
+				.zoom(12);
+
+		map = mapView.createMap(mapOptions);
+		mapInitialized.setValue(true);
+
+	}
+
+	public void setId(int id) {
+		accommodationId=id;
+	}
+
+	public void setViewAccommodationController(ViewAccommodationController viewAccommodationController) {
+		this.viewAccommodationController=viewAccommodationController;
+
+	}
+
+	private Accommodation createNewAccommodationFromNewFields() {
+		return new Accommodation.Builder()
+				.setName(text_name.getText())
+				.setImages("")
+				.setCity("Napoli")
+				.setAddress(text_address.getText())
+				.setLongitude(Double.valueOf(longitudeTextField.getText()))
+				.setLatitude(Double.valueOf(latitudeTextField.getText()))
+				.setDescription(text_description.getText())
+				.setCategory(choice_category.getValue())
+				.setSubcategory(choice_subcategory.getValue())
+				.setRating(0)
+				.create();
+
+	}
+	private Accommodation editAccommodationFromNewFields() {
+		return new Accommodation.Builder()
+				.setId(Integer.valueOf(text_id.getText()))
+				.setName(text_name.getText())
+				.setImages("")
+				.setCity("Napoli")
+				.setAddress(text_address.getText())
+				.setLongitude(Double.valueOf(longitudeTextField.getText()))
+				.setLatitude(Double.valueOf(latitudeTextField.getText()))
+				.setDescription(text_description.getText())
+				.setCategory(choice_category.getValue())
+				.setSubcategory(choice_subcategory.getValue())
+				.setRating(Float.parseFloat(text_rating.getText()))
+				.create();
+
+	}
+
+	private void updateAccommodationDetailGui(Accommodation accommodation) {
+		Platform.runLater(new Runnable(){
+
+			@Override
+			public void run() {
+				text_id.setText(String.valueOf(accommodation.getId()));
+				latitudeTextField.setText(accommodation.getLatitude().toString());
+				longitudeTextField.setText(accommodation.getLongitude().toString());
+				text_name.setText(accommodation.getName());
+				text_description.setText(accommodation.getDescription());
+				text_address.setText(accommodation.getAddress());
+				//text_path.setText(accommodation.getLogoUrl());
+				text_rating.setText(String.valueOf(accommodation.getRating()));
+				choice_category.setValue(accommodation.getCategory());
+				subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
+				choice_subcategory.setItems(subcategory_list);
+				choice_subcategory.setValue(accommodation.getSubCategory());
+				setAccommodationImage(accommodation.getImages());
+
+				/*choice_category listener*//*
+				choice_category.getSelectionModel().selectedIndexProperty().addListener(
+						new ChangeListener<Number>() {
+							@Override
+							public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+								System.out.print("selected "+category_list.get((Integer) newValue));
+								subcategory_list.clear();
+								subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
+
+							}
+						}
+
+				);
+				/*choice_category listener end*/
+
+				if(mapInitialized.getValue()){
+					addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
+				}else {
+					mapInitialized.addListener(new ChangeListener<Boolean>() {
+						@Override
+						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+							if (newValue)
+								addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
+						}
+					});
+				}
+
+			}
+
+		});
+
+	}
+
+	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
+
+		switch (category){
+			case HOTEL:
+				return FXCollections.observableArrayList(Subcategory.hotels);
+			case RESTAURANT:
+				return FXCollections.observableArrayList(Subcategory.restaurants);
+			case ATTRACTION:
+				return FXCollections.observableArrayList(Subcategory.attractions);
+			default:
+				return FXCollections.observableArrayList();
+		}
 	}
 
 	private void addMapMarker(String name,Double lat, Double lon){

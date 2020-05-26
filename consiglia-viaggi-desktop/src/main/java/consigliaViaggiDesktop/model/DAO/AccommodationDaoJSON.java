@@ -3,16 +3,14 @@ import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.Accommodation;
-import consigliaViaggiDesktop.model.AccommodationDao;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.Subcategory;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class AccommodationDaoJSON implements AccommodationDao {
 
@@ -31,24 +29,82 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	}
 
 	@Override
-	public String createAccommodation(Accommodation accommodation) {
-		return String.valueOf(createAccommodationJSON(accommodation));
+	public Accommodation createAccommodation(Accommodation accommodation) throws IOException, DaoException {
+		return createAccommodationJSON(accommodation);
 
 	}
 
+	@Override
+	public Boolean deleteAccommodation(int idAccommodation) throws IOException, DaoException {
 
+		return deleteAccommodationJSON(idAccommodation);
+	}
 
-	private JsonElement createAccommodationJSON(Accommodation accommodation) {
-		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
+	@Override
+	public Boolean editAccommodation(Accommodation accommodation) throws IOException, DaoException {
+		return  editAccommodationJson(accommodation);
+	}
 
-		JsonObject response;
-		try {
-			return postAccommodation(jsonAccommodation);
-		} catch (IOException e) {
-			e.printStackTrace();
+	private Boolean editAccommodationJson(Accommodation accommodation) throws IOException, DaoException {
+		URL url = new URL(Constants.EDIT_ACCOMMODATION_URL);
+		HttpURLConnection connection = null;
+		int responseCode=0;
+
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("PUT");
+		connection.setDoOutput(true);
+		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
+		connection.setRequestProperty("Content-Type","application/json");
+
+		OutputStream os = connection.getOutputStream();
+		byte[] input = encodeAccommodation(accommodation).toString().getBytes(StandardCharsets.UTF_8);
+		os.write(input, 0, input.length);
+
+		responseCode=connection.getResponseCode();
+		BufferedReader jsonResponse = null;
+
+		if(responseCode!=HttpsURLConnection.HTTP_OK){
+			if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
+				throw  new DaoException(DaoException.NOT_FOUND,"Record non trovato");
+			}
+			else
+				throw  new DaoException(DaoException.ERROR,"Errore di rete");
 		}
-		response= JsonParser.parseString("\"error\":\"error\"").getAsJsonObject();
-		return response;
+		else return true;
+	}
+
+	private Boolean deleteAccommodationJSON(int idAccommodation) throws IOException, DaoException {
+		URL url = new URL(Constants.DELETE_ACCOMMODATION_URL);
+		HttpURLConnection connection = null;
+		int responseCode=0;
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("DELETE");
+		connection.setDoOutput(true);
+		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
+		connection.setRequestProperty("Content-Type","application/json");
+
+		responseCode=connection.getResponseCode();
+
+		BufferedReader jsonResponse = null;
+
+		if(responseCode!=HttpsURLConnection.HTTP_OK){
+			if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
+				throw  new DaoException(DaoException.NOT_FOUND,"Record non trovato");
+			}
+			else
+				throw  new DaoException(DaoException.ERROR,"Errore di rete");
+		}
+		else
+			return true;
+	}
+
+	private Accommodation createAccommodationJSON(Accommodation accommodation) throws DaoException, IOException{
+
+		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
+		JsonObject response;
+
+		return parseAccommodation(postAccommodation(jsonAccommodation));
+
 	}
 
 	private Accommodation getAccommodationJSON(int id)  {
@@ -77,7 +133,6 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		// if(bufferReader!=null) ... ??
 		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
 		Collection<Accommodation> accommodationCollection = new ArrayList<>();
 		if (jsonTree .isJsonArray()) {
@@ -163,7 +218,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return json;
 	}
 
-	private JsonElement postAccommodation(JsonObject accommodationJson) throws IOException {
+	private JsonObject postAccommodation(JsonObject accommodationJson) throws IOException, DaoException {
 		URL url = new URL(Constants.CREATE_ACCOMMODATION_URL);
 		HttpURLConnection connection = null;
 		int responseCode=0;
@@ -186,25 +241,18 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		if (responseCode== HttpURLConnection.HTTP_CREATED) {
 			jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		}
-		if(connection.getResponseCode()==401){
-			System.out.print("\nResponse: Non autorizzato"); //bisogna implementare qualcosa
-			return JsonParser.parseString("\"error\":\"error\"").getAsJsonObject();
-		}
-		// if json null???
-		return convertToJsonElement(jsonResponse);
+		else if(connection.getResponseCode()==401){
+				throw  new DaoException(DaoException.FORBIDDEN_ACCESS,"Non autorizzato");
+			}
+			else{
+				throw  new DaoException(DaoException.ERROR,"Errore di rete");
+			}
+
+		return convertToJsonObject(jsonResponse);
 	}
 
-	private JsonElement convertToJsonElement(BufferedReader json) {
-
-		JsonElement object = JsonParser.parseReader(json);
-		if(object.isJsonObject()){
-			System.out.print("\nIs JsonObject ");
-			return object;
-		}
-		else{
-			System.out.print("\nNot JsonObject ");
-			return null;
-		}
+	private JsonObject convertToJsonObject(BufferedReader json) {
+		return JsonParser.parseReader(json).getAsJsonObject();
 	}
 }
 

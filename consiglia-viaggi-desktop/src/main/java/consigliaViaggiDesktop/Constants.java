@@ -31,6 +31,7 @@ public final class Constants  {
     public static final String SERVER_URL="http://localhost:5000/";
     public static final String GET_ACCOMMODATION_LIST_URL = SERVER_URL+"accommodation";
     public static final String CREATE_ACCOMMODATION_URL = SERVER_URL+"accommodation/create";
+    public static final String DELETE_ACCOMMODATION_URL = SERVER_URL+"accommodation/delete/";
     public static final String APPROVE_REVIEW = SERVER_URL+"review/edit/";
     public static final String STATUS_PARAM ="?status=";
     public static final String GET_REVIEW_LIST_URL = SERVER_URL+"review";
@@ -42,9 +43,7 @@ public final class Constants  {
     public static final String SUBCATEGORY_PARAM ="&subCategory=";
     public static final String ACCOMMODATION_ID_PARAM ="?accommodationId=";
     public static final String REVIEW_ID_PARAM ="?reviewId=";
-
-
-
+    public static final String EDIT_ACCOMMODATION_URL =SERVER_URL+"accommodation/edit/" ;
 
 
     private Constants(){

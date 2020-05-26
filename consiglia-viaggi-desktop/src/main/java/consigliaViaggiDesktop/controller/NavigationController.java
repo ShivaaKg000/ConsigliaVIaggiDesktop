@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Optional;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,16 +28,21 @@ public class NavigationController {
 		
 	}
 
-	public void navigateToView(String newViewFxml,Object controller) throws IOException
+	public void navigateToView(String newViewFxml,Object controller)
     {		
 		Scene previousScene=currentStage.getScene();
 		previousSceneStack.addLast(previousScene);
 		FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(newViewFxml));
         loader.setController(controller);
-        
-        Parent view = loader.load();
-        Scene viewscene = new Scene(view);
+
+		Parent view = null;
+		try {
+			view = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Scene viewscene = new Scene(view);
         currentStage.setScene(viewscene);
         //Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         
@@ -44,14 +50,19 @@ public class NavigationController {
         
     }
 	
-	public void navigateToView(String newViewFxml) throws IOException
+	public void navigateToView(String newViewFxml)
     {		
 		Scene previousScene=currentStage.getScene();
 		previousSceneStack.addLast(previousScene);
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(newViewFxml));
-        Parent view = loader.load();
-        Scene viewscene = new Scene(view);
+		Parent view = null;
+		try {
+			view = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Scene viewscene = new Scene(view);
         currentStage.setScene(viewscene);    
         currentStage.show();
         
@@ -76,6 +87,18 @@ public class NavigationController {
 		} else {
 			return false;
 		}
+	}
+	public void buildInfoBox(String title,String header){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle(title);
+				alert.setHeaderText(header);
+				Optional<ButtonType> result = alert.showAndWait();
+			}
+		});
+
 	}
 
 	public Stage getCurrentStage() {
