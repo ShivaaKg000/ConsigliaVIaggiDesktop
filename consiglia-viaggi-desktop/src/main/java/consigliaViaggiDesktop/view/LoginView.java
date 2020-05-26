@@ -26,20 +26,23 @@ public class LoginView {
 
 
     @FXML
-    private void ok() throws IOException {
+    private void ok() {
 
     	String userName = userNameField.getText();
         String password = passwordField.getText();
 
-        if (LoginController.getInstance().authenticate(userName, password))
-        {
-
-            errorLabel.setText("");
-            loadMenuView("");
-        }
-        else
-        {
-            errorLabel.setText("Username/Password is not valid");
+        try {
+            if (LoginController.getInstance().authenticate(userName, password))
+            {
+                errorLabel.setText("");
+                loadMenuView("");
+            }
+            else
+            {
+                errorLabel.setText("Username/Password is not valid");
+            }
+        } catch (IOException e) {
+            errorLabel.setText(e.getMessage());
         }
         clearFields();
     }
@@ -54,7 +57,6 @@ public class LoginView {
 
     public void loadMenuView(String userName) throws IOException
     {
-    	
     	MenuView controller= new MenuView();
     	controller.nomeUser(userName);
     	NavigationController.getInstance().navigateToView(Constants.MENU_VIEW, controller);

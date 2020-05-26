@@ -1,9 +1,12 @@
-package consigliaViaggiDesktop.model;
+package consigliaViaggiDesktop.model.DAO;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
+import consigliaViaggiDesktop.model.Review;
+import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.Status;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +18,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
-public class ReviewDaoJSON implements ReviewDao{
+public class ReviewDaoJSON implements ReviewDao {
 
     GsonBuilder builder;
     Gson gson;
@@ -43,7 +46,7 @@ public class ReviewDaoJSON implements ReviewDao{
     @Override
     public Review approveReview(int reviewId) {
         try {
-            Review review=editReview(reviewId,Status.APPROVED);
+            Review review=editReview(reviewId, Status.APPROVED);
             if(review!=null){
                 return review;
             }

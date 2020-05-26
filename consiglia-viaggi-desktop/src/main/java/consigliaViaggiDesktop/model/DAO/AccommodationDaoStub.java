@@ -1,4 +1,4 @@
-package consigliaViaggiDesktop.model;
+package consigliaViaggiDesktop.model.DAO;
 
 import java.util.ArrayList;
 import java.util.List;

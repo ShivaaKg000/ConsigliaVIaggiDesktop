@@ -1,7 +1,11 @@
-package consigliaViaggiDesktop.model;
+package consigliaViaggiDesktop.model.DAO;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
+import consigliaViaggiDesktop.model.Accommodation;
+import consigliaViaggiDesktop.model.AccommodationDao;
+import consigliaViaggiDesktop.model.Category;
+import consigliaViaggiDesktop.model.Subcategory;
 
 import java.io.*;
 import java.net.*;
@@ -13,7 +17,7 @@ import java.util.List;
 public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
-	public List<Accommodation> getAccommodationList(String category, String subCategory,String searchParam, int page)  {
+	public List<Accommodation> getAccommodationList(String category, String subCategory, String searchParam, int page)  {
 
 		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(searchParam,category,subCategory, page);
 		System.out.print(accommodationList);

@@ -1,9 +1,13 @@
-package consigliaViaggiDesktop.model;
+package consigliaViaggiDesktop.model.DAO;
+
+import consigliaViaggiDesktop.model.Review;
+import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewDaoStub implements ReviewDao{
+public class ReviewDaoStub implements ReviewDao {
 
     @Override
     public List<Review> getReviewList(int id) {

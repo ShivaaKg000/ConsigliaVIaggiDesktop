@@ -31,27 +31,23 @@ public class LoginController {
 		return loginController;
 	}
 	
-	public boolean authenticate(String username, String pwd)
-	{
-		try {
-			BufferedReader jsonResponse = getJsonResponseFromLoginUrl(username,pwd);
-			if(jsonResponse!=null) {
-				String token = getTokenFromJsonResponse(jsonResponse);
-				System.out.print(token);
-				if (token != null) {
-					if (checkIfAdmin(token)) {
-						saveUserInstance(token, username);
-						return true;
-					} else {
-						//not an Admin
-						return false;
-					}
+	public boolean authenticate(String username, String pwd) throws IOException {
+
+		BufferedReader jsonResponse = getJsonResponseFromLoginUrl(username,pwd);
+		if(jsonResponse!=null) {
+			String token = getTokenFromJsonResponse(jsonResponse);
+			System.out.print(token);
+			if (token != null) {
+				if (checkIfAdmin(token)) {
+					saveUserInstance(token, username);
+					return true;
+				} else {
+					//not an Admin
+					return false;
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
 		}
+
 		return false;
 	}
 

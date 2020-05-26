@@ -54,7 +54,7 @@ public class Review{
 		return status;
 	}
 
-	static class Builder {
+	public static class Builder {
 
     	private int id;
     	private int accommodationId;
