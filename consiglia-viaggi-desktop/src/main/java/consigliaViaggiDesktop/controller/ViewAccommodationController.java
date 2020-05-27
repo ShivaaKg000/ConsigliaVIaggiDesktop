@@ -9,6 +9,7 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.DAO.DaoException;
+import consigliaViaggiDesktop.model.SearchParams;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -18,11 +19,10 @@ import javafx.concurrent.Task;
 public class ViewAccommodationController {
 
 
-    private AccommodationDao accommodationDao;
-    private ObservableList<Accommodation> observableAccommodationList;
-    private ExecutorService executor;
-    private String currentSearchParam,currentCategory,currentSubCategory;
-    int currentpage;
+    private final AccommodationDao accommodationDao;
+    private final ObservableList<Accommodation> observableAccommodationList;
+    private final ExecutorService executor;
+   	private SearchParams currentSearchParams;
 
 
     public ViewAccommodationController() {
@@ -33,19 +33,15 @@ public class ViewAccommodationController {
     }
 
 
-    public ObservableList<Accommodation> loadAccommodationListAsync(String category, String subCategory,String searchParam,int page) {
+    public ObservableList<Accommodation> loadAccommodationListAsync(SearchParams params) {
 
-    	currentCategory=category;
-    	currentSubCategory=subCategory;
-    	currentSearchParam=searchParam;
-    	currentpage=page;
-
+    	currentSearchParams=params;
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
             public Void call() {
     			
-    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(category,subCategory,searchParam,0);
+    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(currentSearchParams);
     			observableAccommodationList.addAll(accommodationList);
     			observableAccommodationList.notifyAll();
 				return null;
@@ -75,8 +71,8 @@ public class ViewAccommodationController {
 				return null;
             }
         };
-        Thread testThread = new Thread(task);
-        testThread.start();
+		Thread testThread = new Thread(task);
+		executor.execute(testThread);
 		return observableAccommodation;
      
     }
@@ -100,7 +96,7 @@ public class ViewAccommodationController {
 			}
 		};
 		Thread testThread = new Thread(task);
-		testThread.start();
+		executor.execute(testThread);
 		return response;
 	}
     
@@ -124,17 +120,26 @@ public class ViewAccommodationController {
 
 	}
 
-	public void deleteAccommodation(int accommodationId) {
-		try {
-			accommodationDao.deleteAccommodation(accommodationId);
-			NavigationController.getInstance().buildInfoBox("Cancellazione","Struttura eliminata con successo ");
-		} catch (IOException e) {
-			NavigationController.getInstance().buildInfoBox("Cancellazione","Errore sconosciuto");
-		} catch (DaoException e) {
-			NavigationController.getInstance().buildInfoBox("Cancellazione",e.getErrorMessage());
-		}
+	public BooleanProperty deleteAccommodation(int accommodationId) {
 
-
+		BooleanProperty response = new SimpleBooleanProperty();
+		Task task = new Task() {
+			@Override
+			public Void call() {
+				try {
+					response.setValue(accommodationDao.deleteAccommodation(accommodationId));
+					NavigationController.getInstance().buildInfoBox("Cancellazione", "Struttura eliminata con successo ");
+					refreshAccommodationList();
+				} catch (DaoException e) {
+					NavigationController.getInstance().buildInfoBox("Cancellazione", e.getErrorMessage());
+				}
+				response.notifyAll();
+				return null;
+			}
+		};
+		Thread testThread = new Thread(task);
+		testThread.start();
+		return response;
 	}
 
 	public void loadCreateAccommodationDetailView() {
@@ -152,8 +157,6 @@ public class ViewAccommodationController {
 					result.set(accommodationDao.editAccommodation(editedAccommodation));
 					NavigationController.getInstance().buildInfoBox("Modifica","Modifica avvenuta con successo!");
 					refreshAccommodationList();
-				} catch (IOException e) {
-					NavigationController.getInstance().buildInfoBox("Modifica",e.getMessage());
 				} catch (DaoException e) {
 					NavigationController.getInstance().buildInfoBox("Modifica",e.getErrorMessage());
 				}
@@ -166,7 +169,7 @@ public class ViewAccommodationController {
 	}
 
 	public void refreshAccommodationList(){
-		loadAccommodationListAsync(currentCategory,currentSubCategory,currentSearchParam,currentpage);
+		loadAccommodationListAsync(currentSearchParams);
 	}
 
 }

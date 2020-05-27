@@ -154,7 +154,7 @@ public class ViewReviewController {
 
                 Review review=  reviewDao.approveReview(reviewId);
                 updatedReview.setValue(review);
-
+                refreshList();
                 return null;
             }
         };
@@ -172,7 +172,7 @@ public class ViewReviewController {
 
                 Review review=  reviewDao.rejectReview(reviewId);
                 updatedReview.setValue(review);
-
+                refreshList();
                 return null;
             }
         };

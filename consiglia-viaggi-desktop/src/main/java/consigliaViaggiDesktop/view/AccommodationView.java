@@ -2,6 +2,7 @@ package consigliaViaggiDesktop.view;
 import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
+import consigliaViaggiDesktop.model.SearchParams;
 import consigliaViaggiDesktop.model.Subcategory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -77,10 +78,10 @@ public class AccommodationView {
 		setTableClickEvent(tableAccommodation);
 		
 		//accommodationList=viewAccommodationController.getObsarvableAccommodationList();
-		accommodationList=viewAccommodationController.loadAccommodationListAsync(
-				"",
-				"",
-				"",page);
+		accommodationList=viewAccommodationController.loadAccommodationListAsync( new SearchParams.Builder()
+				.setCurrentpage(page)
+				.create());
+
 		tableAccommodation.setItems(accommodationList);
 		
 	}
@@ -147,10 +148,12 @@ public class AccommodationView {
 
 
 		accommodationList=viewAccommodationController.loadAccommodationListAsync(
-				cat,
-				subCat,
-				searchParamTextEdit.getText(),
-				page);
+				new SearchParams.Builder()
+				.setCurrentCategory(cat)
+				.setCurrentSubCategory(subCat)
+				.setCurrentSearchString(searchParamTextEdit.getText())
+				.setCurrentpage(page)
+				.create());
 	}
 
 }

@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -47,9 +48,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private TextField addressTextField;
 	@FXML private AnchorPane imageViewAnchorPane;
 	@FXML private HBox mainHbox;
+	@FXML private Button deleteButton;
 
 	private BooleanProperty mapInitialized;
-	private Desktop desktop = Desktop.getDesktop();
 	private Accommodation selectedAccommodation;
 	private GoogleMapView mapView;
 	private GoogleMap map;
@@ -62,6 +63,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
 	public void initialize(){
+
 
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
@@ -99,6 +101,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			viewAccommodationController= new ViewAccommodationController();
 		}
 		if(accommodationId!=null)
+
 			viewAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
 
 			@Override
@@ -143,7 +146,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	@FXML
 	void saveButtonAction(ActionEvent event) {
-		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Salvare le modifiche?")){
+		if(NavigationController.getInstance().buildAlert("Salva","Salvare le modifiche?")){
 			if(accommodationId==null){
 				ObjectProperty<Accommodation> response= viewAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
 				response.addListener(new ChangeListener<Accommodation>() {
@@ -179,7 +182,25 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	@FXML
 	void deleteButtonAction(ActionEvent event){
-		viewAccommodationController.deleteAccommodation(accommodationId);
+		if(accommodationId!=null) {
+			if(NavigationController.getInstance().buildAlert("Cancellazione","Confermi l'eliminazione?")) {
+
+				BooleanProperty response = viewAccommodationController.deleteAccommodation(accommodationId);
+				response.addListener(new ChangeListener<Boolean>() {
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+						if (newValue) {
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									viewAccommodationController.goBack();
+								}
+							});
+						}
+					}
+				});
+			}
+		}
 	}
 
 	@Override
@@ -219,8 +240,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				.setImages("")
 				.setCity("Napoli")
 				.setAddress(text_address.getText())
-				.setLongitude(Double.valueOf(longitudeTextField.getText()))
-				.setLatitude(Double.valueOf(latitudeTextField.getText()))
+				.setLongitude(Double.parseDouble(longitudeTextField.getText()))
+				.setLatitude(Double.parseDouble(latitudeTextField.getText()))
 				.setDescription(text_description.getText())
 				.setCategory(choice_category.getValue())
 				.setSubcategory(choice_subcategory.getValue())
@@ -228,6 +249,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				.create();
 
 	}
+
 	private Accommodation editAccommodationFromNewFields() {
 		return new Accommodation.Builder()
 				.setId(Integer.valueOf(text_id.getText()))
@@ -235,8 +257,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				.setImages("")
 				.setCity("Napoli")
 				.setAddress(text_address.getText())
-				.setLongitude(Double.valueOf(longitudeTextField.getText()))
-				.setLatitude(Double.valueOf(latitudeTextField.getText()))
+				.setLongitude(Double.parseDouble(longitudeTextField.getText()))
+				.setLatitude(Double.parseDouble(latitudeTextField.getText()))
 				.setDescription(text_description.getText())
 				.setCategory(choice_category.getValue())
 				.setSubcategory(choice_subcategory.getValue())
@@ -250,6 +272,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			@Override
 			public void run() {
+
+				deleteButton.setVisible(true);
 				text_id.setText(String.valueOf(accommodation.getId()));
 				latitudeTextField.setText(accommodation.getLatitude().toString());
 				longitudeTextField.setText(accommodation.getLongitude().toString());
@@ -325,12 +349,16 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	private void setAccommodationImage(String url){
 		System.out.println("\n imageUrl: "+url);
+		try{
 		BackgroundImage myBackgroundImage= new BackgroundImage(
 				new Image(url,200,200,true,true),
 				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
 				BackgroundSize.DEFAULT);
 
 		imageViewAnchorPane.setBackground(new Background(myBackgroundImage));
+		} catch (Exception e) {
+			System.out.print("Not an image");
+		}
 	}
 
 	private void openImageFileChooser(){

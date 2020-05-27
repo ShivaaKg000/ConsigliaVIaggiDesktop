@@ -96,6 +96,7 @@ public class NavigationController {
 				alert.setTitle(title);
 				alert.setHeaderText(header);
 				Optional<ButtonType> result = alert.showAndWait();
+
 			}
 		});
 
@@ -106,6 +107,7 @@ public class NavigationController {
 	}
 
 	public void setCurrentStage(Stage currentStage) {
+
 		this.currentStage = currentStage;
 		currentStage.setHeight(720);
         currentStage.setWidth(1280);

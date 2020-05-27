@@ -4,6 +4,7 @@ import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
+import consigliaViaggiDesktop.model.SearchParams;
 import consigliaViaggiDesktop.model.Subcategory;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -15,9 +16,9 @@ import java.util.*;
 public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
-	public List<Accommodation> getAccommodationList(String category, String subCategory, String searchParam, int page)  {
+	public List<Accommodation> getAccommodationList(SearchParams params)  {
 
-		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(searchParam,category,subCategory, page);
+		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(params);
 		System.out.print(accommodationList);
 		return accommodationList;
 	}
@@ -30,62 +31,57 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
 	public Accommodation createAccommodation(Accommodation accommodation) throws IOException, DaoException {
-		return createAccommodationJSON(accommodation);
+
+		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
+
+		return parseAccommodation(createAccommodationJSON(jsonAccommodation));
 
 	}
 
 	@Override
-	public Boolean deleteAccommodation(int idAccommodation) throws IOException, DaoException {
+	public Boolean deleteAccommodation(int idAccommodation) throws DaoException {
 
 		return deleteAccommodationJSON(idAccommodation);
 	}
 
 	@Override
-	public Boolean editAccommodation(Accommodation accommodation) throws IOException, DaoException {
-		return  editAccommodationJson(accommodation);
+	public Boolean editAccommodation(Accommodation accommodation) throws DaoException {
+		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
+		return  editAccommodationJson(jsonAccommodation);
 	}
 
-	private Boolean editAccommodationJson(Accommodation accommodation) throws IOException, DaoException {
-		URL url = new URL(Constants.EDIT_ACCOMMODATION_URL);
-		HttpURLConnection connection = null;
+	private Boolean editAccommodationJson(JsonObject accommodation) throws DaoException {
 		int responseCode=0;
-
-		connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("PUT");
-		connection.setDoOutput(true);
-		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
-		connection.setRequestProperty("Content-Type","application/json");
-
-		OutputStream os = connection.getOutputStream();
-		byte[] input = encodeAccommodation(accommodation).toString().getBytes(StandardCharsets.UTF_8);
-		os.write(input, 0, input.length);
-
-		responseCode=connection.getResponseCode();
-		BufferedReader jsonResponse = null;
-
+		HttpURLConnection connection = null;
+		try {
+			connection = createAuthenticatedConnection(Constants.EDIT_ACCOMMODATION_URL, "PUT");
+			writeOutputStream(connection, accommodation.toString());
+			responseCode=connection.getResponseCode();
+			//BufferedReader jsonResponse = null;
+		} catch (IOException e) {
+			throw new DaoException(DaoException.ERROR,"Errore di rete");
+		}
 		if(responseCode!=HttpsURLConnection.HTTP_OK){
 			if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
 				throw  new DaoException(DaoException.NOT_FOUND,"Record non trovato");
 			}
 			else
-				throw  new DaoException(DaoException.ERROR,"Errore di rete");
+				throw  new DaoException(DaoException.ERROR,"Bad Request");
 		}
 		else return true;
 	}
 
-	private Boolean deleteAccommodationJSON(int idAccommodation) throws IOException, DaoException {
-		URL url = new URL(Constants.DELETE_ACCOMMODATION_URL);
-		HttpURLConnection connection = null;
+	private Boolean deleteAccommodationJSON(int idAccommodation) throws DaoException {
+
 		int responseCode=0;
-		connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("DELETE");
-		connection.setDoOutput(true);
-		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
-		connection.setRequestProperty("Content-Type","application/json");
-
-		responseCode=connection.getResponseCode();
-
-		BufferedReader jsonResponse = null;
+		HttpURLConnection connection = null;
+		try {
+			connection = createAuthenticatedConnection(Constants.DELETE_ACCOMMODATION_URL+idAccommodation, "DELETE");
+			responseCode=connection.getResponseCode();
+			//BufferedReader jsonResponse = null;
+		} catch (IOException e) {
+			throw new DaoException(DaoException.ERROR,"Errore di rete");
+		}
 
 		if(responseCode!=HttpsURLConnection.HTTP_OK){
 			if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
@@ -96,15 +92,6 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		}
 		else
 			return true;
-	}
-
-	private Accommodation createAccommodationJSON(Accommodation accommodation) throws DaoException, IOException{
-
-		JsonObject jsonAccommodation=encodeAccommodation(accommodation);
-		JsonObject response;
-
-		return parseAccommodation(postAccommodation(jsonAccommodation));
-
 	}
 
 	private Accommodation getAccommodationJSON(int id)  {
@@ -122,9 +109,16 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return parseAccommodation(accommodationJSON);
 	}
 
-	private Collection<Accommodation> getAccommodationListJSONParsing(String query,String category,String subCategory, int page)  {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+Constants.QUERY_PARAM+ URLEncoder.encode(query, StandardCharsets.UTF_8)+Constants.CATEGORY_PARAM+category
-				+Constants.SUBCATEGORY_PARAM+subCategory+Constants.PAGE_PARAM+page;
+	private Collection<Accommodation> getAccommodationListJSONParsing(SearchParams params)  {
+		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+
+				Constants.QUERY_PARAM+
+				URLEncoder.encode(params.getCurrentSearchString(), StandardCharsets.UTF_8)+
+				Constants.CATEGORY_PARAM+
+				params.getCurrentCategory()+
+				Constants.SUBCATEGORY_PARAM+
+				params.getCurrentSubCategory()+
+				Constants.PAGE_PARAM+
+				params.getCurrentpage();
 
 		System.out.print("\n"+urlString);
 		BufferedReader bufferedReader = null;
@@ -218,23 +212,12 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return json;
 	}
 
-	private JsonObject postAccommodation(JsonObject accommodationJson) throws IOException, DaoException {
-		URL url = new URL(Constants.CREATE_ACCOMMODATION_URL);
-		HttpURLConnection connection = null;
-		int responseCode=0;
-		connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("POST");
-		connection.setDoOutput(true);
-		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
-		connection.setRequestProperty("Content-Type","application/json");
-		try (OutputStream os = connection.getOutputStream()) {
-			System.out.print( "accommodationJson: "+accommodationJson.toString());
-			byte[] input = accommodationJson.toString().getBytes(StandardCharsets.UTF_8);
-			os.write(input, 0, input.length);
+	private JsonObject createAccommodationJSON(JsonObject accommodationJson) throws IOException, DaoException {
 
-		}catch (Exception e){
-			e.printStackTrace();
-		}
+		HttpURLConnection connection = createAuthenticatedConnection(Constants.CREATE_ACCOMMODATION_URL, "POST");
+		int responseCode=0;
+
+		writeOutputStream(connection,accommodationJson.toString());
 		responseCode=connection.getResponseCode();
 
 		BufferedReader jsonResponse = null;
@@ -242,17 +225,34 @@ public class AccommodationDaoJSON implements AccommodationDao {
 			jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		}
 		else if(connection.getResponseCode()==401){
-				throw  new DaoException(DaoException.FORBIDDEN_ACCESS,"Non autorizzato");
-			}
-			else{
-				throw  new DaoException(DaoException.ERROR,"Errore di rete");
-			}
+			throw  new DaoException(DaoException.FORBIDDEN_ACCESS,"Non autorizzato");
+		}
+		else{
+			throw  new DaoException(DaoException.ERROR,"Errore di rete");
+		}
 
 		return convertToJsonObject(jsonResponse);
 	}
 
 	private JsonObject convertToJsonObject(BufferedReader json) {
 		return JsonParser.parseReader(json).getAsJsonObject();
+	}
+
+	private HttpURLConnection createAuthenticatedConnection(String urlString,String requestMethod) throws IOException {
+		URL url = new URL(urlString);
+		HttpURLConnection connection;
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod(requestMethod);
+		connection.setDoOutput(true);
+		connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
+		connection.setRequestProperty("Content-Type","application/json");
+		return connection;
+	}
+
+	private void writeOutputStream(HttpURLConnection connection,String stream) throws IOException {
+		OutputStream os = connection.getOutputStream();
+		byte[] input = stream.getBytes(StandardCharsets.UTF_8);
+		os.write(input, 0, input.length);
 	}
 }
 

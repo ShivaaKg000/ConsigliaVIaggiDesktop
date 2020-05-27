@@ -1,12 +1,10 @@
 package consigliaViaggiDesktop.view;
 
-import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.ViewReviewController;
 import consigliaViaggiDesktop.model.Review;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -14,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 
 public class ReviewDetailView{
 
@@ -61,7 +58,6 @@ public class ReviewDetailView{
 		viewReviewController.goBack();
     }
 
-
     @FXML
     void approveButtonClicked() {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Approvare questa recensione?")) {
@@ -72,7 +68,6 @@ public class ReviewDetailView{
 					System.out.print("\n Review Updated \n"+
 							newValue.getStatus());
 
-					viewReviewController.refreshList();
 				}
 			});
 		}
@@ -88,7 +83,6 @@ public class ReviewDetailView{
 					System.out.print("\n Review Updated \n"+
 							newValue.getStatus());
 
-					viewReviewController.refreshList();
 				}
 			});
 		}
