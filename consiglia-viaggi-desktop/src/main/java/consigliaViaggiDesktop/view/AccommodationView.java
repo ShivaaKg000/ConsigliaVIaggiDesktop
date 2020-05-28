@@ -4,11 +4,15 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.SearchParams;
 import consigliaViaggiDesktop.model.Subcategory;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +22,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
+
+import java.util.List;
 
 public class AccommodationView {
 	
@@ -32,13 +38,16 @@ public class AccommodationView {
 	@FXML 	private ChoiceBox<Category> categoryChoiseBox;
 	@FXML 	private ChoiceBox<Subcategory> subCategoryChoiseBox;
 	@FXML	private TextField searchParamTextEdit;
+	@FXML	private Label pageLabel;
+
 
 	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
-	private  ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
+	private ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
 	private ViewAccommodationController viewAccommodationController;
 	private int page=0;
+	private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
 
 	
 	public void initialize(){
@@ -76,13 +85,11 @@ public class AccommodationView {
 		     }
 		  });
 		setTableClickEvent(tableAccommodation);
-		
-		//accommodationList=viewAccommodationController.getObsarvableAccommodationList();
 		accommodationList=viewAccommodationController.loadAccommodationListAsync( new SearchParams.Builder()
-				.setCurrentpage(page)
 				.create());
-
 		tableAccommodation.setItems(accommodationList);
+		bindView();
+
 		
 	}
 
@@ -130,12 +137,23 @@ public class AccommodationView {
 	void searchButtonClick(ActionEvent event) {
 		searchAccommodation();
 	}
+
 	@FXML
 	void searchTextFieldKeyPressed(KeyEvent event) {
 
 		if(event.getCode().toString().equals("ENTER")){
 			searchAccommodation();
 		}
+	}
+
+	@FXML
+	void nextPageAction(ActionEvent event) {
+		viewAccommodationController.nextPage();
+	}
+
+	@FXML
+	void previousPage(ActionEvent event) {
+		viewAccommodationController.previousPage();
 	}
 
 	void searchAccommodation(){
@@ -154,6 +172,46 @@ public class AccommodationView {
 				.setCurrentSearchString(searchParamTextEdit.getText())
 				.setCurrentpage(page)
 				.create());
+	}
+
+	private void bindView() {
+
+		totalPageNumber= viewAccommodationController.getTotalPageNumber();
+		pageNumber = viewAccommodationController.getPageNumber();
+		totalElemntNumber=viewAccommodationController.getTotalElementNumber();
+
+		accommodationList.addListener(new ListChangeListener<Accommodation>() {
+			@Override
+			public void onChanged(Change<? extends Accommodation> c) {
+				updateGui();
+			}
+		});
+
+		pageNumber.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				Platform.runLater(new Runnable() {
+
+					Long page = 1+(Long)newValue;
+					@Override
+					public void run() {
+						pageLabel.setText("Pagina: "+String.valueOf(page)+" / "+String.valueOf(totalPageNumber.getValue())
+								+"                Totale strutture trovate: "+String.valueOf(totalElemntNumber.getValue()));
+					}
+				});
+			}
+		});
+	}
+
+	private void updateGui() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				pageLabel.setText("Pagina: "+String.valueOf(1+(Long)pageNumber.getValue())+" / "+String.valueOf(totalPageNumber.getValue())
+						+"                Totale strutture trovate: "+String.valueOf(totalElemntNumber.getValue()));
+			}
+		});
+
 	}
 
 }

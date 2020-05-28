@@ -4,6 +4,7 @@ import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
+import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParams;
 import consigliaViaggiDesktop.model.Subcategory;
 
@@ -16,9 +17,9 @@ import java.util.*;
 public class AccommodationDaoJSON implements AccommodationDao {
 
 	@Override
-	public List<Accommodation> getAccommodationList(SearchParams params)  {
+	public JsonPageResponse<Accommodation> getAccommodationList(SearchParams params)  {
 
-		List<Accommodation> accommodationList= (List<Accommodation>) getAccommodationListJSONParsing(params);
+		JsonPageResponse<Accommodation> accommodationList=  getAccommodationListJSONParsing(params);
 		System.out.print(accommodationList);
 		return accommodationList;
 	}
@@ -109,7 +110,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return parseAccommodation(accommodationJSON);
 	}
 
-	private Collection<Accommodation> getAccommodationListJSONParsing(SearchParams params)  {
+	private JsonPageResponse <Accommodation> getAccommodationListJSONParsing(SearchParams params)  {
 		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+
 				Constants.QUERY_PARAM+
 				URLEncoder.encode(params.getCurrentSearchString(), StandardCharsets.UTF_8)+
@@ -127,7 +128,9 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
+		//JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
+		//JsonArray accommodationListJson=jsonObject.get("content").getAsJsonArray();
+		/*JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
 		Collection<Accommodation> accommodationCollection = new ArrayList<>();
 		if (jsonTree .isJsonArray()) {
 			JsonArray array= jsonTree.getAsJsonArray();
@@ -136,9 +139,12 @@ public class AccommodationDaoJSON implements AccommodationDao {
                 accommodationCollection.add(parseAccommodation(accommodationJson));
             }
 			System.out.print(accommodationCollection);
-		}
+		}*/
 
-		return accommodationCollection;
+		JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
+		JsonPageResponse<Accommodation> pageResponse = parseAccommodationsPage(jsonObject);
+		List<Accommodation> ac = pageResponse.getContent();
+		return pageResponse;
 	}
 
 	private Accommodation parseAccommodation(JsonObject accommodationJson){
@@ -254,6 +260,47 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		byte[] input = stream.getBytes(StandardCharsets.UTF_8);
 		os.write(input, 0, input.length);
 	}
+
+	private JsonPageResponse getAccommodationPage(SearchParams params)  {
+
+		String urlString="http://localhost:5000/accommodation?city=napoli&page=0";
+
+		System.out.print("\n"+urlString);
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = getJSONFromUrl(urlString);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
+		JsonPageResponse<Accommodation> pageResponse = parseAccommodationsPage(jsonObject);
+		List<Accommodation> ac = pageResponse.getContent();
+		//JsonObject accommodationJson = JsonParser.parseString(gson.toJson(bufferedReader)).getAsJsonObject();
+		System.out.println("\nAuto encoded JsonPage: "+ac.get(0).getName());
+
+		return pageResponse;
+	}
+
+	private JsonPageResponse parseAccommodationsPage(JsonObject jsonPage){
+
+		List<Accommodation> accommodationCollection = new ArrayList<>();
+		JsonArray array= jsonPage.get("content").getAsJsonArray();
+		for (JsonElement jo : array) {
+			JsonObject accommodationJson = (JsonObject)jo ;
+			accommodationCollection.add(parseAccommodation(accommodationJson));
+		}
+		System.out.print(accommodationCollection);
+
+		JsonPageResponse response = new JsonPageResponse<Accommodation>();
+		response.setContent(accommodationCollection);
+		response.setPage(jsonPage.get("page").getAsLong());
+		response.setOffset(jsonPage.get("offset").getAsLong());
+		response.setPageSize(jsonPage.get("pageSize").getAsLong());
+		response.setTotalPages(jsonPage.get("totalPages").getAsLong());
+		response.setTotalElements(jsonPage.get("totalElements").getAsLong());
+		return response;
+	}
+
 }
 
 

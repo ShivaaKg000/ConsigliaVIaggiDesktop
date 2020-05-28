@@ -3,7 +3,7 @@ package consigliaViaggiDesktop.model;
 public class SearchParams {
 
     private String currentSearchString,currentCategory,currentSubCategory;
-    int currentpage;
+    long currentpage=0;
 
     public SearchParams(Builder builder) {
         this.currentCategory=builder.currentCategory;
@@ -14,7 +14,7 @@ public class SearchParams {
 
     public static class Builder {
         private String currentSearchString="",currentCategory="",currentSubCategory="";
-        int currentpage;
+        long currentpage=0;
 
         public Builder setCurrentSearchString(String currentSearchParam) {
             this.currentSearchString = currentSearchParam;
@@ -31,7 +31,7 @@ public class SearchParams {
             return this;
         }
 
-        public Builder setCurrentpage(int currentpage) {
+        public Builder setCurrentpage(long currentpage) {
             this.currentpage = currentpage;
             return this;
         }
@@ -54,7 +54,7 @@ public class SearchParams {
         return currentSubCategory;
     }
 
-    public int getCurrentpage() {
+    public long getCurrentpage() {
         return currentpage;
     }
 

@@ -9,6 +9,7 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.DAO.DaoException;
+import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParams;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.*;
@@ -23,15 +24,31 @@ public class ViewAccommodationController {
     private final ObservableList<Accommodation> observableAccommodationList;
     private final ExecutorService executor;
    	private SearchParams currentSearchParams;
+	private LongProperty pageNumber;
+	private LongProperty totalPageNumber;
+	private LongProperty totalElementNumber;
 
 
-    public ViewAccommodationController() {
-
+	public ViewAccommodationController() {
+		totalPageNumber= new SimpleLongProperty();
+		pageNumber= new SimpleLongProperty(-1);
+		totalElementNumber= new SimpleLongProperty();
     	executor=initExecutor(4);
     	accommodationDao= new AccommodationDaoJSON();
         observableAccommodationList= FXCollections.observableArrayList();		
     }
 
+	public LongProperty getPageNumber() {
+		return pageNumber;
+	}
+
+	public LongProperty getTotalPageNumber() {
+		return totalPageNumber;
+	}
+
+	public LongProperty getTotalElementNumber() {
+		return  totalElementNumber;
+	}
 
     public ObservableList<Accommodation> loadAccommodationListAsync(SearchParams params) {
 
@@ -40,8 +57,11 @@ public class ViewAccommodationController {
     	Task task = new Task() {
     		@Override
             public Void call() {
-    			
-    			List<Accommodation> accommodationList= accommodationDao.getAccommodationList(currentSearchParams);
+				JsonPageResponse<Accommodation> page=accommodationDao.getAccommodationList(currentSearchParams);
+    			List<Accommodation> accommodationList= page.getContent();
+    			pageNumber.setValue(page.getPage());
+				totalPageNumber.setValue(page.getTotalPages());
+				totalElementNumber.setValue(page.getTotalElements());
     			observableAccommodationList.addAll(accommodationList);
     			observableAccommodationList.notifyAll();
 				return null;
@@ -109,17 +129,6 @@ public class ViewAccommodationController {
 
 	}
 
-	public void goBack() {
-    	NavigationController.getInstance().navigateBack();
-		
-	}
-
-	public void goBackToMenu() {
-		executor.shutdownNow();
-		NavigationController.getInstance().navigateBack();
-
-	}
-
 	public BooleanProperty deleteAccommodation(int accommodationId) {
 
 		BooleanProperty response = new SimpleBooleanProperty();
@@ -170,6 +179,39 @@ public class ViewAccommodationController {
 
 	public void refreshAccommodationList(){
 		loadAccommodationListAsync(currentSearchParams);
+	}
+
+	public void nextPage() {
+		if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
+			currentSearchParams = new SearchParams.Builder().setCurrentpage(currentSearchParams.getCurrentpage() + 1)
+					.setCurrentSubCategory(currentSearchParams.getCurrentSubCategory())
+					.setCurrentSearchString(currentSearchParams.getCurrentSearchString())
+					.setCurrentCategory(currentSearchParams.getCurrentCategory())
+					.create();
+			loadAccommodationListAsync(currentSearchParams);
+		}
+	}
+
+	public void previousPage() {
+		if (pageNumber.getValue()>0) {
+			currentSearchParams = new SearchParams.Builder().setCurrentpage(currentSearchParams.getCurrentpage() - 1)
+					.setCurrentSubCategory(currentSearchParams.getCurrentSubCategory())
+					.setCurrentSearchString(currentSearchParams.getCurrentSearchString())
+					.setCurrentCategory(currentSearchParams.getCurrentCategory())
+					.create();
+			loadAccommodationListAsync(currentSearchParams);
+		}
+	}
+
+	public void goBack() {
+		NavigationController.getInstance().navigateBack();
+
+	}
+
+	public void goBackToMenu() {
+		executor.shutdownNow();
+		NavigationController.getInstance().navigateBack();
+
 	}
 
 }

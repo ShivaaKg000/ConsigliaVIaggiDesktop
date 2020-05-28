@@ -157,11 +157,13 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				});
 			}
 			else{
+				Accommodation updatedAccommodation=editAccommodationFromNewFields();
 				BooleanProperty response= viewAccommodationController.editAccommodationAsync(editAccommodationFromNewFields());
 				response.addListener(new ChangeListener<Boolean>() {
 					@Override
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-
+						if(newValue)
+							updateAccommodationDetailGui(updatedAccommodation);
 					}
 				});
 			}
@@ -273,6 +275,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			@Override
 			public void run() {
 
+				accommodationId=accommodation.getId();
 				deleteButton.setVisible(true);
 				text_id.setText(String.valueOf(accommodation.getId()));
 				latitudeTextField.setText(accommodation.getLatitude().toString());
