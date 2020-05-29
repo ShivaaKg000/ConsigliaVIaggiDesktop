@@ -1,7 +1,7 @@
 package consigliaViaggiDesktop.model.DAO;
 
 import consigliaViaggiDesktop.model.Review;
-import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.Status;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class ReviewDaoStub implements ReviewDao {
             		.setAccommodationId(i)
             		.setAccommodationName("Da Peppino")
                     .setAuthor("Paolo")
-                    .setReviewText("Peppino � na schifezz "+i)
+                    .setReviewText("Peppino è na schifezz "+i)
                     .setRating((float) (1 + Math.random() * (5 - 1)))
                     .setData(sDate)
                     .setApproved(Status.PENDING)

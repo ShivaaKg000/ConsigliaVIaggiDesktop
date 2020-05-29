@@ -5,7 +5,7 @@ import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.Review;
-import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.Status;
 
 import java.io.BufferedReader;

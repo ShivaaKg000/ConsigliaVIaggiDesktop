@@ -1,4 +1,6 @@
-package consigliaViaggiDesktop.model;
+package consigliaViaggiDesktop.model.DAO;
+
+import consigliaViaggiDesktop.model.Review;
 
 import java.util.List;
 
