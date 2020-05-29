@@ -87,8 +87,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 				connection = createAuthenticatedConnection(Constants.EDIT_ACCOMMODATION_URL, "PUT");
 				writeOutputStream(connection, accommodation.toString());
 				responseCode=connection.getResponseCode();
-				//BufferedReader jsonResponse = null;
-			} catch (IOException e) {
+				} catch (IOException e) {
 				throw new DaoException(DaoException.ERROR,"Errore di rete");
 			}
 			if(responseCode!=HttpsURLConnection.HTTP_OK){
@@ -187,17 +186,13 @@ public class AccommodationDaoJSON implements AccommodationDao {
 			BufferedReader bufferedReader;
 			try {
 				bufferedReader = getJSONFromUrl(urlString);
-			} catch (MalformedURLException | DaoException e) {
+			} catch (MalformedURLException e) {
 				throw new DaoException(DaoException.ERROR,e.getMessage());
 
 			}
 			JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
-			JsonPageResponse<Accommodation> pageResponse = parseAccommodationsPage(jsonObject);
 
-			//???
-			List<Accommodation> ac = pageResponse.getContent();
-
-			return pageResponse;
+			return parseAccommodationsPage(jsonObject);
 		}
 
 		private JsonPageResponse<Accommodation> parseAccommodationsPage(JsonObject jsonPage){
@@ -231,7 +226,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 			BufferedReader bufferedReader;
 			try {
 				bufferedReader = getJSONFromUrl(urlString);
-			} catch (MalformedURLException | DaoException e) {
+			} catch (MalformedURLException e) {
 				throw new DaoException(DaoException.ERROR,e.getMessage());
 			}
 			JsonElement jsonTree  = JsonParser.parseReader(bufferedReader);
@@ -258,36 +253,8 @@ public class AccommodationDaoJSON implements AccommodationDao {
 			return json;
 		}
 
-
-
-	//??? DA ELIMINARE!
-	/*private JsonPageResponse getAccommodationPage(SearchParams params) throws DaoException {
-
-		String urlString="http://localhost:5000/accommodation?city=napoli&page=0";
-
-		System.out.print("\n"+urlString);
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = getJSONFromUrl(urlString);
-		} catch (MalformedURLException | DaoException e) {
-			throw new DaoException(DaoException.ERROR,e.getMessage());
-		}
-		JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
-		JsonPageResponse<Accommodation> pageResponse = parseAccommodationsPage(jsonObject);
-
-		//????
-		List<Accommodation> ac = pageResponse.getContent();
-
-		return pageResponse;
-	}*/
-
 }
 
-
-	/*
-	private JsonObject convertToJsonObject(BufferedReader json) {
-		return JsonParser.parseReader(json).getAsJsonObject();
-	}*/
 
 
 

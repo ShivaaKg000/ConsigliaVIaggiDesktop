@@ -19,7 +19,6 @@ import javafx.concurrent.Task;
 
 public class ViewAccommodationController {
 
-
     private final AccommodationDao accommodationDao;
     private final ObservableList<Accommodation> observableAccommodationList;
     private final ExecutorService executor;
@@ -27,7 +26,6 @@ public class ViewAccommodationController {
 	private LongProperty pageNumber;
 	private LongProperty totalPageNumber;
 	private LongProperty totalElementNumber;
-
 
 	public ViewAccommodationController() {
 		totalPageNumber= new SimpleLongProperty();
@@ -41,16 +39,30 @@ public class ViewAccommodationController {
 	public LongProperty getPageNumber() {
 		return pageNumber;
 	}
-
 	public LongProperty getTotalPageNumber() {
 		return totalPageNumber;
 	}
-
 	public LongProperty getTotalElementNumber() {
 		return  totalElementNumber;
 	}
 
-    public ObservableList<Accommodation> loadAccommodationListAsync(SearchParams params) {
+	public ObjectProperty<Accommodation> getAccommodationAsync(int id) {
+		ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<Accommodation>();
+		Task task = new Task() {
+			@Override
+			public Void call() throws InterruptedException, DaoException {
+
+				Accommodation accommodation= accommodationDao.getAccommodationById(id);
+				observableAccommodation.setValue(accommodation);
+				return null;
+			}
+		};
+		Thread testThread = new Thread(task);
+		executor.execute(testThread);
+		return observableAccommodation;
+
+	}
+	public ObservableList<Accommodation> loadAccommodationListAsync(SearchParams params) {
 
     	currentSearchParams=params;
     	observableAccommodationList.clear();
@@ -73,30 +85,15 @@ public class ViewAccommodationController {
 
         return observableAccommodationList;
     }
-    
-    private ExecutorService initExecutor(int threadPullNumber) {
-		return new ThreadPoolExecutor(threadPullNumber, threadPullNumber, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-
-
+	public void refreshAccommodationList(){
+		loadAccommodationListAsync(currentSearchParams);
 	}
-    
-    public ObjectProperty<Accommodation> getAccommodationAsync(int id) {
-    	ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<Accommodation>();
-    	Task task = new Task() {
-    		@Override
-            public Void call() throws InterruptedException, DaoException {
-    			
-    			Accommodation accommodation= accommodationDao.getAccommodationById(id);
-    			observableAccommodation.setValue(accommodation);
-				return null;
-            }
-        };
-		Thread testThread = new Thread(task);
-		executor.execute(testThread);
-		return observableAccommodation;
-     
-    }
 
+	public void loadCreateAccommodationDetailView() {
+		AccommodationDetailView accommodationDetailView=new AccommodationDetailView();
+		accommodationDetailView.setViewAccommodationController(this);
+		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
+	}
 	public ObjectProperty<Accommodation> createAccommodationAsync(Accommodation accommodation) {
 		ObjectProperty<Accommodation>  response = new SimpleObjectProperty();
 		Task task = new Task() {
@@ -128,6 +125,25 @@ public class ViewAccommodationController {
 		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
 
 	}
+	public BooleanProperty editAccommodationAsync(Accommodation editedAccommodation) {
+		BooleanProperty result= new SimpleBooleanProperty();
+		Task task = new Task() {
+			@Override
+			public Void call(){
+				try {
+					result.set(accommodationDao.editAccommodation(editedAccommodation));
+					NavigationController.getInstance().buildInfoBox("Modifica","Modifica avvenuta con successo!");
+					refreshAccommodationList();
+				} catch (DaoException e) {
+					NavigationController.getInstance().buildInfoBox("Modifica",e.getErrorMessage());
+				}
+				return null;
+			}
+		};
+		Thread testThread = new Thread(task);
+		testThread.start();
+		return result;
+	}
 
 	public BooleanProperty deleteAccommodation(int accommodationId) {
 
@@ -151,36 +167,6 @@ public class ViewAccommodationController {
 		return response;
 	}
 
-	public void loadCreateAccommodationDetailView() {
-		AccommodationDetailView accommodationDetailView=new AccommodationDetailView();
-		accommodationDetailView.setViewAccommodationController(this);
-		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_DETAIL_VIEW,accommodationDetailView);
-	}
-
-	public BooleanProperty editAccommodationAsync(Accommodation editedAccommodation) {
-		BooleanProperty result= new SimpleBooleanProperty();
-		Task task = new Task() {
-			@Override
-			public Void call(){
-				try {
-					result.set(accommodationDao.editAccommodation(editedAccommodation));
-					NavigationController.getInstance().buildInfoBox("Modifica","Modifica avvenuta con successo!");
-					refreshAccommodationList();
-				} catch (DaoException e) {
-					NavigationController.getInstance().buildInfoBox("Modifica",e.getErrorMessage());
-				}
-				return null;
-			}
-		};
-		Thread testThread = new Thread(task);
-		testThread.start();
-		return result;
-	}
-
-	public void refreshAccommodationList(){
-		loadAccommodationListAsync(currentSearchParams);
-	}
-
 	public void nextPage() {
 		if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
 			currentSearchParams = new SearchParams.Builder().setCurrentpage(currentSearchParams.getCurrentpage() + 1)
@@ -191,7 +177,6 @@ public class ViewAccommodationController {
 			loadAccommodationListAsync(currentSearchParams);
 		}
 	}
-
 	public void previousPage() {
 		if (pageNumber.getValue()>0) {
 			currentSearchParams = new SearchParams.Builder().setCurrentpage(currentSearchParams.getCurrentpage() - 1)
@@ -207,10 +192,15 @@ public class ViewAccommodationController {
 		NavigationController.getInstance().navigateBack();
 
 	}
-
 	public void goBackToMenu() {
 		executor.shutdownNow();
 		NavigationController.getInstance().navigateBack();
+
+	}
+
+	private ExecutorService initExecutor(int threadPullNumber) {
+		return new ThreadPoolExecutor(threadPullNumber, threadPullNumber, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+
 
 	}
 
