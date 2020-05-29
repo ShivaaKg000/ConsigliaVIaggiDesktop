@@ -56,7 +56,7 @@ public class ViewAccommodationController {
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
-            public Void call() {
+            public Void call() throws DaoException {
 				JsonPageResponse<Accommodation> page=accommodationDao.getAccommodationList(currentSearchParams);
     			List<Accommodation> accommodationList= page.getContent();
     			pageNumber.setValue(page.getPage());
@@ -84,7 +84,7 @@ public class ViewAccommodationController {
     	ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<Accommodation>();
     	Task task = new Task() {
     		@Override
-            public Void call() throws InterruptedException {
+            public Void call() throws InterruptedException, DaoException {
     			
     			Accommodation accommodation= accommodationDao.getAccommodationById(id);
     			observableAccommodation.setValue(accommodation);
