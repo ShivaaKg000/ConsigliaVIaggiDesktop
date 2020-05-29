@@ -1,15 +1,14 @@
 package consigliaViaggiDesktop.controller;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 import consigliaViaggiDesktop.Constants;
+import consigliaViaggiDesktop.model.DAO.ReviewDao;
 import consigliaViaggiDesktop.model.DAO.ReviewDaoJSON;
 import consigliaViaggiDesktop.model.Review;
-import consigliaViaggiDesktop.model.ReviewDao;
 import consigliaViaggiDesktop.view.ReviewDetailView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
