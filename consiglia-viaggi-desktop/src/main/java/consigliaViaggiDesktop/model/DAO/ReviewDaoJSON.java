@@ -4,10 +4,12 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
+import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
 import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.Status;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,77 +17,17 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ReviewDaoJSON implements ReviewDao {
 
-    GsonBuilder builder;
-    Gson gson;
-
-    public ReviewDaoJSON(){
-        builder = new GsonBuilder();
-        gson = builder.create();
-    }
-
-    @Override
-    public List<Review> getReviewList(int id) {
-        return (List<Review>) getReviewListJSON(id);
-    }
-
-    @Override
-    public Review getReviewById(int id) {
+    @Override  public Review getReviewById(int id) {
         return getReviewJsonById(id);
     }
-
-    @Override
-    public boolean postReview(Review review) {
-        return false;
-    }
-
-    @Override
-    public Review approveReview(int reviewId) {
-        try {
-            Review review=editReview(reviewId, Status.APPROVED);
-            if(review!=null){
-                return review;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Review rejectReview(int reviewId) {
-        try {
-            Review review=editReview(reviewId,Status.REJECTED);
-            if(review!=null){
-                return review;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new Review.Builder().build();
-    }
-
-    private Collection<Review> getReviewListJSON(int accommodationId)  {
-        String urlString= Constants.GET_REVIEW_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+accommodationId;
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = getJSONFromUrl(urlString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        Type collectionType = new TypeToken<Collection<Review>>(){}.getType();
-        Collection<Review> reviewCollection = gson.fromJson(bufferedReader, collectionType);
-        return reviewCollection;
-    }
-
     private Review getReviewJsonById(int reviewId)  {
         String urlString= Constants.GET_REVIEW_LIST_URL+Constants.REVIEW_ID_PARAM+reviewId;
         GsonBuilder builder = new GsonBuilder();
@@ -98,10 +40,114 @@ public class ReviewDaoJSON implements ReviewDao {
             e.printStackTrace();
         }
 
-        Review review = gson.fromJson(bufferedReader,Review.class);
+        Review review = parseReview(JsonParser.parseReader(bufferedReader).getAsJsonObject());
         return review;
     }
 
+    @Override  public JsonPageResponse<Review> getReviewList(SearchParamsReview params) throws DaoException {
+        JsonPageResponse<Review> reviewListPage=  getReviewListJSONParsing(params.getCurrentSearchString(),params.getCurrentpage());
+        return reviewListPage;
+
+    }
+    private JsonPageResponse <Review> getReviewListJSONParsing(String params, long page) throws DaoException {
+        String urlString= Constants.GET_REVIEW_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+params+Constants.PAGE_PARAM+page;
+        BufferedReader bufferedReader;
+        try {
+            bufferedReader = getJSONFromUrl(urlString);
+        } catch (MalformedURLException e) {
+            throw new DaoException(DaoException.ERROR,e.getMessage());
+
+        }
+        JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
+
+        return parseReviewPage(jsonObject);
+    }
+
+    @Override  public boolean postReview(Review review) {
+        return false;
+    }
+    @Override  public Review approveReview(int reviewId) {
+        try {
+            Review review=editReview(reviewId, Status.APPROVED);
+            if(review!=null){
+                return review;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @Override  public Review rejectReview(int reviewId) {
+        try {
+            Review review=editReview(reviewId,Status.REJECTED);
+            if(review!=null){
+                return review;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new Review.Builder().build();
+    }
+    private Review editReview(int id, Status status) throws IOException {
+        URL url = new URL(Constants.APPROVE_REVIEW+id+Constants.STATUS_PARAM+status);
+        HttpURLConnection connection = null;
+        int responseCode=0;
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Authorization","Bearer "+ LoginController.getInstance().getCurrentUserAuthenticationToken());
+        connection.setRequestProperty("Content-Type","application/json");
+        responseCode=connection.getResponseCode();
+
+        BufferedReader jsonResponse = null;
+        if (responseCode== HttpURLConnection.HTTP_OK) {
+            jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            Review review = parseReview(JsonParser.parseReader(jsonResponse).getAsJsonObject());
+            return review;
+        }
+        return null;
+    }
+
+    private JsonPageResponse<Review> parseReviewPage(JsonObject jsonPage){
+
+        List<Review> reviewCollection = new ArrayList<>();
+        JsonArray array= jsonPage.get("content").getAsJsonArray();
+        for (JsonElement jo : array) {
+            JsonObject reviewJson = (JsonObject)jo ;
+            reviewCollection.add(parseReview(reviewJson));
+        }
+        System.out.println("COLLECTION" + reviewCollection);
+        JsonPageResponse<Review> response = new JsonPageResponse<>();
+        response.setContent(reviewCollection);
+        response.setPage(jsonPage.get("page").getAsLong());
+        response.setOffset(jsonPage.get("offset").getAsLong());
+        response.setPageSize(jsonPage.get("pageSize").getAsLong());
+        response.setTotalPages(jsonPage.get("totalPages").getAsLong());
+        response.setTotalElements(jsonPage.get("totalElements").getAsLong());
+        return response;
+    }
+    private Review parseReview(JsonObject reviewJson){
+        int id = reviewJson.get("id").getAsInt();
+        int accommodationId = reviewJson.get("accommodationId").getAsInt();
+        String accommodationName = reviewJson.get("accommodationName").getAsString();
+        Status stato = Status.valueOf(reviewJson.get("stato").getAsString());
+        String name = reviewJson.get("nome").getAsString();
+        String creationDate =  reviewJson.get("creationDate").getAsString();
+        float rating = reviewJson.get("rating").getAsFloat();
+        String content = reviewJson.get("content").getAsString();
+
+        return new Review.Builder()
+                .setId(id)
+                .setAccommodationId(accommodationId)
+                .setAccommodationName(accommodationName)
+                .setApproved(stato)
+                .setAuthor(name)
+                .setData(creationDate)
+                .setRating(rating)
+                .setReviewText(content)
+                .build();
+
+    }
     private BufferedReader getJSONFromUrl(String urlString) throws MalformedURLException {
         URL url = new URL(urlString);
         HttpURLConnection connection = null;
@@ -121,28 +167,8 @@ public class ReviewDaoJSON implements ReviewDao {
 
         return json;
     }
-
-    private Review editReview(int id, Status status) throws IOException {
-        URL url = new URL(Constants.APPROVE_REVIEW+id+Constants.STATUS_PARAM+status);
-        HttpURLConnection connection = null;
-        int responseCode=0;
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("PUT");
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Authorization","Bearer "+ LoginController.getInstance().getCurrentUserAuthenticationToken());
-        connection.setRequestProperty("Content-Type","application/json");
-        responseCode=connection.getResponseCode();
-
-        BufferedReader jsonResponse = null;
-        if (responseCode== HttpURLConnection.HTTP_OK) {
-            jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            return gson.fromJson(jsonResponse,Review.class);
-        }
-        if(connection.getResponseCode()==401){
-            System.out.print("\nResponse: Non autorizzato"); //bisogna implementare qualcosa
-            //return JsonParser.parseString("\"error\":\"non autorizzato\"").getAsJsonObject();
-        }
-        // if json null???
-        return null;
     }
-}
+
+
+
+

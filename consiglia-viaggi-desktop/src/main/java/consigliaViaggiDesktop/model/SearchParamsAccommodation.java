@@ -1,11 +1,11 @@
 package consigliaViaggiDesktop.model;
 
-public class SearchParams {
+public class SearchParamsAccommodation {
 
     private String currentSearchString,currentCategory,currentSubCategory;
     long currentpage=0;
 
-    public SearchParams(Builder builder) {
+    public SearchParamsAccommodation(Builder builder) {
         this.currentCategory=builder.currentCategory;
         this.currentpage=builder.currentpage;
         this.currentSubCategory=builder.currentSubCategory;
@@ -36,8 +36,8 @@ public class SearchParams {
             return this;
         }
 
-        public SearchParams create() {
-            return new SearchParams(this);
+        public SearchParamsAccommodation create() {
+            return new SearchParamsAccommodation(this);
         }
 
     }

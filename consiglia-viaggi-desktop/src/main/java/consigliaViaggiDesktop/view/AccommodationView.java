@@ -2,10 +2,9 @@ package consigliaViaggiDesktop.view;
 import consigliaViaggiDesktop.controller.ViewAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
-import consigliaViaggiDesktop.model.SearchParams;
+import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.model.Subcategory;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -22,8 +21,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
-
-import java.util.List;
 
 public class AccommodationView {
 	
@@ -85,7 +82,7 @@ public class AccommodationView {
 		     }
 		  });
 		setTableClickEvent(tableAccommodation);
-		accommodationList=viewAccommodationController.loadAccommodationListAsync( new SearchParams.Builder()
+		accommodationList=viewAccommodationController.loadAccommodationListAsync( new SearchParamsAccommodation.Builder()
 				.create());
 		tableAccommodation.setItems(accommodationList);
 		bindView();
@@ -166,7 +163,7 @@ public class AccommodationView {
 
 
 		accommodationList=viewAccommodationController.loadAccommodationListAsync(
-				new SearchParams.Builder()
+				new SearchParamsAccommodation.Builder()
 				.setCurrentCategory(cat)
 				.setCurrentSubCategory(subCat)
 				.setCurrentSearchString(searchParamTextEdit.getText())

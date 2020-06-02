@@ -5,7 +5,7 @@ import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
-import consigliaViaggiDesktop.model.SearchParams;
+import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.model.Subcategory;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -165,13 +165,13 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	// GET
 		@Override
-		public JsonPageResponse<Accommodation> getAccommodationList(SearchParams params) throws DaoException {
+		public JsonPageResponse<Accommodation> getAccommodationList(SearchParamsAccommodation params) throws DaoException {
 
 			JsonPageResponse<Accommodation> accommodationList=  getAccommodationListJSONParsing(params);
 			System.out.print(accommodationList);
 			return accommodationList;
 		}
-		private JsonPageResponse <Accommodation> getAccommodationListJSONParsing(SearchParams params) throws DaoException {
+		private JsonPageResponse <Accommodation> getAccommodationListJSONParsing(SearchParamsAccommodation params) throws DaoException {
 			String urlString= Constants.GET_ACCOMMODATION_LIST_URL+
 					Constants.QUERY_PARAM+
 					URLEncoder.encode(params.getCurrentSearchString(), StandardCharsets.UTF_8)+

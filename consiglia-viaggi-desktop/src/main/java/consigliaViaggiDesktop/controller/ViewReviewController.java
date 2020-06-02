@@ -7,11 +7,20 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import consigliaViaggiDesktop.Constants;
+import consigliaViaggiDesktop.model.Accommodation;
+import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
+import consigliaViaggiDesktop.model.DAO.DaoException;
+import consigliaViaggiDesktop.model.DAO.ReviewDao;
 import consigliaViaggiDesktop.model.DAO.ReviewDaoJSON;
+import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
-import consigliaViaggiDesktop.model.ReviewDao;
+//import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.SearchParamsAccommodation;
+import consigliaViaggiDesktop.model.SearchParamsReview;
 import consigliaViaggiDesktop.view.ReviewDetailView;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,42 +30,66 @@ public class ViewReviewController {
 	
     private ReviewDao reviewDao;
     private ObservableList<Review> observableReviewList;
+    private SearchParamsReview currentSearchParamsReview;
     private ExecutorService executor;
     private int currentAccommodationId;
+    private LongProperty pageNumber;
+    private LongProperty totalPageNumber;
+    private LongProperty totalElementNumber;
     
     public ViewReviewController() {
-
-    	executor=initExecutor(4);
+        totalPageNumber= new SimpleLongProperty();
+        pageNumber= new SimpleLongProperty(-1);
+        totalElementNumber= new SimpleLongProperty();
+        executor=initExecutor(4);
         reviewDao= new ReviewDaoJSON();
-        //reviewDao= new ReviewDaoStub();
-        observableReviewList= FXCollections.observableArrayList();		
+        observableReviewList= FXCollections.observableArrayList();
     }
-    
 
-    public void loadReviewListAsync(int accommodationId) {
+    public LongProperty getPageNumber() {
+        return pageNumber;
+    }
+    public LongProperty getTotalPageNumber() {
+        return totalPageNumber;
+    }
+    public LongProperty getTotalElementNumber() {
+        return  totalElementNumber;
+    }
 
-        currentAccommodationId=accommodationId;
-    	observableReviewList.clear();
-    	Task task = new Task() {
-    		@Override
-            public Void call() throws InterruptedException {
-    			
-    			List<Review> reviewList= reviewDao.getReviewList(accommodationId);
-    			observableReviewList.addAll(reviewList);
-    			observableReviewList.notifyAll();
-				return null;
+
+    public ObservableList<Review> getObsarvableReviewList() {
+        return observableReviewList;
+    }
+    public ObservableList<Review> loadReviewListAsync(SearchParamsReview params) throws DaoException {
+
+        currentSearchParamsReview =params;
+        observableReviewList.clear();
+        Task task = new Task() {
+            @Override
+            public Void call() throws DaoException {
+                JsonPageResponse<Review> page=reviewDao.getReviewList(currentSearchParamsReview);
+                List<Review> reviewList= page.getContent();
+                pageNumber.setValue(page.getPage());
+                totalPageNumber.setValue(page.getTotalPages());
+                totalElementNumber.setValue(page.getTotalElements());
+                observableReviewList.addAll(reviewList);
+                observableReviewList.notifyAll();
+                System.out.println("\nCIAO"+reviewList);
+                return null;
             }
         };
-
+        initExecutor(4);
         Thread testThread = new Thread(task);
         executor.execute(testThread);
-     
+
+        return observableReviewList;
     }
-    
-    private ExecutorService initExecutor(int threadPullNumber) {
-    	return new ThreadPoolExecutor(threadPullNumber, threadPullNumber, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(10));
-		
-	}
+
+
+    public void refreshList() throws DaoException {
+        loadReviewListAsync(currentSearchParamsReview);
+    }
+
 
 	public void addReviewtoListAsync(int reviewId) {
     	Task task = new Task() {
@@ -121,9 +154,6 @@ public class ViewReviewController {
         return copyList;
     }
 
-	public ObservableList<Review> getObsarvableReviewList() {
-		return observableReviewList;
-	}
 
 	public void reviewSelected(int reviewId) {
 
@@ -131,8 +161,6 @@ public class ViewReviewController {
         reviewDetailView.setId(reviewId);
         reviewDetailView.setViewReviewController(this);
         NavigationController.getInstance().navigateToView(Constants.REVIEW_DETAIL_VIEW,reviewDetailView);
-        System.out.println("review selected: "+reviewId);
-
     }
 
 	public void goBack() {
@@ -150,10 +178,11 @@ public class ViewReviewController {
         ObjectProperty<Review> updatedReview= new SimpleObjectProperty<>();
         Task task = new Task() {
             @Override
-            public Void call() throws InterruptedException {
+            public Void call() throws InterruptedException, DaoException {
 
                 Review review=  reviewDao.approveReview(reviewId);
                 updatedReview.setValue(review);
+                NavigationController.getInstance().buildInfoBox("Valutazione recensione","Recensione approvata con successo!");
                 refreshList();
                 return null;
             }
@@ -168,10 +197,11 @@ public class ViewReviewController {
         ObjectProperty<Review> updatedReview= new SimpleObjectProperty<>();
         Task task = new Task() {
             @Override
-            public Void call() throws InterruptedException {
+            public Void call() throws InterruptedException, DaoException {
 
                 Review review=  reviewDao.rejectReview(reviewId);
                 updatedReview.setValue(review);
+                NavigationController.getInstance().buildInfoBox("Valutazione recensione","Recensione rigettata!");
                 refreshList();
                 return null;
             }
@@ -184,7 +214,10 @@ public class ViewReviewController {
 
     }
 
-    public void refreshList() {
-        loadReviewListAsync(currentAccommodationId);
+
+    private ExecutorService initExecutor(int threadPullNumber) {
+        return new ThreadPoolExecutor(threadPullNumber, threadPullNumber, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(10));
+
     }
+
 }
