@@ -1,7 +1,8 @@
 package consigliaViaggiDesktop.view;
 
 import consigliaViaggiDesktop.controller.NavigationController;
-import consigliaViaggiDesktop.controller.ViewReviewController;
+import consigliaViaggiDesktop.controller.manageReview.ModerateReviewController;
+import consigliaViaggiDesktop.controller.manageReview.ReviewController;
 import consigliaViaggiDesktop.model.Review;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -26,23 +27,26 @@ public class ReviewDetailView{
     @FXML	private TextArea review_content;
     
     private int reviewId;
-    private ViewReviewController viewReviewController;
+    private ReviewController reviewController;
+    private ModerateReviewController moderateReviewController;
     
     public void setId(int id) {
 		reviewId=id;
 	}
     
-    public void setViewReviewController(ViewReviewController viewReviewController) {
-    	this.viewReviewController=viewReviewController;
+    public void setReviewController(ReviewController reviewController) {
+    	this.reviewController = reviewController;
 	}
     
     public void initialize() {
+
+    	/*if(reviewController ==null) {
+    		reviewController = new ReviewController();
+    	}*/
+
+		moderateReviewController=new ModerateReviewController(reviewController);
     	
-    	if(viewReviewController==null) {
-    		viewReviewController= new ViewReviewController();
-    	}
-    	
-    	viewReviewController.getReviewAsync(reviewId).addListener(new ChangeListener<Review>() {
+    	reviewController.getReviewAsync(reviewId).addListener(new ChangeListener<Review>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
@@ -55,13 +59,13 @@ public class ReviewDetailView{
     
     @FXML
     void backButtonClicked() {
-		viewReviewController.goBack();
+		reviewController.goBack();
     }
 
     @FXML
     void approveButtonClicked() {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Approvare questa recensione?")) {
-			ObjectProperty<Review> updatedReview= viewReviewController.approveReview(reviewId);
+			ObjectProperty<Review> updatedReview= moderateReviewController.approveReview(reviewId);
 			updatedReview.addListener(new ChangeListener<Review>() {
 				@Override
 				public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
@@ -74,7 +78,7 @@ public class ReviewDetailView{
 	@FXML
 	void rejectButtonClicked() {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Rigettare questa recensione?")) {
-			ObjectProperty<Review> updatedReview= viewReviewController.rejectReview(reviewId);
+			ObjectProperty<Review> updatedReview= moderateReviewController.rejectReview(reviewId);
 			updatedReview.addListener(new ChangeListener<Review>() {
 				@Override
 				public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {

@@ -7,7 +7,10 @@ import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
 import com.lynden.gmapsfx.service.geocoding.GeocodingService;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
-import consigliaViaggiDesktop.controller.ViewAccommodationController;
+import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
+import consigliaViaggiDesktop.controller.manageAccommodation.AddAccommodationController;
+import consigliaViaggiDesktop.controller.manageAccommodation.DeleteAccommodationController;
+import consigliaViaggiDesktop.controller.manageAccommodation.EditAccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.Subcategory;
@@ -29,7 +32,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 
@@ -58,12 +60,21 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private StringProperty address = new SimpleStringProperty();
 	private Integer accommodationId;
 
-	private ViewAccommodationController viewAccommodationController;
+	private AccommodationController accommodationController;
+	private AddAccommodationController addAccommodationController;
+	private DeleteAccommodationController deleteAccommodationController;
+	private EditAccommodationController editAccommodationController;
+
 	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
 	public void initialize(){
 
+		/*inizializzazione controller*/
+		addAccommodationController=new AddAccommodationController(accommodationController);
+		deleteAccommodationController=new DeleteAccommodationController(accommodationController);
+		editAccommodationController= new EditAccommodationController(accommodationController);
+		/**/
 
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
@@ -97,12 +108,12 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		);
 		/*choice_category listener end*/
 
-		if(viewAccommodationController==null) {
-			viewAccommodationController= new ViewAccommodationController();
+		if(accommodationController ==null) {
+			accommodationController = new AccommodationController();
 		}
 		if(accommodationId!=null)
 
-			viewAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
+			editAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
@@ -117,7 +128,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 	@FXML
 	void backButtonClicked() {
-	  viewAccommodationController.goBack();
+	  accommodationController.goBack();
     }
 
 	@FXML
@@ -148,7 +159,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	void saveButtonAction(ActionEvent event) {
 		if(NavigationController.getInstance().buildAlert("Salva","Salvare le modifiche?")){
 			if(accommodationId==null){
-				ObjectProperty<Accommodation> response= viewAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
+				ObjectProperty<Accommodation> response= addAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
 				response.addListener(new ChangeListener<Accommodation>() {
 				@Override
 				public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
@@ -158,7 +169,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			}
 			else{
 				Accommodation updatedAccommodation=editAccommodationFromNewFields();
-				BooleanProperty response= viewAccommodationController.editAccommodationAsync(editAccommodationFromNewFields());
+				BooleanProperty response= editAccommodationController.editAccommodationAsync(editAccommodationFromNewFields());
 				response.addListener(new ChangeListener<Boolean>() {
 					@Override
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -187,7 +198,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		if(accommodationId!=null) {
 			if(NavigationController.getInstance().buildAlert("Cancellazione","Confermi l'eliminazione?")) {
 
-				BooleanProperty response = viewAccommodationController.deleteAccommodation(accommodationId);
+				BooleanProperty response = deleteAccommodationController.deleteAccommodation(accommodationId);
 				response.addListener(new ChangeListener<Boolean>() {
 					@Override
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -195,7 +206,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {
-									viewAccommodationController.goBack();
+									accommodationController.goBack();
 								}
 							});
 						}
@@ -231,8 +242,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		accommodationId=id;
 	}
 
-	public void setViewAccommodationController(ViewAccommodationController viewAccommodationController) {
-		this.viewAccommodationController=viewAccommodationController;
+	public void setAccommodationController(AccommodationController accommodationController) {
+		this.accommodationController = accommodationController;
 
 	}
 

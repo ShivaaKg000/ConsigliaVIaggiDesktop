@@ -1,14 +1,10 @@
 package consigliaViaggiDesktop.view;
 
 import java.io.IOException;
-import consigliaViaggiDesktop.controller.ViewReviewController;
+import consigliaViaggiDesktop.controller.manageReview.ReviewController;
 import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.DAO.DaoException;
-import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -37,14 +33,14 @@ public class ReviewView {
 		@FXML private TableColumn<Review, Status> approved ;
 		
 		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
-		private ViewReviewController viewReviewController;
+		private ReviewController reviewController;
 
 		private int page=0;
 		private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
 
 
 	public void initialize() throws DaoException {
-			viewReviewController = new ViewReviewController();
+			reviewController = new ReviewController();
 			
 			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
 			accommodationName.setCellValueFactory(new PropertyValueFactory<Review, String>("accommodationName"));
@@ -56,7 +52,7 @@ public class ReviewView {
 			setTableClickEvent(tableReview);
 
 
-			reviewList=viewReviewController.loadReviewListAsync(new SearchParamsReview.Builder().
+			reviewList= reviewController.loadReviewListAsync(new SearchParamsReview.Builder().
 					setCurrentpage(0).
 					setCurrentSearchString("22")
 					.create());
@@ -90,7 +86,7 @@ public class ReviewView {
 	                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 	                    Review rowData = row.getItem();
 	                    System.out.println("Double click on: "+rowData.getId());
-	                    viewReviewController.reviewSelected(rowData.getId());
+	                    reviewController.reviewSelected(rowData.getId());
 					
 	                }
 	            });
@@ -136,7 +132,7 @@ public class ReviewView {
 		@FXML
 		public void indietro(){
 			//loadMenuView(UserName);
-			viewReviewController.goBackToMenu();
+			reviewController.goBackToMenu();
 		}
 		@FXML
 		public void cerca() { 

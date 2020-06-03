@@ -1,5 +1,5 @@
 package consigliaViaggiDesktop.view;
-import consigliaViaggiDesktop.controller.ViewAccommodationController;
+import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
@@ -42,14 +42,14 @@ public class AccommodationView {
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
 	private ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
-	private ViewAccommodationController viewAccommodationController;
+	private AccommodationController accommodationController;
 	private int page=0;
 	private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
 
 	
 	public void initialize(){
 		
-		viewAccommodationController = new ViewAccommodationController();
+		accommodationController = new AccommodationController();
 		
 		categoryChoiseBox.setItems(category_list);
 
@@ -82,7 +82,7 @@ public class AccommodationView {
 		     }
 		  });
 		setTableClickEvent(tableAccommodation);
-		accommodationList=viewAccommodationController.loadAccommodationListAsync( new SearchParamsAccommodation.Builder()
+		accommodationList= accommodationController.loadAccommodationListAsync( new SearchParamsAccommodation.Builder()
 				.create());
 		tableAccommodation.setItems(accommodationList);
 		bindView();
@@ -97,7 +97,7 @@ public class AccommodationView {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Accommodation rowData = row.getItem();
-                    viewAccommodationController.loadAccommodationDetailView(rowData.getId());
+                    accommodationController.loadAccommodationDetailView(rowData.getId());
 				
                 }
             });
@@ -108,12 +108,12 @@ public class AccommodationView {
 
 	@FXML
 	public void createButtonAction(){
-		viewAccommodationController.loadCreateAccommodationDetailView();
+		accommodationController.loadCreateAccommodationDetailView();
 	}
 
 	@FXML
 	public void backButtonClicked() {
-		viewAccommodationController.goBackToMenu();
+		accommodationController.goBackToMenu();
 	}
 
 	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
@@ -145,12 +145,12 @@ public class AccommodationView {
 
 	@FXML
 	void nextPageAction(ActionEvent event) {
-		viewAccommodationController.nextPage();
+		accommodationController.nextPage();
 	}
 
 	@FXML
 	void previousPage(ActionEvent event) {
-		viewAccommodationController.previousPage();
+		accommodationController.previousPage();
 	}
 
 	void searchAccommodation(){
@@ -162,7 +162,7 @@ public class AccommodationView {
 			subCat=subCategoryChoiseBox.getValue().toString();
 
 
-		accommodationList=viewAccommodationController.loadAccommodationListAsync(
+		accommodationList= accommodationController.loadAccommodationListAsync(
 				new SearchParamsAccommodation.Builder()
 				.setCurrentCategory(cat)
 				.setCurrentSubCategory(subCat)
@@ -173,9 +173,9 @@ public class AccommodationView {
 
 	private void bindView() {
 
-		totalPageNumber= viewAccommodationController.getTotalPageNumber();
-		pageNumber = viewAccommodationController.getPageNumber();
-		totalElemntNumber=viewAccommodationController.getTotalElementNumber();
+		totalPageNumber= accommodationController.getTotalPageNumber();
+		pageNumber = accommodationController.getPageNumber();
+		totalElemntNumber= accommodationController.getTotalElementNumber();
 
 		accommodationList.addListener(new ListChangeListener<Accommodation>() {
 			@Override
