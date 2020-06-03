@@ -2,8 +2,13 @@ package consigliaViaggiDesktop.view;
 
 import java.io.IOException;
 import consigliaViaggiDesktop.controller.ViewReviewController;
-import consigliaViaggiDesktop.model.Review;
-import consigliaViaggiDesktop.model.Status;
+import consigliaViaggiDesktop.model.*;
+import consigliaViaggiDesktop.model.DAO.DaoException;
+import javafx.application.Platform;
+import javafx.beans.property.LongProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -24,6 +29,7 @@ public class ReviewView {
 	
 		@FXML private BorderPane reviewView;
 		@FXML private TableView<Review> tableReview;
+
 		@FXML private TableColumn<Review, String> author ;
 		@FXML private TableColumn<Review, String> accommodationName;
 		@FXML private TableColumn<Review, Integer> accommodationId;
@@ -33,8 +39,11 @@ public class ReviewView {
 		private  ObservableList<Review> reviewList = FXCollections.observableArrayList();
 		private ViewReviewController viewReviewController;
 
-		public void initialize()
-		{
+		private int page=0;
+		private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
+
+
+	public void initialize() throws DaoException {
 			viewReviewController = new ViewReviewController();
 			
 			author.setCellValueFactory(new PropertyValueFactory<Review,String>("author"));
@@ -43,35 +52,37 @@ public class ReviewView {
 			reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
 			
 			approved.setCellValueFactory(new PropertyValueFactory<Review, Status>("status"));
-			//approved.setCellFactory(CheckBoxTableCell.forTableColumn(approved));
 			setApprovedCellStyle(approved);
 			setTableClickEvent(tableReview);
-			
-			
-			/*bind di reviewList all'observable nel controller*/
-			reviewList=viewReviewController.getObsarvableReviewList();
+
+
+			reviewList=viewReviewController.loadReviewListAsync(new SearchParamsReview.Builder().
+					setCurrentpage(0).
+					setCurrentSearchString("22")
+					.create());
+
 			tableReview.setItems(reviewList);
-			
-			/*set del listener per intercettare il notify dell'observable
-			reviewList.addListener(new InvalidationListener() {
-				
-				@Override
-				public void invalidated(Observable observable) {
-				
-					TableReview.setItems(reviewList);
-					
-				}
-			});;*/
-			
-			
-			/*richiesta al controller di fare l'update della lista in background*/
-			viewReviewController.loadReviewListAsync(1);
-			/*test modifica lista aggiungendo una nuova riga*/
+			//bindView();
 				
 		}
+/*
+	private void bindView() {
 
-		
-		private void setTableClickEvent(TableView<Review> table) {
+		totalPageNumber= viewReviewController.getTotalPageNumber();
+		pageNumber = viewReviewController.getPageNumber();
+		totalElemntNumber=viewReviewController.getTotalElementNumber();
+
+		reviewList.addListener(new ListChangeListener<Review>() {
+			@Override
+			public void onChanged(Change<? extends Review> c) {
+
+			}
+		});
+
+	}
+*/
+
+	private void setTableClickEvent(TableView<Review> table) {
 			
 			table.setRowFactory(tv -> {
 	            TableRow<Review> row = new TableRow<>();

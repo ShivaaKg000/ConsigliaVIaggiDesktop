@@ -65,9 +65,7 @@ public class ReviewDetailView{
 			updatedReview.addListener(new ChangeListener<Review>() {
 				@Override
 				public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
-					System.out.print("\n Review Updated \n"+
-							newValue.getStatus());
-
+					updateReviewDetailGui(newValue);
 				}
 			});
 		}
@@ -80,9 +78,7 @@ public class ReviewDetailView{
 			updatedReview.addListener(new ChangeListener<Review>() {
 				@Override
 				public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
-					System.out.print("\n Review Updated \n"+
-							newValue.getStatus());
-
+					updateReviewDetailGui(newValue);
 				}
 			});
 		}

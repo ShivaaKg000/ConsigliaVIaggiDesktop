@@ -10,7 +10,7 @@ import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
-import consigliaViaggiDesktop.model.SearchParams;
+import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -22,7 +22,7 @@ public class ViewAccommodationController {
     private final AccommodationDao accommodationDao;
     private final ObservableList<Accommodation> observableAccommodationList;
     private final ExecutorService executor;
-   	private SearchParams currentSearchParams;
+   	private SearchParamsAccommodation currentSearchParamsAccommodation;
 	private LongProperty pageNumber;
 	private LongProperty totalPageNumber;
 	private LongProperty totalElementNumber;
@@ -62,14 +62,14 @@ public class ViewAccommodationController {
 		return observableAccommodation;
 
 	}
-	public ObservableList<Accommodation> loadAccommodationListAsync(SearchParams params) {
+	public ObservableList<Accommodation> loadAccommodationListAsync(SearchParamsAccommodation params) {
 
-    	currentSearchParams=params;
+    	currentSearchParamsAccommodation =params;
     	observableAccommodationList.clear();
     	Task task = new Task() {
     		@Override
             public Void call() throws DaoException {
-				JsonPageResponse<Accommodation> page=accommodationDao.getAccommodationList(currentSearchParams);
+				JsonPageResponse<Accommodation> page=accommodationDao.getAccommodationList(currentSearchParamsAccommodation);
     			List<Accommodation> accommodationList= page.getContent();
     			pageNumber.setValue(page.getPage());
 				totalPageNumber.setValue(page.getTotalPages());
@@ -86,7 +86,7 @@ public class ViewAccommodationController {
         return observableAccommodationList;
     }
 	public void refreshAccommodationList(){
-		loadAccommodationListAsync(currentSearchParams);
+		loadAccommodationListAsync(currentSearchParamsAccommodation);
 	}
 
 	public void loadCreateAccommodationDetailView() {
@@ -169,22 +169,22 @@ public class ViewAccommodationController {
 
 	public void nextPage() {
 		if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
-			currentSearchParams = new SearchParams.Builder().setCurrentpage(currentSearchParams.getCurrentpage() + 1)
-					.setCurrentSubCategory(currentSearchParams.getCurrentSubCategory())
-					.setCurrentSearchString(currentSearchParams.getCurrentSearchString())
-					.setCurrentCategory(currentSearchParams.getCurrentCategory())
+			currentSearchParamsAccommodation = new SearchParamsAccommodation.Builder().setCurrentpage(currentSearchParamsAccommodation.getCurrentpage() + 1)
+					.setCurrentSubCategory(currentSearchParamsAccommodation.getCurrentSubCategory())
+					.setCurrentSearchString(currentSearchParamsAccommodation.getCurrentSearchString())
+					.setCurrentCategory(currentSearchParamsAccommodation.getCurrentCategory())
 					.create();
-			loadAccommodationListAsync(currentSearchParams);
+			loadAccommodationListAsync(currentSearchParamsAccommodation);
 		}
 	}
 	public void previousPage() {
 		if (pageNumber.getValue()>0) {
-			currentSearchParams = new SearchParams.Builder().setCurrentpage(currentSearchParams.getCurrentpage() - 1)
-					.setCurrentSubCategory(currentSearchParams.getCurrentSubCategory())
-					.setCurrentSearchString(currentSearchParams.getCurrentSearchString())
-					.setCurrentCategory(currentSearchParams.getCurrentCategory())
+			currentSearchParamsAccommodation = new SearchParamsAccommodation.Builder().setCurrentpage(currentSearchParamsAccommodation.getCurrentpage() - 1)
+					.setCurrentSubCategory(currentSearchParamsAccommodation.getCurrentSubCategory())
+					.setCurrentSearchString(currentSearchParamsAccommodation.getCurrentSearchString())
+					.setCurrentCategory(currentSearchParamsAccommodation.getCurrentCategory())
 					.create();
-			loadAccommodationListAsync(currentSearchParams);
+			loadAccommodationListAsync(currentSearchParamsAccommodation);
 		}
 	}
 
