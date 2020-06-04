@@ -2,41 +2,103 @@ package consigliaViaggiDesktop.model;
 
 public class SearchParamsReview {
 
-    private String currentSearchString;
-    long currentpage=0;
+    private String id;
+    private String author;
+    private String accommodationName;
+    private String content;
+    private String accommodationId;
+    private String status;
+    int currentpage=0;
 
-    public SearchParamsReview(SearchParamsReview.Builder builder) {
+    public SearchParamsReview(Builder builder) {
+        this.id=builder.id;
         this.currentpage=builder.currentpage;
-        this.currentSearchString=builder.currentSearchString;
+        this.accommodationName=builder.accommodationName;
+        this.content=builder.content;
+        this.author=builder.author;
+        this.status=builder.status;
+        this.accommodationId=builder.accommodationId;
     }
 
-    public static class Builder {
-        private String currentSearchString="";
-        long currentpage=0;
-
-        public SearchParamsReview.Builder setCurrentSearchString(String currentSearchParam) {
-            this.currentSearchString = currentSearchParam;
-            return this;
-        }
-
-        public SearchParamsReview.Builder setCurrentpage(long currentpage) {
-            this.currentpage = currentpage;
-            return this;
-        }
-
-        public SearchParamsReview create() {
-            return new SearchParamsReview(this);
-        }
-
+    public SearchParamsReview() {
+        this.id=null;
+        this.currentpage=0;
+        this.accommodationName=null;
+        this.content=null;
+        this.author=null;
+        this.status=null;
+        this.accommodationId=null;
     }
 
-    public String getCurrentSearchString() {
-        return currentSearchString;
+    public void setCurrentpage(int currentpage) {
+        this.currentpage = currentpage;
     }
 
-    public long getCurrentpage() {
+    public String getId() {
+        return id;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getAccommodationName() {
+        return accommodationName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getAccommodationId() {
+        return accommodationId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public int getCurrentpage() {
         return currentpage;
     }
 
+    public static class Builder {
 
+        private String id;
+        private String author;
+        private String accommodationName;
+        private String content;
+        private String accommodationId;
+        private String status;
+        int currentpage=0;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+        public Builder setAuthor(String author) {
+            this.author = author;
+            return this;
+        }public Builder setAccommodationName(String accommodationName ) {
+            this.accommodationName = accommodationName;
+            return this;
+        }public Builder setContent(String content) {
+            this.content = content;
+            return this;
+        }public Builder setAccommodationId(String accommodationId) {
+            this.accommodationId = accommodationId;
+            return this;
+        }public Builder setStatus(String status) {
+            this.status = status;
+            return this;
+        }
+        public Builder setCurrentPage(int page){
+            this.currentpage=page;
+            return this;
+        }
+        public SearchParamsReview build(){
+            return new SearchParamsReview(this);
+        }
+    }
 }
+

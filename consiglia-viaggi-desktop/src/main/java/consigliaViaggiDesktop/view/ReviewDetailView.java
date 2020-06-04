@@ -40,10 +40,6 @@ public class ReviewDetailView{
     
     public void initialize() {
 
-    	/*if(reviewController ==null) {
-    		reviewController = new ReviewController();
-    	}*/
-
 		moderateReviewController=new ModerateReviewController(reviewController);
     	
     	reviewController.getReviewAsync(reviewId).addListener(new ChangeListener<Review>() {

@@ -1,6 +1,5 @@
 package consigliaViaggiDesktop.model.DAO;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
@@ -9,18 +8,13 @@ import consigliaViaggiDesktop.model.Review;
 import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.Status;
 
-import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ReviewDaoJSON implements ReviewDao {
@@ -29,7 +23,7 @@ public class ReviewDaoJSON implements ReviewDao {
         return getReviewJsonById(id);
     }
     private Review getReviewJsonById(int reviewId)  {
-        String urlString= Constants.GET_REVIEW_LIST_URL+Constants.REVIEW_ID_PARAM+reviewId;
+        String urlString= Constants.GET_REVIEW_URL+"?"+Constants.REVIEW_ID_PARAM+reviewId;
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
 
@@ -45,12 +39,26 @@ public class ReviewDaoJSON implements ReviewDao {
     }
 
     @Override  public JsonPageResponse<Review> getReviewList(SearchParamsReview params) throws DaoException {
-        JsonPageResponse<Review> reviewListPage=  getReviewListJSONParsing(params.getCurrentSearchString(),params.getCurrentpage());
+        JsonPageResponse<Review> reviewListPage=  getReviewListJSONParsing(params);
         return reviewListPage;
 
     }
-    private JsonPageResponse <Review> getReviewListJSONParsing(String params, long page) throws DaoException {
-        String urlString= Constants.GET_REVIEW_LIST_URL+Constants.ACCOMMODATION_ID_PARAM+params+Constants.PAGE_PARAM+page;
+    private JsonPageResponse <Review> getReviewListJSONParsing(SearchParamsReview params) throws DaoException {
+        String urlString= Constants.GET_REVIEW_LIST_URL+"?";
+        if(params.getId()!=null && !params.getId().equals(""))
+            urlString+=Constants.REVIEW_ID_PARAM+params.getId()+"&";
+        if(params.getAccommodationName()!=null && !params.getAccommodationName().equals(""))
+            urlString+=Constants.ACCOMMODATION_NAME_PARAM+params.getAccommodationName()+"&";
+        if(params.getAccommodationId()!=null && !params.getAccommodationId().equals(""))
+            urlString+=Constants.ACCOMMODATION_ID_PARAM+params.getAccommodationId()+"&";
+        if(params.getStatus()!=null && !params.getStatus().equals("") )
+            urlString+=Constants.STATUS_PARAM+params.getStatus()+"&";
+        if(params.getContent()!=null && !params.getContent().equals(""))
+            urlString+=Constants.CONTENT_PARAM+params.getContent()+"&";
+        urlString+=Constants.PAGE_PARAM+params.getCurrentpage()+"&";
+
+        System.out.println(urlString);
+
         BufferedReader bufferedReader;
         try {
             bufferedReader = getJSONFromUrl(urlString);
@@ -63,9 +71,6 @@ public class ReviewDaoJSON implements ReviewDao {
         return parseReviewPage(jsonObject);
     }
 
-    @Override  public boolean postReview(Review review) {
-        return false;
-    }
     @Override  public Review approveReview(int reviewId) {
         try {
             Review review=editReview(reviewId, Status.APPROVED);
@@ -89,7 +94,7 @@ public class ReviewDaoJSON implements ReviewDao {
         return new Review.Builder().build();
     }
     private Review editReview(int id, Status status) throws IOException {
-        URL url = new URL(Constants.APPROVE_REVIEW+id+Constants.STATUS_PARAM+status);
+        URL url = new URL(Constants.APPROVE_REVIEW+id+"?"+Constants.STATUS_PARAM+status);
         HttpURLConnection connection = null;
         int responseCode=0;
         connection = (HttpURLConnection) url.openConnection();

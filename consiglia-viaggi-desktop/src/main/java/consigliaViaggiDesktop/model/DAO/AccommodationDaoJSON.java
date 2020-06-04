@@ -178,7 +178,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 					Constants.CATEGORY_PARAM+
 					params.getCurrentCategory()+
 					Constants.SUBCATEGORY_PARAM+
-					params.getCurrentSubCategory()+
+					params.getCurrentSubCategory()+"&"+
 					Constants.PAGE_PARAM+
 					params.getCurrentpage();
 

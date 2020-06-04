@@ -13,12 +13,10 @@ import consigliaViaggiDesktop.model.DAO.ReviewDaoJSON;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
 //import consigliaViaggiDesktop.model.ReviewDao;
+import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.model.SearchParamsReview;
 import consigliaViaggiDesktop.view.ReviewDetailView;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -30,25 +28,27 @@ public class ReviewController {
     private SearchParamsReview currentSearchParamsReview;
     private ExecutorService executor;
     private int currentAccommodationId;
-    private LongProperty pageNumber;
-    private LongProperty totalPageNumber;
-    private LongProperty totalElementNumber;
+    private IntegerProperty pageNumber;
+    private IntegerProperty totalPageNumber;
+    private IntegerProperty totalElementNumber;
 
-    public LongProperty getPageNumber() {
+    public IntegerProperty getPageNumber() {
         return pageNumber;
     }
-    public LongProperty getTotalPageNumber() {
+    public IntegerProperty getTotalPageNumber() {
         return totalPageNumber;
     }
-    public LongProperty getTotalElementNumber() {
+    public IntegerProperty getTotalElementNumber() {
         return  totalElementNumber;
     }
 
 
     public ReviewController() {
-        totalPageNumber= new SimpleLongProperty();
-        pageNumber= new SimpleLongProperty(-1);
-        totalElementNumber= new SimpleLongProperty();
+
+        totalPageNumber= new SimpleIntegerProperty();
+        pageNumber= new SimpleIntegerProperty(-1);
+        totalElementNumber= new SimpleIntegerProperty();
+
         executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(10));
         reviewDao= new ReviewDaoJSON();
         observableReviewList= FXCollections.observableArrayList();
@@ -68,7 +68,6 @@ public class ReviewController {
                 totalElementNumber.setValue(page.getTotalElements());
                 observableReviewList.addAll(reviewList);
                 observableReviewList.notifyAll();
-                System.out.println("\nCIAO"+reviewList);
                 return null;
             }
         };
@@ -79,26 +78,25 @@ public class ReviewController {
 
         return observableReviewList;
     }
-
-    public void refreshList() throws DaoException {
-        loadReviewListAsync(currentSearchParamsReview);
-    }
-
     public ObjectProperty<Review> getReviewAsync(int reviewId) {
-    	ObjectProperty<Review>  observableReview = new SimpleObjectProperty<Review>();
-    	Task task = new Task() {
-    		@Override
+        ObjectProperty<Review>  observableReview = new SimpleObjectProperty<Review>();
+        Task task = new Task() {
+            @Override
             public Void call() throws InterruptedException {
-    			
-    			Review review= reviewDao.getReviewById(reviewId);
-    			observableReview.set(review);
-				return null;
+
+                Review review= reviewDao.getReviewById(reviewId);
+                observableReview.set(review);
+                return null;
             }
         };
         Thread testThread = new Thread(task);
         testThread.start();
-		return observableReview;
-     
+        return observableReview;
+
+    }
+
+    public void refreshList() throws DaoException {
+        loadReviewListAsync(currentSearchParamsReview);
     }
 
 	public void reviewSelected(int reviewId) {
@@ -113,12 +111,23 @@ public class ReviewController {
     	NavigationController.getInstance().navigateBack();
 		
 	}
-
-    public void goBackToMenu() {
+	public void goBackToMenu() {
         //per tornare al menu bisogna interrompere l'executor altrimenti resta attivo in bg
         executor.shutdownNow();
         NavigationController.getInstance().navigateBack();
 
     }
 
+    public void nextPage() throws DaoException {if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
+        currentSearchParamsReview.setCurrentpage(pageNumber.getValue()+1);
+        loadReviewListAsync(currentSearchParamsReview);
+    }
+    }
+
+    public void previousPage() throws DaoException {
+        if (pageNumber.getValue()>0) {
+            currentSearchParamsReview.setCurrentpage(pageNumber.getValue()-1);
+            loadReviewListAsync(currentSearchParamsReview);
+        }
+    }
 }
