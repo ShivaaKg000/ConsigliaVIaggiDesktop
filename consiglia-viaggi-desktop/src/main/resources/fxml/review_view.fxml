@@ -119,21 +119,38 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <columns>
-                                    <TableColumn fx:id="reviewId" prefWidth="74.0" text="Id" />
+                                    <TableColumn fx:id="reviewId" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" style="-fx-alignment: center;" text="Id" />
                                     <TableColumn fx:id="author" prefWidth="246.0" text="Autore" />
                                     <TableColumn fx:id="reviewText" prefWidth="45.0" text="Testo" />
-                                    <TableColumn fx:id="accommodationId" prefWidth="45.0" text="Id Struttura" />
+                                    <TableColumn fx:id="accommodationId" maxWidth="80.0" minWidth="80.0" style="-fx-alignment: center;" text="Id Struttura" />
                                     <TableColumn fx:id="accommodationName" prefWidth="45.0" text="Nome Struttura" />
-                                    <TableColumn fx:id="creationData" prefWidth="75.0" text="Data" />
-                                    <TableColumn fx:id="status" prefWidth="45.0" text="Stato" />
+                                    <TableColumn fx:id="creationData" prefWidth="75.0" style="-fx-alignment: center;" text="Data" />
+                                    <TableColumn fx:id="status" prefWidth="45.0" style="-fx-alignment: center;" text="Stato" />
                                  </columns>
                               </TableView>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#prevPageAction" text="Prev" />
-                                    <Button mnemonicParsing="false" onAction="#nextPageAction" text="Next" />
-                                    <Label text="Label" />
+                                    <Button mnemonicParsing="false" onAction="#prevPageAction" styleClass="default-button">
+                                       <graphic>
+                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@/images/left_arrow.png" />
+                                             </image></ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#nextPageAction" styleClass="default-button">
+                                       <graphic>
+                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@/images/right_arrow.png" />
+                                             </image></ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Label fx:id="pageLabel" text="Label" />
                                  </children>
+                                 <padding>
+                                    <Insets top="5.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </VBox>

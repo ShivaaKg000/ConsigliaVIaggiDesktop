@@ -54,6 +54,10 @@ public class Review{
 		return status;
 	}
 
+    public String getStatusLabel() {
+        return status.label;
+    }
+
 	public static class Builder {
 
     	private int id;

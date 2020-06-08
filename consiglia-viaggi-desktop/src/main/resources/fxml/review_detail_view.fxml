@@ -9,21 +9,18 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane id="#" fitToHeight="true" fitToWidth="true" minViewportHeight="720.0" minViewportWidth="1280.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane id="#" fitToHeight="true" fitToWidth="true" minViewportHeight="720.0" minViewportWidth="1280.0" prefViewportHeight="720.0" prefViewportWidth="1280.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <HBox alignment="CENTER" styleClass="main-bg">
          <children>
-            <AnchorPane stylesheets="@../css/application.css" HBox.hgrow="ALWAYS">
+            <AnchorPane minHeight="600.0" minWidth="800.0" stylesheets="@../css/application.css" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#backButtonClicked" styleClass="default-button">
                            <graphic>
@@ -34,23 +31,24 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <GridPane>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
+                        <HBox alignment="CENTER_LEFT">
                            <children>
-                              <VBox>
+                              <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="username_label" alignment="CENTER" contentDisplay="RIGHT" text="Username:">
+                                    <Label fx:id="username_label1" alignment="CENTER" contentDisplay="RIGHT" text="ID:">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                        <graphic>
-                                          <Text fx:id="username_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="idText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                       </graphic>
+                                    </Label>
+                                    <Label fx:id="username_label" alignment="CENTER" contentDisplay="RIGHT" text="Autore:">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <graphic>
+                                          <Text fx:id="authorText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                                        </graphic>
                                     </Label>
                                     <Label fx:id="accommodation_label" alignment="CENTER" contentDisplay="RIGHT" text="Struttura:">
@@ -58,15 +56,15 @@
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                        <graphic>
-                                          <Text fx:id="accommodation_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="accommodationText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                                        </graphic>
                                     </Label>
-                                    <Label fx:id="address_label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Indirizzo:">
+                                    <Label fx:id="address_label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Stato:">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                        <graphic>
-                                          <Text fx:id="address_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                                        </graphic>
                                     </Label>
                                     <Label fx:id="rating_label" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Valutazione:">
@@ -74,12 +72,20 @@
                                           <Font name="System Bold" size="16.0" />
                                        </font>
                                        <graphic>
-                                          <Text fx:id="rating_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="ratingText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                       </graphic>
+                                    </Label>
+                                    <Label fx:id="rating_label1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Data:">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <graphic>
+                                          <Text fx:id="dateText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                                        </graphic>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox alignment="CENTER_RIGHT" spacing="15.0" GridPane.columnIndex="1">
+                              <VBox alignment="CENTER_RIGHT" spacing="15.0">
                                  <children>
                                     <Button mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#approveButtonClicked" prefHeight="39.0" prefWidth="299.0" styleClass="default-button" text="Approva">
                                        <graphic>
@@ -111,7 +117,7 @@
                                  </children>
                               </VBox>
                            </children>
-                        </GridPane>
+                        </HBox>
                         <HBox alignment="CENTER">
                            <children>
                               <Label text="Contenuto Recensione">
@@ -121,7 +127,7 @@
                               </Label>
                            </children>
                         </HBox>
-                        <TextArea fx:id="review_content" editable="false" prefHeight="400.0" VBox.vgrow="ALWAYS" />
+                        <TextArea fx:id="reviewContentTextArea" editable="false" prefHeight="400.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

@@ -9,22 +9,19 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 
 
 public class ReviewDetailView{
 
-    @FXML	private Label username_label;
-    @FXML	private Text username_text;
-    @FXML	private Label accommodation_label;
-    @FXML   private Text accommodation_text;
-    @FXML	private Label address_label;
-    @FXML   private Text address_text;
-    @FXML	private Label rating_label;
-    @FXML	private Text rating_text;
-    @FXML	private TextArea review_content;
+	@FXML	private Text idText;
+    @FXML	private Text authorText;
+    @FXML   private Text accommodationText;
+    @FXML   private Text statusText;
+    @FXML	private Text ratingText;
+	@FXML	private Text dateText;
+    @FXML	private TextArea reviewContentTextArea;
     
     private int reviewId;
     private ReviewController reviewController;
@@ -89,10 +86,13 @@ public class ReviewDetailView{
 
 			@Override
 			public void run() {
-				username_text.setText(review.getAuthor());
-				accommodation_text.setText(review.getAccommodationName());
-				rating_text.setText(String.valueOf(review.getRating()));
-				review_content.setText(review.getReviewText());
+				idText.setText(String.valueOf(review.getId()));
+				authorText.setText(review.getAuthor());
+				accommodationText.setText(review.getAccommodationName());
+				statusText.setText(review.getStatusLabel());
+				ratingText.setText(String.valueOf(review.getRating()));
+				dateText.setText(review.getData());
+				reviewContentTextArea.setText(review.getReviewText());
 				
 			}
 			   

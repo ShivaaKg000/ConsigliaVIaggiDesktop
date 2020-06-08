@@ -1,6 +1,7 @@
 package consigliaViaggiDesktop.controller.manageReview;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -84,8 +85,13 @@ public class ReviewController {
             @Override
             public Void call() throws InterruptedException {
 
-                Review review= reviewDao.getReviewById(reviewId);
-                observableReview.set(review);
+                try {
+                    Review review = reviewDao.getReviewById(reviewId);
+                    observableReview.set(review);
+                } catch (DaoException e) {
+                    NavigationController.getInstance().buildInfoBox("Errore",e.getErrorMessage());
+                }
+
                 return null;
             }
         };

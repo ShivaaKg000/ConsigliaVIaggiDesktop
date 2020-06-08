@@ -14,15 +14,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ReviewDaoJSON implements ReviewDao {
 
-    @Override  public Review getReviewById(int id) {
+    @Override  public Review getReviewById(int id) throws DaoException {
         return getReviewJsonById(id);
     }
-    private Review getReviewJsonById(int reviewId)  {
+    private Review getReviewJsonById(int reviewId) throws DaoException {
         String urlString= Constants.GET_REVIEW_URL+"?"+Constants.REVIEW_ID_PARAM+reviewId;
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -77,7 +85,7 @@ public class ReviewDaoJSON implements ReviewDao {
             if(review!=null){
                 return review;
             }
-        } catch (IOException e) {
+        } catch (IOException | DaoException e) {
             e.printStackTrace();
         }
         return null;
@@ -88,12 +96,12 @@ public class ReviewDaoJSON implements ReviewDao {
             if(review!=null){
                 return review;
             }
-        } catch (IOException e) {
+        } catch (IOException | DaoException e) {
             e.printStackTrace();
         }
         return new Review.Builder().build();
     }
-    private Review editReview(int id, Status status) throws IOException {
+    private Review editReview(int id, Status status) throws IOException, DaoException {
         URL url = new URL(Constants.APPROVE_REVIEW+id+"?"+Constants.STATUS_PARAM+status);
         HttpURLConnection connection = null;
         int responseCode=0;
@@ -113,7 +121,7 @@ public class ReviewDaoJSON implements ReviewDao {
         return null;
     }
 
-    private JsonPageResponse<Review> parseReviewPage(JsonObject jsonPage){
+    private JsonPageResponse<Review> parseReviewPage(JsonObject jsonPage) throws DaoException {
 
         List<Review> reviewCollection = new ArrayList<>();
         JsonArray array= jsonPage.get("content").getAsJsonArray();
@@ -131,13 +139,15 @@ public class ReviewDaoJSON implements ReviewDao {
         response.setTotalElements(jsonPage.get("totalElements").getAsLong());
         return response;
     }
-    private Review parseReview(JsonObject reviewJson){
+    private Review parseReview(JsonObject reviewJson) throws DaoException {
         int id = reviewJson.get("id").getAsInt();
         int accommodationId = reviewJson.get("accommodationId").getAsInt();
         String accommodationName = reviewJson.get("accommodationName").getAsString();
         Status stato = Status.valueOf(reviewJson.get("stato").getAsString());
         String name = reviewJson.get("nome").getAsString();
         String creationDate =  reviewJson.get("creationDate").getAsString();
+        creationDate = creationDate.substring(0,creationDate.indexOf("+"));
+        String formattedDate = formatDate(creationDate);
         float rating = reviewJson.get("rating").getAsFloat();
         String content = reviewJson.get("content").getAsString();
 
@@ -147,12 +157,24 @@ public class ReviewDaoJSON implements ReviewDao {
                 .setAccommodationName(accommodationName)
                 .setApproved(stato)
                 .setAuthor(name)
-                .setData(creationDate)
+                .setData(formattedDate)
                 .setRating(rating)
                 .setReviewText(content)
                 .build();
 
     }
+
+    private String formatDate(String creationDate) throws DaoException {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSS").parse(creationDate);
+        } catch (ParseException e) {
+            throw new DaoException(DaoException.ERROR, e.getMessage());
+        }
+        return new SimpleDateFormat("dd/MM/yyyy, Hm").format(date);
+
+    }
+
     private BufferedReader getJSONFromUrl(String urlString) throws MalformedURLException {
         URL url = new URL(urlString);
         HttpURLConnection connection = null;

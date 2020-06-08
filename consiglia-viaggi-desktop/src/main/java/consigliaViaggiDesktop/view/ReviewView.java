@@ -5,9 +5,6 @@ import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.DAO.DaoException;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -16,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Callback;
 
 public class ReviewView {
 
@@ -66,8 +64,39 @@ public class ReviewView {
 		reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
 		creationData.setCellValueFactory(new PropertyValueFactory<Review, String>("data"));
 		status.setCellValueFactory(new PropertyValueFactory<Review, Status>("status"));
+		status.setCellFactory(column -> {
+			return new TableCell<Review, Status>() {
+				@Override
+				protected void updateItem(Status item, boolean empty) {
+					super.updateItem(item, empty); //This is mandatory
 
-		setApprovedCellStyle(status);
+					if (item == null || empty) //If the cell is empty
+					{
+						setText(null);
+						setStyle("");
+					} else                        //If the cell is not empty
+					{
+
+						setText(item.label); //Put the String data in the cell
+						if (item == Status.PENDING) {
+							this.setTextFill(javafx.scene.paint.Paint.valueOf("#000000")); //The text in red
+							setStyle("-fx-background-color: yellow ; -fx-alignment: center"); //The background of the cell in yellow
+
+						} else if (item == Status.APPROVED) {
+							this.setTextFill(javafx.scene.paint.Paint.valueOf("#00cc00"));
+							setStyle("-fx-alignment: center"); //The background of the cell in white
+
+						} else{
+							setTextFill(javafx.scene.paint.Paint.valueOf("#ff0000"));
+							setStyle("-fx-alignment: center"); //The background of the cell in white
+
+						}
+					}
+				}
+			};
+
+		});
+
 		setTableClickEvent(tableReview);
 
 
@@ -78,63 +107,8 @@ public class ReviewView {
 
 	}
 
-	private void bindView() {
-
-		totalPageNumber= reviewController.getTotalPageNumber();
-		pageNumber = reviewController.getPageNumber();
-		totalElemntNumber= reviewController.getTotalElementNumber();
-
-		reviewList.addListener(new ListChangeListener<Review>() {
-			@Override
-			public void onChanged(Change<? extends Review> c) {
-				updateGui();
-			}
-		});
-		pageNumber.addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				Platform.runLater(new Runnable() {
-
-					Long page = 1+(Long)newValue;
-					@Override
-					public void run() {
-						pageLabel.setText("Pagina: "+String.valueOf(page)+" / "+String.valueOf(totalPageNumber.getValue())
-								+"                Totale strutture trovate: "+String.valueOf(totalElemntNumber.getValue()));
-					}
-				});
-			}
-		});
-	}
-	private void updateGui() {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				pageLabel.setText("Pagina: "+String.valueOf(1+pageNumber.getValue())+" / "+String.valueOf(totalPageNumber.getValue())
-						+"                Totale strutture trovate: "+String.valueOf(totalElemntNumber.getValue()));
-			}
-		});
-
-	}
-
-	private void setTableClickEvent(TableView<Review> table) {
-
-		table.setRowFactory(tv -> {
-			TableRow<Review> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 2 && (!row.isEmpty())) {
-					Review rowData = row.getItem();
-					System.out.println("Double click on: " + rowData.getId());
-					reviewController.reviewSelected(rowData.getId());
-
-				}
-			});
-			return row;
-		});
-
-	}
-
-	private void setApprovedCellStyle(TableColumn<Review, Status> approved) {
-		approved.setCellFactory(column -> {
+	private Callback<TableColumn<Review, Status>, TableCell<Review, Status>> createStatusCellFactory() {
+		return column -> {
 			return new TableCell<Review, Status>() {
 				@Override
 				protected void updateItem(Status item, boolean empty) {
@@ -158,6 +132,60 @@ public class ReviewView {
 				}
 			};
 
+		};
+	}
+
+	private void bindView() {
+
+		totalPageNumber= reviewController.getTotalPageNumber();
+		pageNumber = reviewController.getPageNumber();
+		totalElemntNumber= reviewController.getTotalElementNumber();
+
+		reviewList.addListener(new ListChangeListener<Review>() {
+			@Override
+			public void onChanged(Change<? extends Review> c) {
+				updateGui();
+			}
+		});
+		/*pageNumber.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				Platform.runLater(new Runnable() {
+
+					Long page = 1+(Long)newValue;
+					@Override
+					public void run() {
+						pageLabel.setText("Pagina: "+String.valueOf(page)+" / "+String.valueOf(totalPageNumber.getValue())
+								+"                Totale recensioni trovate: "+String.valueOf(totalElemntNumber.getValue()));
+					}
+				});
+			}
+		});*/
+	}
+	private void updateGui() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				pageLabel.setText("Pagina: "+String.valueOf(1+pageNumber.getValue())+" / "+String.valueOf(totalPageNumber.getValue())
+						+"                Totale recensioni trovate: "+String.valueOf(totalElemntNumber.getValue()));
+			}
+		});
+
+	}
+
+	private void setTableClickEvent(TableView<Review> table) {
+
+		table.setRowFactory(tv -> {
+			TableRow<Review> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Review rowData = row.getItem();
+					System.out.println("Double click on: " + rowData.getId());
+					reviewController.reviewSelected(rowData.getId());
+
+				}
+			});
+			return row;
 		});
 
 	}
