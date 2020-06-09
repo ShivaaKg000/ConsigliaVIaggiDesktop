@@ -3,6 +3,8 @@ package consigliaViaggiDesktop.model.DAO;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
+
+import java.io.File;
 import java.io.IOException;
 
 public interface AccommodationDao {
@@ -11,4 +13,6 @@ public interface AccommodationDao {
 	Accommodation createAccommodation(Accommodation accommodation) throws IOException, DaoException;
 	Boolean deleteAccommodation(int idAccommodation) throws DaoException;
 	Boolean editAccommodation(Accommodation accommodation) throws  DaoException;
+
+	String uploadAccommodationImage(File image, String imgName) throws  DaoException;
 }

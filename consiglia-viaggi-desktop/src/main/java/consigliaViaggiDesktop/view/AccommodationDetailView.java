@@ -51,7 +51,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private AnchorPane imageViewAnchorPane;
 	@FXML private HBox mainHbox;
 	@FXML private Button deleteButton;
+	@FXML private ProgressIndicator uploadImageProgressIndicator;
+	@FXML private Button uploadImageButton;
 
+	private String imageUrl="";
+	private File currentImageFile;
 	private BooleanProperty mapInitialized;
 	private Accommodation selectedAccommodation;
 	private GoogleMapView mapView;
@@ -189,7 +193,33 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML
 	void clearImageButtonClicked(ActionEvent event) {
 
+		imageUrl="";
 		setAccommodationImage(Constants.IMG_PLACEHOLDER);
+		uploadImageButton.setDisable(true);
+		//TO DO deleteImageFromServer
+
+	}
+
+	@FXML
+	void uploadButtonAction(ActionEvent event) {
+
+		if (currentImageFile!=null){
+			uploadImageProgressIndicator.setVisible(true);
+			addAccommodationController.uploadAccommodationImage(currentImageFile,text_name.getText()).addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					uploadImageProgressIndicator.setVisible(false);
+					uploadImageButton.setDisable(true);
+
+					if (newValue.equals("")) {
+						setAccommodationImage(Constants.IMG_PLACEHOLDER);
+					}
+					else
+						imageUrl=newValue;
+				}
+			});
+		}
+
 
 	}
 
@@ -250,7 +280,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private Accommodation createNewAccommodationFromNewFields() {
 		return new Accommodation.Builder()
 				.setName(text_name.getText())
-				.setImages("")
+				.setImages(imageUrl)
 				.setCity("Napoli")
 				.setAddress(text_address.getText())
 				.setLongitude(Double.parseDouble(longitudeTextField.getText()))
@@ -267,7 +297,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		return new Accommodation.Builder()
 				.setId(Integer.valueOf(text_id.getText()))
 				.setName(text_name.getText())
-				.setImages("")
+				.setImages(imageUrl)
 				.setCity("Napoli")
 				.setAddress(text_address.getText())
 				.setLongitude(Double.parseDouble(longitudeTextField.getText()))
@@ -285,7 +315,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			@Override
 			public void run() {
-
+				imageUrl=accommodation.getImages();
 				accommodationId=accommodation.getId();
 				deleteButton.setVisible(true);
 				text_id.setText(String.valueOf(accommodation.getId()));
@@ -380,10 +410,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		final FileChooser fileChooser = new FileChooser();
 		configureFileChooser(fileChooser);
 
-		File file = fileChooser.showOpenDialog(mainHbox.getScene().getWindow());
-		if (file != null) {
+		currentImageFile = fileChooser.showOpenDialog(mainHbox.getScene().getWindow());
+		if (currentImageFile != null) {
 			try {
-				setAccommodationImage(file.toURI().toURL().toExternalForm());
+				setAccommodationImage(currentImageFile.toURI().toURL().toExternalForm());
+				uploadImageButton.setDisable(false);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}

@@ -31,6 +31,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     //GMaps
     compile group: 'com.lynden', name: 'GMapsFX', version: '2.12.0'
+    compile 'org.apache.httpcomponents:httpclient:4.5.12'
+    compile "org.apache.httpcomponents:httpmime:4.3"
 }
 
 apply plugin: "org.openjfx.javafxplugin"

@@ -6,11 +6,10 @@ import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.DAO.DaoException;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
+
+import java.io.File;
 
 public class EditAccommodationController {
 
@@ -26,10 +25,15 @@ public class EditAccommodationController {
         ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<Accommodation>();
         Task task = new Task() {
             @Override
-            public Void call() throws InterruptedException, DaoException {
+            public Void call() {
 
-                Accommodation accommodation= accommodationDao.getAccommodationById(id);
-                observableAccommodation.setValue(accommodation);
+                try {
+                    Accommodation accommodation = accommodationDao.getAccommodationById(id);
+                    observableAccommodation.setValue(accommodation);
+                } catch (DaoException e) {
+                    NavigationController.getInstance().buildInfoBox("Data error",e.getErrorMessage());
+                }
+
                 return null;
             }
         };

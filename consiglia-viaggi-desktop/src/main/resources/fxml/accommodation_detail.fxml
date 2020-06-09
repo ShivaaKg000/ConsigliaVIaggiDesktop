@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
@@ -181,16 +182,23 @@
                                                                      </children>
                                                                   </HBox>
                                                                   <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                                                                     <AnchorPane fx:id="imageViewAnchorPane" minHeight="100.0" minWidth="100.0" onMouseClicked="#accommodationImageSelected" prefHeight="100.0" prefWidth="100.0" style="-fx-border-color: #B8B8B8;" VBox.vgrow="ALWAYS">
+                                                                     <AnchorPane fx:id="imageViewAnchorPane" maxWidth="220.0" minHeight="100.0" minWidth="100.0" onMouseClicked="#accommodationImageSelected" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #B8B8B8;" VBox.vgrow="ALWAYS">
                                                                         <cursor>
                                                                            <Cursor fx:constant="HAND" />
                                                                         </cursor>
+                                                                        <children>
+                                                                           <ProgressIndicator fx:id="uploadImageProgressIndicator" layoutX="1.0" layoutY="44.0" visible="false" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" />
+                                                                        </children>
                                                                      </AnchorPane>
-                                                                     <Button mnemonicParsing="false" onAction="#clearImageButtonClicked" styleClass="clear-image-button" text="Clear">
-                                                                        <VBox.margin>
-                                                                           <Insets top="3.0" />
-                                                                        </VBox.margin>
-                                                                     </Button>
+                                                                     <HBox alignment="CENTER" spacing="5.0">
+                                                                        <children>
+                                                                           <Button fx:id="uploadImageButton" disable="true" minWidth="0.0" mnemonicParsing="false" onAction="#uploadButtonAction" styleClass="clear-image-button" text="Upload" />
+                                                                           <Button minWidth="55.0" mnemonicParsing="false" onAction="#clearImageButtonClicked" styleClass="clear-image-button" text="Clear" />
+                                                                        </children>
+                                                                        <padding>
+                                                                           <Insets top="5.0" />
+                                                                        </padding>
+                                                                     </HBox>
             
                                                                            <HBox.margin>
                                                                         <Insets />
