@@ -48,6 +48,7 @@ public final class Constants  {
     public static final String CONTENT_PARAM ="content=" ;
     public static final String ACCOMMODATION_NAME_PARAM ="accommodationName=" ;
     public static final String GET_REVIEW_URL=SERVER_URL+"single_review_view";
+    public static final String ORDER_BY_PARAM ="orderBy=" ;
 
 
     private Constants(){

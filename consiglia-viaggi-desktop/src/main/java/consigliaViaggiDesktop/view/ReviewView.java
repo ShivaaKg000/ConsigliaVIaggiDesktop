@@ -19,6 +19,8 @@ public class ReviewView {
 
 	@FXML private BorderPane reviewView;
 
+	@FXML private ComboBox<String> orderByComboBox;
+
 	@FXML private TableView<Review> tableReview;
 	@FXML private TableColumn<Review, Long> reviewId;
 	@FXML private TableColumn<Review, String> author;
@@ -34,14 +36,14 @@ public class ReviewView {
 	@FXML private TextField contentTextField;
 	@FXML private TextField authorTextField;
 	@FXML private ComboBox<String> statusComboBox;
-
 	@FXML private Label pageLabel;
 
 	private ObservableList<Review> reviewList = FXCollections.observableArrayList();
 	private ReviewController reviewController;
 
-
 	private ObservableList<String> status_list= FXCollections.observableArrayList();
+
+	private ObservableList<String> orderBy_list= FXCollections.observableArrayList();
 
 	private int page = 0;
 	private IntegerProperty pageNumber;
@@ -53,9 +55,11 @@ public class ReviewView {
 
 		reviewController = new ReviewController();
 
+		orderBy_list.addAll("","nome","id","accommodation_id","accommodation_name","content","stato","rating","creation_data");
+		orderByComboBox.setItems(orderBy_list);
+
 		status_list.addAll(Status.getStatusList());
 		statusComboBox.setItems(status_list);
-
 
 		reviewId.setCellValueFactory(new PropertyValueFactory<Review, Long>("id"));
 		author.setCellValueFactory(new PropertyValueFactory<Review, String>("author"));
@@ -99,9 +103,7 @@ public class ReviewView {
 
 		setTableClickEvent(tableReview);
 
-
 		reviewList = reviewController.loadReviewListAsync(new SearchParamsReview());
-
 		tableReview.setItems(reviewList);
 		bindView();
 
@@ -216,6 +218,7 @@ public class ReviewView {
 						setContent(contentTextField.getText()).
 						setStatus(Status.getStatusByLabel(statusComboBox.getValue())).
 						setCurrentPage(page).
+						setOrderBy(orderByComboBox.getValue()).
 						build();
 	}
 }

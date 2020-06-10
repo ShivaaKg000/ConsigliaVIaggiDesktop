@@ -8,6 +8,7 @@ public class SearchParamsReview {
     private String content;
     private String accommodationId;
     private String status;
+    private String orderBy;
     int currentpage=0;
 
     public SearchParamsReview(Builder builder) {
@@ -18,6 +19,7 @@ public class SearchParamsReview {
         this.author=builder.author;
         this.status=builder.status;
         this.accommodationId=builder.accommodationId;
+        this.orderBy=builder.orderBy;
     }
 
     public SearchParamsReview() {
@@ -26,8 +28,9 @@ public class SearchParamsReview {
         this.accommodationName=null;
         this.content=null;
         this.author=null;
-        this.status=null;
+        this.status="";
         this.accommodationId=null;
+        this.orderBy="id";
     }
 
     public void setCurrentpage(int currentpage) {
@@ -62,6 +65,10 @@ public class SearchParamsReview {
         return currentpage;
     }
 
+    public String getOrderBy() {
+        return orderBy;
+    }
+
     public static class Builder {
 
         private String id;
@@ -70,6 +77,7 @@ public class SearchParamsReview {
         private String content;
         private String accommodationId;
         private String status;
+        private String orderBy;
         int currentpage=0;
 
         public Builder setId(String id) {
@@ -94,6 +102,10 @@ public class SearchParamsReview {
         }
         public Builder setCurrentPage(int page){
             this.currentpage=page;
+            return this;
+        }
+        public Builder setOrderBy(String orderBy){
+            this.orderBy=orderBy;
             return this;
         }
         public SearchParamsReview build(){

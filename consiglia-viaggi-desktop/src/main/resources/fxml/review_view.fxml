@@ -106,6 +106,7 @@
                            </GridPane.margin>
                         </Label>
                         <ComboBox fx:id="statusComboBox" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="orderByComboBox" prefWidth="150.0" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
                </top>

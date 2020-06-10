@@ -27,9 +27,11 @@ public class ReviewDaoJSON implements ReviewDao {
     }
     private Review getReviewJsonById(int reviewId) throws DaoException {
         String urlString= Constants.GET_REVIEW_URL+"?"+Constants.REVIEW_ID_PARAM+reviewId;
+
+        /*
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-
+        */
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = getJSONFromUrl(urlString);
@@ -58,6 +60,8 @@ public class ReviewDaoJSON implements ReviewDao {
             urlString+=Constants.STATUS_PARAM+params.getStatus()+"&";
         if(params.getContent()!=null && !params.getContent().equals(""))
             urlString+=Constants.CONTENT_PARAM+params.getContent()+"&";
+        if(params.getOrderBy()!=null && !params.getOrderBy().equals(""))
+            urlString+=Constants.ORDER_BY_PARAM+params.getOrderBy()+"&";
         urlString+=Constants.PAGE_PARAM+params.getCurrentpage()+"&";
 
         System.out.println(urlString);
