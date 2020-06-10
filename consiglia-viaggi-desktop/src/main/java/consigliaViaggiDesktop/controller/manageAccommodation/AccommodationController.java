@@ -1,5 +1,6 @@
 package consigliaViaggiDesktop.controller.manageAccommodation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import javafx.beans.property.*;
@@ -33,7 +34,7 @@ public class AccommodationController {
 		totalElementNumber= new SimpleLongProperty();
     	executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
     	accommodationDao= new AccommodationDaoJSON();
-        observableAccommodationList= FXCollections.observableArrayList();		
+        observableAccommodationList= FXCollections.observableArrayList();
     }
 
 	public LongProperty getPageNumber() {
@@ -49,17 +50,26 @@ public class AccommodationController {
 	public ObservableList<Accommodation> loadAccommodationListAsync(SearchParamsAccommodation params) {
 
     	currentSearchParamsAccommodation =params;
-    	observableAccommodationList.clear();
+
     	Task task = new Task() {
     		@Override
-            public Void call() throws DaoException {
-				JsonPageResponse<Accommodation> page=accommodationDao.getAccommodationList(currentSearchParamsAccommodation);
-    			List<Accommodation> accommodationList= page.getContent();
+            public Void call(){
+				JsonPageResponse<Accommodation> page= null;
+
+				try {
+					page = accommodationDao.getAccommodationList(currentSearchParamsAccommodation);
+				} catch (DaoException e) {
+					NavigationController.getInstance().buildInfoBox("Ricerca",e.getMessage());
+				}
+
     			pageNumber.setValue(page.getPage());
 				totalPageNumber.setValue(page.getTotalPages());
 				totalElementNumber.setValue(page.getTotalElements());
-    			observableAccommodationList.addAll(accommodationList);
-    			observableAccommodationList.notifyAll();
+
+				List<Accommodation> accommodationList= page.getContent();
+				observableAccommodationList.remove(0,observableAccommodationList.size());
+				observableAccommodationList.addAll(accommodationList);
+
 				return null;
             }
         };
@@ -90,20 +100,24 @@ public class AccommodationController {
 
 	public void nextPage() {
 		if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
-			currentSearchParamsAccommodation = new SearchParamsAccommodation.Builder().setCurrentpage(currentSearchParamsAccommodation.getCurrentpage() + 1)
+			currentSearchParamsAccommodation = new SearchParamsAccommodation.Builder().setCurrentpage(currentSearchParamsAccommodation.getCurrentPage() + 1)
 					.setCurrentSubCategory(currentSearchParamsAccommodation.getCurrentSubCategory())
 					.setCurrentSearchString(currentSearchParamsAccommodation.getCurrentSearchString())
 					.setCurrentCategory(currentSearchParamsAccommodation.getCurrentCategory())
+					.setDirection(currentSearchParamsAccommodation.getDirection())
+					.setOrderBy(currentSearchParamsAccommodation.getOrderBy())
 					.create();
 			loadAccommodationListAsync(currentSearchParamsAccommodation);
 		}
 	}
 	public void previousPage() {
 		if (pageNumber.getValue()>0) {
-			currentSearchParamsAccommodation = new SearchParamsAccommodation.Builder().setCurrentpage(currentSearchParamsAccommodation.getCurrentpage() - 1)
+			currentSearchParamsAccommodation = new SearchParamsAccommodation.Builder().setCurrentpage(currentSearchParamsAccommodation.getCurrentPage() - 1)
 					.setCurrentSubCategory(currentSearchParamsAccommodation.getCurrentSubCategory())
 					.setCurrentSearchString(currentSearchParamsAccommodation.getCurrentSearchString())
 					.setCurrentCategory(currentSearchParamsAccommodation.getCurrentCategory())
+					.setDirection(currentSearchParamsAccommodation.getDirection())
+					.setOrderBy(currentSearchParamsAccommodation.getOrderBy())
 					.create();
 			loadAccommodationListAsync(currentSearchParamsAccommodation);
 		}

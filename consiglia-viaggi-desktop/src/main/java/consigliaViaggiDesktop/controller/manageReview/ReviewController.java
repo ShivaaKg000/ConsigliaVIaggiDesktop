@@ -58,7 +58,7 @@ public class ReviewController {
     public ObservableList<Review> loadReviewListAsync(SearchParamsReview params) throws DaoException {
 
         currentSearchParamsReview =params;
-        observableReviewList.clear();
+
         Task task = new Task() {
             @Override
             public Void call() throws DaoException {
@@ -67,8 +67,8 @@ public class ReviewController {
                 pageNumber.setValue(page.getPage());
                 totalPageNumber.setValue(page.getTotalPages());
                 totalElementNumber.setValue(page.getTotalElements());
+                observableReviewList.clear();
                 observableReviewList.addAll(reviewList);
-                observableReviewList.notifyAll();
                 return null;
             }
         };

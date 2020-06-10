@@ -46,7 +46,7 @@ public class AccommodationView {
 	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
-	private ObservableList<Accommodation> accommodationList = FXCollections.observableArrayList();
+	private ObservableList<Accommodation> accommodationList;
 	private AccommodationController accommodationController;
 	private int page=0;
 	private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
@@ -168,7 +168,7 @@ public class AccommodationView {
 			subCat=subCategoryChoiseBox.getValue().toString();
 
 
-		accommodationList= accommodationController.loadAccommodationListAsync(
+		accommodationController.loadAccommodationListAsync(
 				new SearchParamsAccommodation.Builder()
 				.setCurrentCategory(cat)
 				.setCurrentSubCategory(subCat)
@@ -189,29 +189,14 @@ public class AccommodationView {
 				updateGui();
 			}
 		});
-
-		pageNumber.addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				Platform.runLater(new Runnable() {
-
-					Long page = 1+(Long)newValue;
-					@Override
-					public void run() {
-						pageLabel.setText("Pagina: "+String.valueOf(page)+" / "+String.valueOf(totalPageNumber.getValue())
-								+"                Totale strutture trovate: "+String.valueOf(totalElemntNumber.getValue()));
-					}
-				});
-			}
-		});
 	}
 
 	private void updateGui() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				pageLabel.setText("Pagina: "+String.valueOf(1+(Long)pageNumber.getValue())+" / "+String.valueOf(totalPageNumber.getValue())
-						+"                Totale strutture trovate: "+String.valueOf(totalElemntNumber.getValue()));
+				pageLabel.setText("Pagina: "+(1+pageNumber.getValue())+" / "+(totalPageNumber.getValue())
+						+" 						Totale strutture trovate: "+(totalElemntNumber.getValue()));
 			}
 		});
 

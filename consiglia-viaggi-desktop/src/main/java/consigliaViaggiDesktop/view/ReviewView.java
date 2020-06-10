@@ -57,9 +57,11 @@ public class ReviewView {
 
 		orderBy_list.addAll("","nome","id","accommodation_id","accommodation_name","content","stato","rating","creation_data");
 		orderByComboBox.setItems(orderBy_list);
+		orderByComboBox.getSelectionModel().select(0);
 
 		status_list.addAll(Status.getStatusList());
 		statusComboBox.setItems(status_list);
+		statusComboBox.getSelectionModel().select(0);
 
 		reviewId.setCellValueFactory(new PropertyValueFactory<Review, Long>("id"));
 		author.setCellValueFactory(new PropertyValueFactory<Review, String>("author"));
@@ -149,20 +151,6 @@ public class ReviewView {
 				updateGui();
 			}
 		});
-		/*pageNumber.addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				Platform.runLater(new Runnable() {
-
-					Long page = 1+(Long)newValue;
-					@Override
-					public void run() {
-						pageLabel.setText("Pagina: "+String.valueOf(page)+" / "+String.valueOf(totalPageNumber.getValue())
-								+"                Totale recensioni trovate: "+String.valueOf(totalElemntNumber.getValue()));
-					}
-				});
-			}
-		});*/
 	}
 	private void updateGui() {
 		Platform.runLater(new Runnable() {
@@ -219,6 +207,7 @@ public class ReviewView {
 						setStatus(Status.getStatusByLabel(statusComboBox.getValue())).
 						setCurrentPage(page).
 						setOrderBy(orderByComboBox.getValue()).
+                        setDirection("DESC").
 						build();
 	}
 }

@@ -36,9 +36,9 @@ public final class Constants  {
     public static final String CREATE_ACCOMMODATION_URL = SERVER_URL+"accommodation/create";
     public static final String DELETE_ACCOMMODATION_URL = SERVER_URL+"accommodation/delete/";
     public static final String EDIT_ACCOMMODATION_URL =SERVER_URL+"accommodation/edit/" ;
-    public static final String QUERY_PARAM ="?query=";
-    public static final String CATEGORY_PARAM ="&category=";
-    public static final String SUBCATEGORY_PARAM ="&subCategory=";
+    public static final String QUERY_PARAM ="query=";
+    public static final String CATEGORY_PARAM ="category=";
+    public static final String SUBCATEGORY_PARAM ="subCategory=";
     //Review
     public static final String GET_REVIEW_LIST_URL = SERVER_URL+"review_view";
     public static final String APPROVE_REVIEW = SERVER_URL+"review/edit/";
@@ -49,6 +49,7 @@ public final class Constants  {
     public static final String ACCOMMODATION_NAME_PARAM ="accommodationName=" ;
     public static final String GET_REVIEW_URL=SERVER_URL+"single_review_view";
     public static final String ORDER_BY_PARAM ="orderBy=" ;
+    public static final String DIRECTION_PARAM ="direction=" ;
 
 
     private Constants(){

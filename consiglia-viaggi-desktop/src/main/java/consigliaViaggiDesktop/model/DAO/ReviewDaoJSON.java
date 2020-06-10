@@ -62,6 +62,8 @@ public class ReviewDaoJSON implements ReviewDao {
             urlString+=Constants.CONTENT_PARAM+params.getContent()+"&";
         if(params.getOrderBy()!=null && !params.getOrderBy().equals(""))
             urlString+=Constants.ORDER_BY_PARAM+params.getOrderBy()+"&";
+        if(params.getDirection()!=null && !params.getDirection().equals(""))
+            urlString+=Constants.DIRECTION_PARAM+params.getDirection()+"&";
         urlString+=Constants.PAGE_PARAM+params.getCurrentpage()+"&";
 
         System.out.println(urlString);
@@ -170,7 +172,7 @@ public class ReviewDaoJSON implements ReviewDao {
         } catch (ParseException e) {
             throw new DaoException(DaoException.ERROR, e.getMessage());
         }
-        return new SimpleDateFormat("dd/MM/yyyy, Hm").format(date);
+        return new SimpleDateFormat("dd/MM/yyyy, HH:mm").format(date);
 
     }
 

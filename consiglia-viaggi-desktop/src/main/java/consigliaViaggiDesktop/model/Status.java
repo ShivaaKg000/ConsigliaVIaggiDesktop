@@ -22,10 +22,12 @@ public enum Status {
     }
 
     public static String getStatusByLabel(String label){
-        if(label.equals(PENDING.label))  return  PENDING.toString();
-        if(label.equals(APPROVED.label)) return APPROVED.toString();
-        if(label.equals(REJECTED.label)) return REJECTED.toString();
-            return "";
+        if(label!=null) {
+            if (label.equals(PENDING.label)) return PENDING.toString();
+            if (label.equals(APPROVED.label)) return APPROVED.toString();
+            if (label.equals(REJECTED.label)) return REJECTED.toString();
+        }
+        return "";
     }
 
     public static List<String> getStatusList(){

@@ -186,15 +186,19 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		return accommodationList;
 	}
 	private JsonPageResponse <Accommodation> getAccommodationListJSONParsing(SearchParamsAccommodation params) throws DaoException {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+
+		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"?"+
 				Constants.QUERY_PARAM+
-				URLEncoder.encode(params.getCurrentSearchString(), StandardCharsets.UTF_8)+
+				URLEncoder.encode(params.getCurrentSearchString(), StandardCharsets.UTF_8)+"&"+
 				Constants.CATEGORY_PARAM+
-				params.getCurrentCategory()+
+				params.getCurrentCategory()+"&"+
 				Constants.SUBCATEGORY_PARAM+
 				params.getCurrentSubCategory()+"&"+
+				Constants.ORDER_BY_PARAM+
+				params.getOrderBy()+"&"+
+				Constants.DIRECTION_PARAM+
+				params.getDirection()+"&"+
 				Constants.PAGE_PARAM+
-				params.getCurrentpage();
+				params.getCurrentPage();
 
 		System.out.print("\n"+urlString);
 		BufferedReader bufferedReader;

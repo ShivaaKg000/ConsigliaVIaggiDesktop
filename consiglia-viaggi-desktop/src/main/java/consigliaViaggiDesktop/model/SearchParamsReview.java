@@ -9,6 +9,7 @@ public class SearchParamsReview {
     private String accommodationId;
     private String status;
     private String orderBy;
+    private String direction;
     int currentpage=0;
 
     public SearchParamsReview(Builder builder) {
@@ -20,6 +21,7 @@ public class SearchParamsReview {
         this.status=builder.status;
         this.accommodationId=builder.accommodationId;
         this.orderBy=builder.orderBy;
+        this.direction=builder.direction;
     }
 
     public SearchParamsReview() {
@@ -31,6 +33,7 @@ public class SearchParamsReview {
         this.status="";
         this.accommodationId=null;
         this.orderBy="id";
+        this.direction="DESC";
     }
 
     public void setCurrentpage(int currentpage) {
@@ -69,6 +72,8 @@ public class SearchParamsReview {
         return orderBy;
     }
 
+    public String getDirection(){return direction;}
+
     public static class Builder {
 
         private String id;
@@ -78,7 +83,9 @@ public class SearchParamsReview {
         private String accommodationId;
         private String status;
         private String orderBy;
+        private String direction;
         int currentpage=0;
+
 
         public Builder setId(String id) {
             this.id = id;
@@ -106,6 +113,10 @@ public class SearchParamsReview {
         }
         public Builder setOrderBy(String orderBy){
             this.orderBy=orderBy;
+            return this;
+        }
+        public Builder setDirection(String direction){
+            this.direction=direction;
             return this;
         }
         public SearchParamsReview build(){
