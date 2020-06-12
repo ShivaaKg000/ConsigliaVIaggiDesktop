@@ -12,14 +12,8 @@ import javafx.stage.Stage;
 
 public class MenuView {
 
-	@FXML
-    private Text welcomeText;
-    @FXML
-    private BorderPane menuView;
-    @FXML
-    private Parent login;
-    @FXML
-    private Parent accommodationView;
+	@FXML private Text welcomeText;
+    @FXML private BorderPane menuView;
 
     public String userName;
     

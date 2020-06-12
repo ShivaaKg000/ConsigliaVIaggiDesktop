@@ -14,12 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 
 public class ReviewView {
-
-	@FXML private BorderPane reviewView;
 
 	@FXML private Label errorLabel;
 	@FXML private ComboBox<OrderByChoice> orderByComboBox;
@@ -47,10 +44,9 @@ public class ReviewView {
 	private ObservableList<String> status_list= FXCollections.observableArrayList();
 	private ObservableList<OrderByChoice> orderBy_list= FXCollections.observableArrayList();
 
-	private int page = 0;
 	private IntegerProperty pageNumber;
 	private IntegerProperty totalPageNumber;
-	private IntegerProperty totalElemntNumber;
+	private IntegerProperty totalElementNumber;
 
     private static class OrderByChoice{
         private String label;
@@ -199,7 +195,7 @@ public class ReviewView {
 
 		totalPageNumber= reviewController.getTotalPageNumber();
 		pageNumber = reviewController.getPageNumber();
-		totalElemntNumber= reviewController.getTotalElementNumber();
+		totalElementNumber = reviewController.getTotalElementNumber();
 
 		reviewList.addListener(new ListChangeListener<Review>() {
 			@Override
@@ -213,7 +209,7 @@ public class ReviewView {
 			@Override
 			public void run() {
 				pageLabel.setText("Pagina: "+String.valueOf(1+pageNumber.getValue())+" / "+String.valueOf(totalPageNumber.getValue())
-						+"                Totale recensioni trovate: "+String.valueOf(totalElemntNumber.getValue()));
+						+"                Totale recensioni trovate: "+String.valueOf(totalElementNumber.getValue()));
 			}
 		});
 
@@ -291,7 +287,6 @@ public class ReviewView {
 						setAccommodationName(accommodationName).
 						setContent(content).
 						setStatus(Status.getStatusByLabel(statusComboBox.getValue())).
-						setCurrentPage(page).
 						setOrderBy(orderByComboBox.getValue().getParam()).
                         setDirection(orderByComboBox.getValue().getDirection()).
 						build();

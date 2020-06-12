@@ -24,7 +24,7 @@ import javafx.util.Callback;
 
 public class AccommodationView {
 
-	// Elementi della vista
+
 	@FXML   private Label errorLabel;
 	@FXML   private ComboBox<OrderByChoice> orderByComboBox;
 	@FXML 	private TableView<Accommodation> tableAccommodation;
@@ -38,7 +38,6 @@ public class AccommodationView {
 	@FXML 	private ChoiceBox<Subcategory> subCategoryChoiceBox;
 	@FXML	private TextField searchParamTextEdit;
 	@FXML	private Label pageLabel;
-		//@FXML	private BorderPane accommodationView;
 
 
 	private static class OrderByChoice{
@@ -98,12 +97,12 @@ public class AccommodationView {
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 	private ObservableList<AccommodationView.OrderByChoice> orderBy_list= FXCollections.observableArrayList();
 
-	private int page=0;
-	private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
+	private LongProperty pageNumber,totalPageNumber, totalElementNumber;
 
 	public void initialize(){
 
 		orderByComboBox.setItems(OrderByChoice.getList(orderBy_list));
+		orderByComboBox.getSelectionModel().select(0);
 
 		accommodationController = new AccommodationController();
 
@@ -166,7 +165,6 @@ public class AccommodationView {
 						.setCurrentCategory(cat)
 						.setCurrentSubCategory(subCat)
 						.setCurrentSearchString(searchParam)
-						.setCurrentpage(page)
 						.setOrderBy(orderByComboBox.getValue().getParam())
 						.setDirection(orderByComboBox.getValue().getDirection())
 						.create());
@@ -176,7 +174,7 @@ public class AccommodationView {
 
 		totalPageNumber= accommodationController.getTotalPageNumber();
 		pageNumber = accommodationController.getPageNumber();
-		totalElemntNumber= accommodationController.getTotalElementNumber();
+		totalElementNumber = accommodationController.getTotalElementNumber();
 
 		accommodationList.addListener(new ListChangeListener<Accommodation>() {
 			@Override
@@ -190,7 +188,7 @@ public class AccommodationView {
 			@Override
 			public void run() {
 				pageLabel.setText("Pagina: "+(1+pageNumber.getValue())+" / "+(totalPageNumber.getValue())
-						+" 						Totale strutture trovate: "+(totalElemntNumber.getValue()));
+						+" 						Totale strutture trovate: "+(totalElementNumber.getValue()));
 			}
 		});
 

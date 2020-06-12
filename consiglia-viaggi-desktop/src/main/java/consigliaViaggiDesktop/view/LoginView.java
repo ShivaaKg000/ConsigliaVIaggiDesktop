@@ -14,14 +14,10 @@ import javafx.scene.layout.BorderPane;
 
 public class LoginView {
 
-    @FXML
-    private BorderPane login;
-    @FXML
-    private TextField userNameField ;
-    @FXML
-    private PasswordField passwordField ;
-    @FXML
-    private Label errorLabel ;
+
+    @FXML private TextField userNameField ;
+    @FXML private PasswordField passwordField ;
+    @FXML private Label errorLabel ;
 
 
 
