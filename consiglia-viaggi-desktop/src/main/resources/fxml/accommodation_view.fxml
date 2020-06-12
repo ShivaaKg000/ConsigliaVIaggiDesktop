@@ -38,6 +38,7 @@
                         <Label layoutX="212.0" layoutY="25.0" text="Categoria" />
                         <Label layoutX="186.0" layoutY="61.0" text="Sottocategoria" />
                         <Label fx:id="errorLabel" layoutX="689.0" layoutY="83.0" />
+                        <ComboBox fx:id="orderByComboBox" layoutX="286.0" layoutY="82.0" prefWidth="150.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefWidth="1084.0" SplitPane.resizableWithParent="false">
