@@ -35,7 +35,7 @@ public class LoginView {
             if (LoginController.getInstance().authenticate(userName, password))
             {
                 errorLabel.setText("");
-                loadMenuView("");
+                loadMenuView(userName);
             }
             else
             {

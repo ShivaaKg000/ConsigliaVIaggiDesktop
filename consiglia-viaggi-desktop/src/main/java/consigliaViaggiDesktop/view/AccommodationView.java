@@ -14,22 +14,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class AccommodationView {
-	
-	@FXML	private BorderPane accommodationView;
+
+	// Elementi della vista
+	@FXML   private Label errorLabel;
 	@FXML 	private TableView<Accommodation> tableAccommodation;
 	@FXML 	private TableColumn<Accommodation, Integer> id ;
 	@FXML 	private TableColumn<Accommodation, String> name ;
@@ -37,30 +33,30 @@ public class AccommodationView {
 	@FXML 	private TableColumn<Accommodation, Category> category ;
 	@FXML 	private TableColumn<Accommodation, Subcategory> subCategory;
 	@FXML 	private TableColumn<Accommodation, String> city;
-	@FXML 	private ChoiceBox<Category> categoryChoiseBox;
-	@FXML 	private ChoiceBox<Subcategory> subCategoryChoiseBox;
+	@FXML 	private ChoiceBox<Category> categoryChoiceBox;
+	@FXML 	private ChoiceBox<Subcategory> subCategoryChoiceBox;
 	@FXML	private TextField searchParamTextEdit;
 	@FXML	private Label pageLabel;
+		//@FXML	private BorderPane accommodationView;
 
+	private ObservableList<Accommodation> accommodationList;
+
+	private AccommodationController accommodationController;
 
 	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
 	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
-	private ObservableList<Accommodation> accommodationList;
-	private AccommodationController accommodationController;
 	private int page=0;
 	private LongProperty pageNumber,totalPageNumber,totalElemntNumber;
 
-	
 	public void initialize(){
-		
-		accommodationController = new AccommodationController();
-		
-		categoryChoiseBox.setItems(category_list);
 
-		subCategoryChoiseBox.setItems(subcategory_list);
+		accommodationController = new AccommodationController();
+
+		categoryChoiceBox.setItems(category_list);
+		subCategoryChoiceBox.setItems(subcategory_list);
 		/*choice_category listener*/
-		categoryChoiseBox.getSelectionModel().selectedIndexProperty().addListener(
+		categoryChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
 				new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -96,85 +92,28 @@ public class AccommodationView {
 		
 	}
 
-	private void setTableClickEvent(TableView<Accommodation> table) {
-		
-		table.setRowFactory(tv -> {
-            TableRow<Accommodation> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-                    Accommodation rowData = row.getItem();
-                    accommodationController.loadAccommodationDetailView(rowData.getId());
-				
-                }
-            });
-            return row ;
-        });
-		
-	}
-
-	@FXML
-	public void createButtonAction(){
-		accommodationController.loadCreateAccommodationDetailView();
-	}
-
-	@FXML
-	public void backButtonClicked() {
-		accommodationController.goBackToMenu();
-	}
-
-	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
-
-		switch (category){
-			case HOTEL:
-				return FXCollections.observableArrayList(Subcategory.hotels);
-			case RESTAURANT:
-				return FXCollections.observableArrayList(Subcategory.restaurants);
-			case ATTRACTION:
-				return FXCollections.observableArrayList(Subcategory.attractions);
-			default:
-				return FXCollections.observableArrayList();
-		}
-	}
-
-	@FXML
-	void searchButtonClick(ActionEvent event) {
-		searchAccommodation();
-	}
-
-	@FXML
-	void searchTextFieldKeyPressed(KeyEvent event) {
-
-		if(event.getCode().toString().equals("ENTER")){
-			searchAccommodation();
-		}
-	}
-
-	@FXML
-	void nextPageAction(ActionEvent event) {
-		accommodationController.nextPage();
-	}
-
-	@FXML
-	void previousPage(ActionEvent event) {
-		accommodationController.previousPage();
-	}
-
-	void searchAccommodation(){
+	private void searchAccommodation(){
 		String cat="";
 		String subCat="";
-		if(categoryChoiseBox.getValue()!=null)
-			cat=categoryChoiseBox.getValue().toString();
-		if(subCategoryChoiseBox.getValue()!=null)
-			subCat=subCategoryChoiseBox.getValue().toString();
+		if(categoryChoiceBox.getValue()!=null)
+			cat= categoryChoiceBox.getValue().toString();
+		if(subCategoryChoiceBox.getValue()!=null)
+			subCat= subCategoryChoiceBox.getValue().toString();
 
-
+		errorLabel.setText("");
+		String searchParam=(searchParamTextEdit.getText());
+		if(searchParam.length()<3 && searchParam.length()>0 ){
+			searchParam="";
+			errorLabel.setText("									La parola cercata deve contenere almeno tre caratteri!");
+			searchParamTextEdit.clear();
+		}
 		accommodationController.loadAccommodationListAsync(
 				new SearchParamsAccommodation.Builder()
-				.setCurrentCategory(cat)
-				.setCurrentSubCategory(subCat)
-				.setCurrentSearchString(searchParamTextEdit.getText())
-				.setCurrentpage(page)
-				.create());
+						.setCurrentCategory(cat)
+						.setCurrentSubCategory(subCat)
+						.setCurrentSearchString(searchParam)
+						.setCurrentpage(page)
+						.create());
 	}
 
 	private void bindView() {
@@ -190,7 +129,6 @@ public class AccommodationView {
 			}
 		});
 	}
-
 	private void updateGui() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -202,5 +140,64 @@ public class AccommodationView {
 
 	}
 
+	private void setTableClickEvent(TableView<Accommodation> table) {
+
+		table.setOnKeyPressed((KeyEvent e) -> {
+			if (!table.getSelectionModel().isEmpty() && e.getCode() == KeyCode.ENTER) {
+				Accommodation rowData = table.getSelectionModel().getSelectedItem();
+				accommodationController.loadAccommodationDetailView(rowData.getId());
+				e.consume();
+			}
+		});
+		table.setRowFactory(tv -> {
+            TableRow<Accommodation> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if ( event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Accommodation rowData = row.getItem();
+                    accommodationController.loadAccommodationDetailView(rowData.getId());
+				
+                }
+            });
+            return row ;
+        });
+		
+	}
+	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
+
+		switch (category){
+			case HOTEL:
+				return FXCollections.observableArrayList(Subcategory.hotels);
+			case RESTAURANT:
+				return FXCollections.observableArrayList(Subcategory.restaurants);
+			case ATTRACTION:
+				return FXCollections.observableArrayList(Subcategory.attractions);
+			default:
+				return FXCollections.observableArrayList();
+		}
+	}
+
+	@FXML private void searchButtonClick(ActionEvent event) {
+		searchAccommodation();
+	}
+	@FXML private void searchTextFieldKeyPressed(KeyEvent event) {
+
+		if(event.getCode().toString().equals("ENTER")){
+			searchAccommodation();
+		}
+	}
+
+	@FXML private void nextPageAction(ActionEvent event) {
+		accommodationController.nextPage();
+	}
+	@FXML private void previousPage(ActionEvent event) {
+		accommodationController.previousPage();
+	}
+
+	@FXML private void createButtonAction(){
+		accommodationController.loadCreateAccommodationDetailView();
+	}
+	@FXML private void backButtonClicked() {
+		accommodationController.goBackToMenu();
+	}
 
 }

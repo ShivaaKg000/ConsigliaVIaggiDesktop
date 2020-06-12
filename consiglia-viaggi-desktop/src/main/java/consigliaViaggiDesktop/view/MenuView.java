@@ -33,39 +33,18 @@ public class MenuView {
     
     @FXML
     private void logout() throws IOException {
-    	loadLoginView();
+        NavigationController.getInstance().navigateBack();
     }
-    @FXML
-    private void recensioni() throws IOException
+    @FXML private void recensioni() throws IOException
     {
-    	loadReviewView(this.userName);
+        Stage window = (Stage) menuView.getScene().getWindow();
+        NavigationController.getInstance().setCurrentStage(window);
+        NavigationController.getInstance().navigateToView(Constants.REVIEW_VIEW);
+
 	}
     @FXML
     private void strutture() throws IOException
     {
-    	loadAccommodationView();
-	}
-    public void loadReviewView(String UserName) throws IOException
-    {
-    	Stage window = (Stage) menuView.getScene().getWindow();
-    	NavigationController.getInstance().setCurrentStage(window);
-    	NavigationController.getInstance().navigateToView(Constants.REVIEW_VIEW);
-        
-    }
-    public void loadLoginView() throws IOException
-    {
-    	logOut();
-    	NavigationController.getInstance().navigateBack();
-        
-    }
-
-    private void logOut() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void loadAccommodationView() throws IOException
-    {
-		
 		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_VIEW);
         
     }

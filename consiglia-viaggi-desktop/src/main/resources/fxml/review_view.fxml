@@ -47,7 +47,7 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <TextField fx:id="idTextField" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <TextField fx:id="idTextField" onKeyPressed="#searchTextFieldKeyPressed" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
@@ -57,7 +57,7 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <TextField fx:id="accommodationIdTextField" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <TextField fx:id="accommodationIdTextField" onKeyPressed="#searchTextFieldKeyPressed" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
@@ -67,7 +67,7 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <TextField fx:id="accommodationNameTextField" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                        <TextField fx:id="accommodationNameTextField" onKeyPressed="#searchTextFieldKeyPressed" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
@@ -82,12 +82,12 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <TextField fx:id="authorTextField" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <TextField fx:id="authorTextField" onKeyPressed="#searchTextFieldKeyPressed" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="contentTextField" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                        <TextField fx:id="contentTextField" onKeyPressed="#searchTextFieldKeyPressed" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="4" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
@@ -105,8 +105,12 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="statusComboBox" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                        <ComboBox fx:id="orderByComboBox" prefWidth="150.0" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="statusComboBox" onKeyPressed="#searchTextFieldKeyPressed" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="orderByComboBox" onKeyPressed="#searchTextFieldKeyPressed" prefWidth="150.0" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="20.0" />
+                           </GridPane.margin></ComboBox>
+                        <Label text="Ordina per:" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </top>
@@ -120,13 +124,13 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                                  <columns>
-                                    <TableColumn fx:id="reviewId" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" style="-fx-alignment: center;" text="Id" />
-                                    <TableColumn fx:id="author" prefWidth="246.0" text="Autore" />
-                                    <TableColumn fx:id="reviewText" prefWidth="45.0" text="Testo" />
-                                    <TableColumn fx:id="accommodationId" maxWidth="80.0" minWidth="80.0" style="-fx-alignment: center;" text="Id Struttura" />
-                                    <TableColumn fx:id="accommodationName" prefWidth="45.0" text="Nome Struttura" />
-                                    <TableColumn fx:id="creationData" prefWidth="75.0" style="-fx-alignment: center;" text="Data" />
-                                    <TableColumn fx:id="status" prefWidth="45.0" style="-fx-alignment: center;" text="Stato" />
+                                    <TableColumn fx:id="reviewId" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" style="-fx-alignment: center;" text="Id" />
+                                    <TableColumn fx:id="author" prefWidth="246.0" sortable="false" text="Autore" />
+                                    <TableColumn fx:id="reviewText" prefWidth="45.0" sortable="false" text="Testo" />
+                                    <TableColumn fx:id="accommodationId" maxWidth="80.0" minWidth="80.0" sortable="false" style="-fx-alignment: center;" text="Id Struttura" />
+                                    <TableColumn fx:id="accommodationName" prefWidth="45.0" sortable="false" text="Nome Struttura" />
+                                    <TableColumn fx:id="creationData" prefWidth="75.0" sortable="false" style="-fx-alignment: center;" text="Data" />
+                                    <TableColumn fx:id="status" prefWidth="45.0" sortable="false" style="-fx-alignment: center;" text="Stato" />
                                  </columns>
                               </TableView>
                               <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
@@ -148,6 +152,7 @@
                                        </graphic>
                                     </Button>
                                     <Label fx:id="pageLabel" text="Label" />
+                                    <Label fx:id="errorLabel" />
                                  </children>
                                  <padding>
                                     <Insets top="5.0" />
