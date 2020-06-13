@@ -1,6 +1,5 @@
 package consigliaViaggiDesktop.controller.manageAccommodation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import javafx.beans.property.*;
@@ -17,6 +16,8 @@ import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 public class AccommodationController {
 
@@ -51,9 +52,9 @@ public class AccommodationController {
 
     	currentSearchParamsAccommodation =params;
 
-    	Task task = new Task() {
+    	Task task = new Task<JsonPageResponse<Accommodation>>() {
     		@Override
-            public Void call(){
+            public JsonPageResponse<Accommodation> call(){
 				JsonPageResponse<Accommodation> page= null;
 
 				try {
@@ -62,17 +63,28 @@ public class AccommodationController {
 					NavigationController.getInstance().buildInfoBox("Ricerca",e.getMessage());
 				}
 
-    			pageNumber.setValue(page.getPage());
+    			/*pageNumber.setValue(page.getPage());
 				totalPageNumber.setValue(page.getTotalPages());
 				totalElementNumber.setValue(page.getTotalElements());
 
 				List<Accommodation> accommodationList= page.getContent();
 				observableAccommodationList.remove(0,observableAccommodationList.size());
-				observableAccommodationList.addAll(accommodationList);
+				observableAccommodationList.addAll(accommodationList);*/
 
-				return null;
+				return page;
             }
         };
+		task.setOnSucceeded(t -> {
+			JsonPageResponse<Accommodation> pageResult= (JsonPageResponse<Accommodation>) task.getValue();
+			pageNumber.setValue(pageResult.getPage());
+			totalPageNumber.setValue(pageResult.getTotalPages());
+			totalElementNumber.setValue(pageResult.getTotalElements());
+
+			List<Accommodation> accommodationList= pageResult.getContent();
+			observableAccommodationList.remove(0,observableAccommodationList.size());
+			observableAccommodationList.addAll(accommodationList);
+
+		});
 		executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
         Thread testThread = new Thread(task);
         executor.execute(testThread);

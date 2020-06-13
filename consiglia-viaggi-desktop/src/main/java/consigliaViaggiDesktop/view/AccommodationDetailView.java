@@ -233,12 +233,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 					@Override
 					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 						if (newValue) {
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									accommodationController.goBack();
-								}
-							});
+							Platform.runLater(() -> accommodationController.goBack());
 						}
 					}
 				});
@@ -311,54 +306,49 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	}
 
 	private void updateAccommodationDetailGui(Accommodation accommodation) {
-		Platform.runLater(new Runnable(){
+		Platform.runLater(() -> {
+			imageUrl=accommodation.getImages();
+			accommodationId=accommodation.getId();
+			deleteButton.setVisible(true);
+			text_id.setText(String.valueOf(accommodation.getId()));
+			latitudeTextField.setText(accommodation.getLatitude().toString());
+			longitudeTextField.setText(accommodation.getLongitude().toString());
+			text_name.setText(accommodation.getName());
+			text_description.setText(accommodation.getDescription());
+			text_address.setText(accommodation.getAddress());
+			//text_path.setText(accommodation.getLogoUrl());
+			text_rating.setText(String.valueOf(accommodation.getRating()));
+			choice_category.setValue(accommodation.getCategory());
+			subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
+			choice_subcategory.setItems(subcategory_list);
+			choice_subcategory.setValue(accommodation.getSubCategory());
+			setAccommodationImage(accommodation.getImages());
 
-			@Override
-			public void run() {
-				imageUrl=accommodation.getImages();
-				accommodationId=accommodation.getId();
-				deleteButton.setVisible(true);
-				text_id.setText(String.valueOf(accommodation.getId()));
-				latitudeTextField.setText(accommodation.getLatitude().toString());
-				longitudeTextField.setText(accommodation.getLongitude().toString());
-				text_name.setText(accommodation.getName());
-				text_description.setText(accommodation.getDescription());
-				text_address.setText(accommodation.getAddress());
-				//text_path.setText(accommodation.getLogoUrl());
-				text_rating.setText(String.valueOf(accommodation.getRating()));
-				choice_category.setValue(accommodation.getCategory());
-				subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
-				choice_subcategory.setItems(subcategory_list);
-				choice_subcategory.setValue(accommodation.getSubCategory());
-				setAccommodationImage(accommodation.getImages());
-
-				/*choice_category listener*//*
-				choice_category.getSelectionModel().selectedIndexProperty().addListener(
-						new ChangeListener<Number>() {
-							@Override
-							public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-								System.out.print("selected "+category_list.get((Integer) newValue));
-								subcategory_list.clear();
-								subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
-
-							}
-						}
-
-				);
-				/*choice_category listener end*/
-
-				if(mapInitialized.getValue()){
-					addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
-				}else {
-					mapInitialized.addListener(new ChangeListener<Boolean>() {
+			/*choice_category listener*//*
+			choice_category.getSelectionModel().selectedIndexProperty().addListener(
+					new ChangeListener<Number>() {
 						@Override
-						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-							if (newValue)
-								addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
-						}
-					});
-				}
+						public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+							System.out.print("selected "+category_list.get((Integer) newValue));
+							subcategory_list.clear();
+							subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
 
+						}
+					}
+
+			);
+			/*choice_category listener end*/
+
+			if(mapInitialized.getValue()){
+				addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
+			}else {
+				mapInitialized.addListener(new ChangeListener<Boolean>() {
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+						if (newValue)
+							addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
+					}
+				});
 			}
 
 		});
