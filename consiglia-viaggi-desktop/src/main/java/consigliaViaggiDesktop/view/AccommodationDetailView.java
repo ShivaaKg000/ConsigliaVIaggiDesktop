@@ -1,5 +1,6 @@
 package consigliaViaggiDesktop.view;
 
+
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.object.*;
@@ -82,8 +83,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
-		//mapView = new GoogleMapView("it-IT", "");
-		mapView = new GoogleMapView("it-IT", "AIzaSyCMh5QgPKHyXr_swIaV5JXdDkwaABIXbGU");
+		mapView = new GoogleMapView();
+		mapView.setKey("AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
+		//mapView = new GoogleMapView("en-US", "AIzaSyCMh5QgPKHyXr_swIaV5JXdDkwaABIXbGU");
 		AnchorPane.setBottomAnchor(mapView, 0.0);
 		AnchorPane.setTopAnchor(mapView, 0.0);
 		AnchorPane.setLeftAnchor(mapView, 0.0);

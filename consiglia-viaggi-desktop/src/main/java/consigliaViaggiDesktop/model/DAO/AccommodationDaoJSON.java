@@ -153,15 +153,15 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	}
 	private JsonObject encodeAccommodation(Accommodation accommodation){
-	Gson gson = new Gson();
-	JsonObject accommodationJson = JsonParser.parseString(gson.toJson(accommodation)).getAsJsonObject();
-	System.out.println("\nAuto encoded: "+accommodationJson);
-	accommodationJson.remove("accommodationLocation");
-	accommodationJson.addProperty("city",accommodation.getCity());
-	accommodationJson.addProperty("latitude",accommodation.getLatitude());
-	accommodationJson.addProperty("longitude",accommodation.getLongitude());
-	accommodationJson.addProperty("address",accommodation.getAddress());
-	System.out.println("\nAuto encoded: "+accommodationJson);
+		Gson gson = new Gson();
+		JsonObject accommodationJson = JsonParser.parseString(gson.toJson(accommodation)).getAsJsonObject();
+		System.out.println("\nAuto encoded: "+accommodationJson);
+		accommodationJson.remove("accommodationLocation");
+		accommodationJson.addProperty("city",accommodation.getCity());
+		accommodationJson.addProperty("latitude",accommodation.getLatitude());
+		accommodationJson.addProperty("longitude",accommodation.getLongitude());
+		accommodationJson.addProperty("address",accommodation.getAddress());
+		System.out.println("\nAuto encoded: "+accommodationJson);
 
 	return accommodationJson;
 }
