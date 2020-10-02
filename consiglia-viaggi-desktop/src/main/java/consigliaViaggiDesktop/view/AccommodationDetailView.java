@@ -143,7 +143,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		geocodingService.geocode(address.get(),(results, status) -> {
 			System.out.print("geocoded");
 			System.out.print(results[0]);
-			LatLong latLong = null;
+			//LatLong latLong = null;
 
 			if( status == GeocoderStatus.ZERO_RESULTS) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, "No matching address found");
@@ -152,12 +152,16 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			} else if( results.length > 1 ) {
 				Alert alert = new Alert(Alert.AlertType.WARNING, "Multiple results found, showing the first one.");
 				alert.show();
-				latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
-			} else {
-				latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
+				//latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
 			}
+			map.clearMarkers();
+			addMapMarker(results[0].getPlaceId(), results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
+			Platform.runLater(() -> {
+				latitudeTextField.setText(String.valueOf(results[0].getGeometry().getLocation().getLatitude()));
+				longitudeTextField.setText(String.valueOf(results[0].getGeometry().getLocation().getLongitude()));
+				text_address.setText(results[0].getFormattedAddress());
+			});
 
-			map.setCenter(latLong);
 		});
 	}
 
@@ -356,6 +360,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		});
 
 	}
+
 
 	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
 
