@@ -42,6 +42,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private TextField latitudeTextField;
 	@FXML private TextField longitudeTextField;
 	@FXML private TextField text_name;
+	@FXML private TextField cityTextField;
 	@FXML private TextField text_address;
 	@FXML private TextArea text_description;
 	@FXML private Text text_rating;
@@ -160,6 +161,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				latitudeTextField.setText(String.valueOf(results[0].getGeometry().getLocation().getLatitude()));
 				longitudeTextField.setText(String.valueOf(results[0].getGeometry().getLocation().getLongitude()));
 				text_address.setText(results[0].getFormattedAddress());
+				cityTextField.setText(results[0].getAddressComponents().get(1).getShortName());
+
 			});
 
 		});
@@ -282,7 +285,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		return new Accommodation.Builder()
 				.setName(text_name.getText())
 				.setImages(imageUrl)
-				.setCity("Napoli")
+				.setCity(cityTextField.getText())
 				.setAddress(text_address.getText())
 				.setLongitude(Double.parseDouble(longitudeTextField.getText()))
 				.setLatitude(Double.parseDouble(latitudeTextField.getText()))
@@ -299,7 +302,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				.setId(Integer.valueOf(text_id.getText()))
 				.setName(text_name.getText())
 				.setImages(imageUrl)
-				.setCity("Napoli")
+				.setCity(cityTextField.getText())
 				.setAddress(text_address.getText())
 				.setLongitude(Double.parseDouble(longitudeTextField.getText()))
 				.setLatitude(Double.parseDouble(latitudeTextField.getText()))
@@ -322,6 +325,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			text_name.setText(accommodation.getName());
 			text_description.setText(accommodation.getDescription());
 			text_address.setText(accommodation.getAddress());
+			cityTextField.setText(accommodation.getCity());
 			//text_path.setText(accommodation.getLogoUrl());
 			text_rating.setText(String.valueOf(accommodation.getRating()));
 			choice_category.setValue(accommodation.getCategory());
@@ -360,7 +364,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		});
 
 	}
-
 
 	private ObservableList<Subcategory> dynamicSubCategoryChoice(Category category) {
 
