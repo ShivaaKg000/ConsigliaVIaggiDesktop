@@ -32,7 +32,7 @@ public final class Constants  {
     public static final String LOGIN_URL = SERVER_URL+"authenticate";
     public static final String PAGE_PARAM ="page=";
     //Accommodation
-    public static final String GET_ACCOMMODATION_LIST_URL = SERVER_URL+"accommodation";
+    public static final String GET_ACCOMMODATION_LIST_URL = SERVER_URL+"accommodation_generic";
     public static final String CREATE_ACCOMMODATION_URL = SERVER_URL+"accommodation/create";
     public static final String DELETE_ACCOMMODATION_URL = SERVER_URL+"accommodation/delete/";
     public static final String EDIT_ACCOMMODATION_URL =SERVER_URL+"accommodation/edit/" ;
