@@ -1,4 +1,5 @@
 package consigliaViaggiDesktop.model.DAO;
+
 import com.google.common.net.HttpHeaders;
 import com.google.gson.*;
 import consigliaViaggiDesktop.Constants;
@@ -16,13 +17,16 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccommodationDaoJSON implements AccommodationDao {
 
@@ -182,8 +186,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 	@Override
 	public JsonPageResponse<Accommodation> getAccommodationList(SearchParamsAccommodation params) throws DaoException {
 
-		JsonPageResponse<Accommodation> accommodationList=  getAccommodationListJSONParsing(params);
-		return accommodationList;
+		return getAccommodationListJSONParsing(params);
 	}
 	private JsonPageResponse <Accommodation> getAccommodationListJSONParsing(SearchParamsAccommodation params) throws DaoException {
 		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"?"+
@@ -286,7 +289,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		post.setEntity(entity);
 		post.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + LoginController.getInstance().getCurrentUserAuthenticationToken());
 		BufferedReader jsonResponse;
-		String imgUrl = null;
+		String imgUrl;
 		try {
 			HttpResponse response = httpclient.execute(post);
 			if(response.getStatusLine().getStatusCode()!=200)

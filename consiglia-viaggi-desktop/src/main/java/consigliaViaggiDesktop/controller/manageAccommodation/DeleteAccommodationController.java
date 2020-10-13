@@ -11,7 +11,7 @@ import javafx.concurrent.Task;
 
 public class DeleteAccommodationController {
     private final AccommodationDao accommodationDao;
-    private AccommodationController accommodationController;
+    private final AccommodationController accommodationController;
 
     public DeleteAccommodationController(AccommodationController accommodationController) {
 

@@ -6,11 +6,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.model.User;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -66,8 +66,8 @@ public class LoginController {
 
 	private BufferedReader getJsonResponseFromLoginUrl(String user, String pwd) throws IOException {
 		URL url = new URL(Constants.LOGIN_URL);
-		HttpURLConnection connection = null;
-		int responseCode = 0;
+		HttpURLConnection connection;
+		int responseCode;
 
 		String jsonInputString = "{\"username\":\"" + user + "\", \"password\": \"" + pwd + "\"}";
 		System.out.print(jsonInputString);

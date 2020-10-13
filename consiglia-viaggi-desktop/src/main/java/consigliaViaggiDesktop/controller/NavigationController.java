@@ -16,7 +16,7 @@ public class NavigationController {
 	
 	private static NavigationController navigationController;
 	private Stage currentStage;
-	private LinkedList<Scene> previousSceneStack = new LinkedList<>();
+	private final LinkedList<Scene> previousSceneStack = new LinkedList<>();
 
 	public static NavigationController getInstance() {
 		if(navigationController==null)
@@ -36,17 +36,15 @@ public class NavigationController {
         loader.setLocation(getClass().getResource(newViewFxml));
         loader.setController(controller);
 
-		Parent view = null;
+		Parent view;
 		try {
 			view = loader.load();
+			Scene viewscene = new Scene(view);
+			currentStage.setScene(viewscene);
+			currentStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Scene viewscene = new Scene(view);
-        currentStage.setScene(viewscene);
-        //Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        
-        currentStage.show();
         
     }
 	
@@ -56,16 +54,17 @@ public class NavigationController {
 		previousSceneStack.addLast(previousScene);
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(newViewFxml));
-		Parent view = null;
+		Parent view;
 		try {
 			view = loader.load();
+			Scene viewscene = new Scene(view);
+			currentStage.setScene(viewscene);
+			currentStage.show();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Scene viewscene = new Scene(view);
-        currentStage.setScene(viewscene);    
-        currentStage.show();
-        
+
     }
 	
 	public void navigateBack() {
@@ -89,15 +88,12 @@ public class NavigationController {
 		}
 	}
 	public void buildInfoBox(String title,String header){
-		Platform.runLater(new Runnable(){
-			@Override
-			public void run() {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setTitle(title);
-				alert.setHeaderText(header);
-				Optional<ButtonType> result = alert.showAndWait();
+		Platform.runLater(() -> {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle(title);
+			alert.setHeaderText(header);
+			Optional<ButtonType> result = alert.showAndWait();
 
-			}
 		});
 
 	}

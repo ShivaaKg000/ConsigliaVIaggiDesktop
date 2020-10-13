@@ -1,6 +1,5 @@
 package consigliaViaggiDesktop.controller.manageAccommodation;
 
-import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
@@ -18,7 +17,7 @@ import java.io.IOException;
 public class AddAccommodationController {
 
     private final AccommodationDao accommodationDao;
-    private AccommodationController accommodationController;
+    private final AccommodationController accommodationController;
 
     public AddAccommodationController(AccommodationController accommodationController){
         accommodationDao= new AccommodationDaoJSON();

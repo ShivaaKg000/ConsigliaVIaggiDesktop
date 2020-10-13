@@ -2,14 +2,14 @@ package consigliaViaggiDesktop.model;
 
 public class SearchParamsAccommodation {
 
-    private String currentSearchString,currentCategory,currentSubCategory;
-    private String orderBy;
-    private String direction;
-    long currentpage;
+    private final String currentSearchString,currentCategory,currentSubCategory;
+    private final String orderBy;
+    private final String direction;
+    private final long currentPage;
 
     public SearchParamsAccommodation(Builder builder) {
         this.currentCategory=builder.currentCategory;
-        this.currentpage=builder.currentpage;
+        this.currentPage =builder.currentpage;
         this.currentSubCategory=builder.currentSubCategory;
         this.currentSearchString=builder.currentSearchString;
         this.direction=builder.direction;
@@ -71,7 +71,7 @@ public class SearchParamsAccommodation {
     }
 
     public long getCurrentPage() {
-        return currentpage;
+        return currentPage;
     }
 
     public String getOrderBy() {

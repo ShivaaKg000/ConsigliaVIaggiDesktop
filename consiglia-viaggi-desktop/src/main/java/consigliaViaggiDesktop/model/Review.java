@@ -3,14 +3,14 @@ package consigliaViaggiDesktop.model;
 
 public class Review{
 
-	private int id;
-	private int accommodationId;
-	private String accommodationName;
-	private String author;
-    private String reviewText;
-    private float rating;
-    private String data;
-    private Status status;
+	private final int id;
+	private final int accommodationId;
+	private final String accommodationName;
+	private final String author;
+    private final String reviewText;
+    private final float rating;
+    private final String data;
+    private final Status status;
    
     public Review(Builder builder) {
     	this.id=builder.id;
@@ -30,30 +30,22 @@ public class Review{
     public int getAccommodationId() {
   		return accommodationId;
   	}
-      
     public String getAccommodationName() {
   		return accommodationName;
   	}
     public String getAuthor() {
         return author;
     }
-
     public String getReviewText() {
         return reviewText;
     }
-
     public String getData() {
         return data;
     }
-
     public float getRating() {
         return rating;
     }
-
-    public Status getStatus() {
-		return status;
-	}
-
+    public Status getStatus() { return status; }
     public String getStatusLabel() {
         return status.label;
     }

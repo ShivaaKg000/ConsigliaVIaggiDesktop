@@ -38,11 +38,11 @@ public class ReviewView {
 	@FXML private ComboBox<String> statusComboBox;
 	@FXML private Label pageLabel;
 
-	private ObservableList<Review> reviewList = FXCollections.observableArrayList();
 	private ReviewController reviewController;
 
-	private ObservableList<String> status_list= FXCollections.observableArrayList();
-	private ObservableList<OrderByChoice> orderBy_list= FXCollections.observableArrayList();
+	private ObservableList<Review> reviewList = FXCollections.observableArrayList();
+	private final ObservableList<String> status_list= FXCollections.observableArrayList();
+	private final ObservableList<OrderByChoice> orderBy_list= FXCollections.observableArrayList();
 
 	private IntegerProperty pageNumber;
 	private IntegerProperty totalPageNumber;
@@ -50,8 +50,8 @@ public class ReviewView {
 
     private static class OrderByChoice{
         private String label;
-        private String param;
-		private String direction;
+        private final String param;
+		private final String direction;
 
         public OrderByChoice(String label,String param,String direction){
             this.label=label;
@@ -205,13 +205,9 @@ public class ReviewView {
 		});
 	}
 	private void updateGui() {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				pageLabel.setText("Pagina: "+String.valueOf(1+pageNumber.getValue())+" / "+String.valueOf(totalPageNumber.getValue())
-						+"                Totale recensioni trovate: "+String.valueOf(totalElementNumber.getValue()));
-			}
-		});
+		Platform.runLater(() -> pageLabel.setText("Pagina: "+String.valueOf(1+pageNumber.getValue())+" / "
+				+ String.valueOf(totalPageNumber.getValue())
+				+"                Totale recensioni trovate: "+String.valueOf(totalElementNumber.getValue())));
 
 	}
 

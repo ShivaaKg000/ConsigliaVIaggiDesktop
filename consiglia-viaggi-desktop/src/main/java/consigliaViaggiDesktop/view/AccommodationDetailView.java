@@ -113,7 +113,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				}
 
 		);
-		/*choice_category listener end*/
 
 		if(accommodationController ==null) {
 			accommodationController = new AccommodationController();

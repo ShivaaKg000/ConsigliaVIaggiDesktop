@@ -11,7 +11,7 @@ import javafx.concurrent.Task;
 
 public class ModerateReviewController {
 
-    private ReviewDao reviewDao;
+    private final ReviewDao reviewDao;
     private final ReviewController reviewController;
 
     public ModerateReviewController(ReviewController reviewController){
@@ -23,7 +23,7 @@ public class ModerateReviewController {
         ObjectProperty<Review> updatedReview= new SimpleObjectProperty<>();
         Task task = new Task() {
             @Override
-            public Void call() throws InterruptedException, DaoException {
+            public Void call() throws DaoException {
 
                 Review review=  reviewDao.approveReview(reviewId);
                 updatedReview.setValue(review);

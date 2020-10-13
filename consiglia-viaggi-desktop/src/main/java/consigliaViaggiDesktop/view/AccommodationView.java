@@ -42,8 +42,8 @@ public class AccommodationView {
 
 	private static class OrderByChoice{
 		private String label;
-		private String param;
-		private String direction;
+		private final String param;
+		private final String direction;
 
 		public OrderByChoice(String label,String param,String direction){
 			this.label=label;
@@ -93,9 +93,9 @@ public class AccommodationView {
 
 	private AccommodationController accommodationController;
 
-	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
-	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
-	private ObservableList<AccommodationView.OrderByChoice> orderBy_list= FXCollections.observableArrayList();
+	private final ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
+	private final ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
+	private final ObservableList<AccommodationView.OrderByChoice> orderBy_list= FXCollections.observableArrayList();
 
 	private LongProperty pageNumber,totalPageNumber, totalElementNumber;
 
@@ -184,13 +184,8 @@ public class AccommodationView {
 		});
 	}
 	private void updateGui() {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				pageLabel.setText("Pagina: "+(1+pageNumber.getValue())+" / "+(totalPageNumber.getValue())
-						+" 						Totale strutture trovate: "+(totalElementNumber.getValue()));
-			}
-		});
+		Platform.runLater(() -> pageLabel.setText("Pagina: "+(1+pageNumber.getValue())+" / "+(totalPageNumber.getValue())
+				+" 						Totale strutture trovate: "+(totalElementNumber.getValue())));
 
 	}
 

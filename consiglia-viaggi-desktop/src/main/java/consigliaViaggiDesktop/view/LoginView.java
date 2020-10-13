@@ -1,16 +1,14 @@
 package consigliaViaggiDesktop.view;
 
-import java.io.IOException;
-
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.controller.NavigationController;
-import consigliaViaggiDesktop.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+
+import java.io.IOException;
 
 public class LoginView {
 
@@ -18,8 +16,6 @@ public class LoginView {
     @FXML private TextField userNameField ;
     @FXML private PasswordField passwordField ;
     @FXML private Label errorLabel ;
-
-
 
     @FXML
     private void ok() {
@@ -51,8 +47,7 @@ public class LoginView {
     public void initialize() {
     }
 
-    public void loadMenuView(String userName) throws IOException
-    {
+    public void loadMenuView(String userName) {
     	MenuView controller= new MenuView();
     	controller.nomeUser(userName);
     	NavigationController.getInstance().navigateToView(Constants.MENU_VIEW, controller);

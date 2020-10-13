@@ -30,7 +30,7 @@ public enum Subcategory {
         return subCategoryName;
     }
 
-    Subcategory(Category cat, String subCat){
+    private Subcategory(Category cat, String subCat){
 
         this.categoryName=cat.getCategoryName();
         subCategoryName=subCat;

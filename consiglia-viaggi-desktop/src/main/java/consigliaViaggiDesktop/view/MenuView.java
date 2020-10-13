@@ -1,11 +1,8 @@
 package consigliaViaggiDesktop.view;
 
-import java.io.IOException;
-
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -26,10 +23,10 @@ public class MenuView {
     }
     
     @FXML
-    private void logout() throws IOException {
+    private void logout(){
         NavigationController.getInstance().navigateBack();
     }
-    @FXML private void recensioni() throws IOException
+    @FXML private void recensioni()
     {
         Stage window = (Stage) menuView.getScene().getWindow();
         NavigationController.getInstance().setCurrentStage(window);
@@ -37,7 +34,7 @@ public class MenuView {
 
 	}
     @FXML
-    private void strutture() throws IOException
+    private void strutture()
     {
 		NavigationController.getInstance().navigateToView(Constants.ACCOMMODATION_VIEW);
         

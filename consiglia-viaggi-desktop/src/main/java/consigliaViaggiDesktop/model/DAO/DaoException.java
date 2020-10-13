@@ -8,8 +8,8 @@ public class DaoException extends Exception {
     public final static int FORBIDDEN_ACCESS = 4;
     public static final int NOT_FOUND = 5 ;
 
-    private String errorMessage;
-    private int errorCode;
+    private final String errorMessage;
+    private final int errorCode;
 
     public DaoException(int errorCode,String message) {
         this.errorCode = errorCode;

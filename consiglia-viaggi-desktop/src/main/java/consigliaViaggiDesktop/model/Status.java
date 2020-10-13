@@ -31,7 +31,7 @@ public enum Status {
     }
 
     public static List<String> getStatusList(){
-        List<String> result= new ArrayList();
+        ArrayList<String> result= new ArrayList<>();
         result.add("");
         result.add(PENDING.label);
         result.add(APPROVED.label);

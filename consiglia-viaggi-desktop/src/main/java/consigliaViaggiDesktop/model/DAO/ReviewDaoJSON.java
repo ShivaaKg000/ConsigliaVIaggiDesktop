@@ -28,25 +28,22 @@ public class ReviewDaoJSON implements ReviewDao {
     private Review getReviewJsonById(int reviewId) throws DaoException {
         String urlString= Constants.GET_REVIEW_URL+"?"+Constants.REVIEW_ID_PARAM+reviewId;
 
-        /*
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        */
-        BufferedReader bufferedReader = null;
+        BufferedReader bufferedReader;
         try {
             bufferedReader = getJSONFromUrl(urlString);
+            if(bufferedReader==null){
+                return null;
+            }
+            else
+                return parseReview(JsonParser.parseReader(bufferedReader).getAsJsonObject());
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return null;
         }
-
-        Review review = parseReview(JsonParser.parseReader(bufferedReader).getAsJsonObject());
-        return review;
     }
 
     @Override  public JsonPageResponse<Review> getReviewList(SearchParamsReview params) throws DaoException {
-        JsonPageResponse<Review> reviewListPage=  getReviewListJSONParsing(params);
-        return reviewListPage;
-
+        return getReviewListJSONParsing(params);
     }
     private JsonPageResponse <Review> getReviewListJSONParsing(SearchParamsReview params) throws DaoException {
         String urlString= Constants.GET_REVIEW_LIST_URL+"?";
@@ -64,20 +61,20 @@ public class ReviewDaoJSON implements ReviewDao {
             urlString+=Constants.ORDER_BY_PARAM+params.getOrderBy()+"&";
         if(params.getDirection()!=null && !params.getDirection().equals(""))
             urlString+=Constants.DIRECTION_PARAM+params.getDirection()+"&";
-        urlString+=Constants.PAGE_PARAM+params.getCurrentpage()+"&";
+        urlString+=Constants.PAGE_PARAM+params.getCurrentPage()+"&";
 
         System.out.println(urlString);
 
         BufferedReader bufferedReader;
         try {
             bufferedReader = getJSONFromUrl(urlString);
-        } catch (MalformedURLException e) {
-            throw new DaoException(DaoException.ERROR,e.getMessage());
-
+            if(bufferedReader==null) throw new DaoException(DaoException.ERROR,"ERROR");
+            JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
+            return parseReviewPage(jsonObject);
         }
-        JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
-
-        return parseReviewPage(jsonObject);
+        catch (MalformedURLException e) {
+            throw new DaoException(DaoException.ERROR,e.getMessage());
+        }
     }
 
     @Override  public Review approveReview(int reviewId) {
@@ -104,8 +101,8 @@ public class ReviewDaoJSON implements ReviewDao {
     }
     private Review editReview(int id, Status status) throws IOException, DaoException {
         URL url = new URL(Constants.APPROVE_REVIEW+id+"?"+Constants.STATUS_PARAM+status);
-        HttpURLConnection connection = null;
-        int responseCode=0;
+        HttpURLConnection connection;
+        int responseCode;
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
         connection.setDoOutput(true);
@@ -113,11 +110,10 @@ public class ReviewDaoJSON implements ReviewDao {
         connection.setRequestProperty("Content-Type","application/json");
         responseCode=connection.getResponseCode();
 
-        BufferedReader jsonResponse = null;
+        BufferedReader jsonResponse;
         if (responseCode== HttpURLConnection.HTTP_OK) {
             jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            Review review = parseReview(JsonParser.parseReader(jsonResponse).getAsJsonObject());
-            return review;
+            return parseReview(JsonParser.parseReader(jsonResponse).getAsJsonObject());
         }
         return null;
     }
@@ -166,9 +162,9 @@ public class ReviewDaoJSON implements ReviewDao {
     }
 
     private String formatDate(String creationDate) throws DaoException {
-        Date date = null;
+        Date date;
         try {
-            date = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSS").parse(creationDate);
+            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(creationDate);
         } catch (ParseException e) {
             throw new DaoException(DaoException.ERROR, e.getMessage());
         }
@@ -178,24 +174,20 @@ public class ReviewDaoJSON implements ReviewDao {
 
     private BufferedReader getJSONFromUrl(String urlString) throws MalformedURLException {
         URL url = new URL(urlString);
-        HttpURLConnection connection = null;
+        HttpURLConnection connection;
+        BufferedReader json;
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedReader json  = null;
-        try {
             json = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            return json;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-
-        return json;
     }
-    }
+}
 
 
 

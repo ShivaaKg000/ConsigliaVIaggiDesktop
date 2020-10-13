@@ -1,8 +1,6 @@
 package consigliaViaggiDesktop.controller.manageReview;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -14,7 +12,6 @@ import consigliaViaggiDesktop.model.DAO.ReviewDaoJSON;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
 //import consigliaViaggiDesktop.model.ReviewDao;
-import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.model.SearchParamsReview;
 import consigliaViaggiDesktop.view.ReviewDetailView;
 import javafx.beans.property.*;
@@ -125,14 +122,14 @@ public class ReviewController {
     }
 
     public void nextPage() throws DaoException {if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
-        currentSearchParamsReview.setCurrentpage(pageNumber.getValue()+1);
+        currentSearchParamsReview.setCurrentPage(pageNumber.getValue()+1);
         loadReviewListAsync(currentSearchParamsReview);
     }
     }
 
     public void previousPage() throws DaoException {
         if (pageNumber.getValue()>0) {
-            currentSearchParamsReview.setCurrentpage(pageNumber.getValue()-1);
+            currentSearchParamsReview.setCurrentPage(pageNumber.getValue()-1);
             loadReviewListAsync(currentSearchParamsReview);
         }
     }

@@ -1,12 +1,5 @@
 package consigliaViaggiDesktop.controller.manageAccommodation;
 
-import java.util.List;
-import java.util.concurrent.*;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.Accommodation;
@@ -16,8 +9,17 @@ import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class AccommodationController {
 
@@ -25,9 +27,9 @@ public class AccommodationController {
     private final ObservableList<Accommodation> observableAccommodationList;
     private ExecutorService executor;
    	private SearchParamsAccommodation currentSearchParamsAccommodation;
-	private LongProperty pageNumber;
-	private LongProperty totalPageNumber;
-	private LongProperty totalElementNumber;
+	private final LongProperty pageNumber;
+	private final LongProperty totalPageNumber;
+	private final LongProperty totalElementNumber;
 
 	public AccommodationController() {
 		totalPageNumber= new SimpleLongProperty();

@@ -5,16 +5,16 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.DAO.DaoException;
-
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
-
-import java.io.File;
 
 public class EditAccommodationController {
 
     private final AccommodationDao accommodationDao;
-    private AccommodationController accommodationController;
+    private final AccommodationController accommodationController;
 
     public EditAccommodationController(AccommodationController accommodationController) {
         accommodationDao= new AccommodationDaoJSON();

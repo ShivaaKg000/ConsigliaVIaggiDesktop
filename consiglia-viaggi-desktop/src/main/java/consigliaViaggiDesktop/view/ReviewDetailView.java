@@ -6,8 +6,6 @@ import consigliaViaggiDesktop.controller.manageReview.ReviewController;
 import consigliaViaggiDesktop.model.Review;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
@@ -39,14 +37,7 @@ public class ReviewDetailView{
 
 		moderateReviewController=new ModerateReviewController(reviewController);
     	
-    	reviewController.getReviewAsync(reviewId).addListener(new ChangeListener<Review>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
-				updateReviewDetailGui(newValue);		
-			}
-   		
-    	});
+    	reviewController.getReviewAsync(reviewId).addListener((observable, oldValue, newValue) -> updateReviewDetailGui(newValue));
     	
     }
     
@@ -59,12 +50,7 @@ public class ReviewDetailView{
     void approveButtonClicked() {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Approvare questa recensione?")) {
 			ObjectProperty<Review> updatedReview= moderateReviewController.approveReview(reviewId);
-			updatedReview.addListener(new ChangeListener<Review>() {
-				@Override
-				public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
-					updateReviewDetailGui(newValue);
-				}
-			});
+			updatedReview.addListener((observable, oldValue, newValue) -> updateReviewDetailGui(newValue));
 		}
     }
 
@@ -72,30 +58,20 @@ public class ReviewDetailView{
 	void rejectButtonClicked() {
 		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Rigettare questa recensione?")) {
 			ObjectProperty<Review> updatedReview= moderateReviewController.rejectReview(reviewId);
-			updatedReview.addListener(new ChangeListener<Review>() {
-				@Override
-				public void changed(ObservableValue<? extends Review> observable, Review oldValue, Review newValue) {
-					updateReviewDetailGui(newValue);
-				}
-			});
+			updatedReview.addListener((observable, oldValue, newValue) -> updateReviewDetailGui(newValue));
 		}
 	}
     
     private void updateReviewDetailGui(Review review) {
-    	Platform.runLater(new Runnable(){
+    	Platform.runLater(() -> {
+			idText.setText(String.valueOf(review.getId()));
+			authorText.setText(review.getAuthor());
+			accommodationText.setText(review.getAccommodationName());
+			statusText.setText(review.getStatusLabel());
+			ratingText.setText(String.valueOf(review.getRating()));
+			dateText.setText(review.getData());
+			reviewContentTextArea.setText(review.getReviewText());
 
-			@Override
-			public void run() {
-				idText.setText(String.valueOf(review.getId()));
-				authorText.setText(review.getAuthor());
-				accommodationText.setText(review.getAccommodationName());
-				statusText.setText(review.getStatusLabel());
-				ratingText.setText(String.valueOf(review.getRating()));
-				dateText.setText(review.getData());
-				reviewContentTextArea.setText(review.getReviewText());
-				
-			}
-			   
 		});
 	}
 	

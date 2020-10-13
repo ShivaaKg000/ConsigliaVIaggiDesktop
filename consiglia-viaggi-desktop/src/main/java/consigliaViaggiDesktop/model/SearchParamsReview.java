@@ -2,19 +2,19 @@ package consigliaViaggiDesktop.model;
 
 public class SearchParamsReview {
 
-    private String id;
-    private String author;
-    private String accommodationName;
-    private String content;
-    private String accommodationId;
-    private String status;
-    private String orderBy;
-    private String direction;
-    int currentpage=0;
+    private final String id;
+    private final String author;
+    private final String accommodationName;
+    private final String content;
+    private final String accommodationId;
+    private final String status;
+    private final String orderBy;
+    private final String direction;
+    private int currentPage;
 
     public SearchParamsReview(Builder builder) {
         this.id=builder.id;
-        this.currentpage=builder.currentpage;
+        this.currentPage =builder.currentpage;
         this.accommodationName=builder.accommodationName;
         this.content=builder.content;
         this.author=builder.author;
@@ -26,7 +26,7 @@ public class SearchParamsReview {
 
     public SearchParamsReview() {
         this.id=null;
-        this.currentpage=0;
+        this.currentPage =0;
         this.accommodationName=null;
         this.content=null;
         this.author=null;
@@ -36,8 +36,8 @@ public class SearchParamsReview {
         this.direction="DESC";
     }
 
-    public void setCurrentpage(int currentpage) {
-        this.currentpage = currentpage;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 
     public String getId() {
@@ -64,8 +64,8 @@ public class SearchParamsReview {
         return status;
     }
 
-    public int getCurrentpage() {
-        return currentpage;
+    public int getCurrentPage() {
+        return currentPage;
     }
 
     public String getOrderBy() {
