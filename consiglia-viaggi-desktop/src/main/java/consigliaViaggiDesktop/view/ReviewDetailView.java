@@ -37,7 +37,8 @@ public class ReviewDetailView{
 
 		moderateReviewController=new ModerateReviewController(reviewController);
     	
-    	reviewController.getReviewAsync(reviewId).addListener((observable, oldValue, newValue) -> updateReviewDetailGui(newValue));
+    	reviewController.getReviewAsync(reviewId).addListener((observable, oldValue, newValue)
+																					-> updateReviewDetailGui(newValue));
     	
     }
     
@@ -45,6 +46,17 @@ public class ReviewDetailView{
     void backButtonClicked() {
 		reviewController.goBack();
     }
+
+	@FXML
+	void deleteButtonClicked() {
+		if(NavigationController.getInstance().buildAlert("Confirmation Dialog","Eliminare questa recensione?")) {
+			reviewController.deleteReview(reviewId).addListener((observable, oldValue, newValue) -> {
+				if(newValue){
+					reviewController.goBack();
+				}
+			});
+		}
+	}
 
     @FXML
     void approveButtonClicked() {

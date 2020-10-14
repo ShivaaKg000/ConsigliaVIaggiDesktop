@@ -9,6 +9,7 @@ import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
+import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
@@ -35,7 +36,7 @@ public class AccommodationController {
 		totalPageNumber= new SimpleLongProperty();
 		pageNumber= new SimpleLongProperty(-1);
 		totalElementNumber= new SimpleLongProperty();
-    	executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+    	executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
     	accommodationDao= new AccommodationDaoJSON();
         observableAccommodationList= FXCollections.observableArrayList();
     }
@@ -54,7 +55,7 @@ public class AccommodationController {
 
     	currentSearchParamsAccommodation =params;
 
-    	Task task = new Task<JsonPageResponse<Accommodation>>() {
+    	Task<JsonPageResponse<Accommodation>> task = new Task<>() {
     		@Override
             public JsonPageResponse<Accommodation> call(){
 				JsonPageResponse<Accommodation> page= null;
@@ -62,22 +63,14 @@ public class AccommodationController {
 				try {
 					page = accommodationDao.getAccommodationList(currentSearchParamsAccommodation);
 				} catch (DaoException e) {
-					NavigationController.getInstance().buildInfoBox("Ricerca",e.getMessage());
+					NavigationController.getInstance().buildInfoBox("Ricerca",e.getErrorMessage()+"("+e.getErrorCode()+")");
 				}
-
-    			/*pageNumber.setValue(page.getPage());
-				totalPageNumber.setValue(page.getTotalPages());
-				totalElementNumber.setValue(page.getTotalElements());
-
-				List<Accommodation> accommodationList= page.getContent();
-				observableAccommodationList.remove(0,observableAccommodationList.size());
-				observableAccommodationList.addAll(accommodationList);*/
 
 				return page;
             }
         };
 		task.setOnSucceeded(t -> {
-			JsonPageResponse<Accommodation> pageResult= (JsonPageResponse<Accommodation>) task.getValue();
+			JsonPageResponse<Accommodation> pageResult= task.getValue();
 			pageNumber.setValue(pageResult.getPage());
 			totalPageNumber.setValue(pageResult.getTotalPages());
 			totalElementNumber.setValue(pageResult.getTotalElements());
@@ -87,7 +80,7 @@ public class AccommodationController {
 			observableAccommodationList.addAll(accommodationList);
 
 		});
-		executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+		executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
         Thread testThread = new Thread(task);
         executor.execute(testThread);
 
@@ -138,7 +131,7 @@ public class AccommodationController {
 	}
 
 	public void goBack() {
-		NavigationController.getInstance().navigateBack();
+		Platform.runLater(() -> NavigationController.getInstance().navigateBack());
 
 	}
 	public void goBackToMenu() {

@@ -25,10 +25,10 @@ public class AddAccommodationController {
     }
 
     public ObjectProperty<Accommodation> createAccommodationAsync(Accommodation accommodation) {
-        ObjectProperty<Accommodation>  response = new SimpleObjectProperty();
-        Task task = new Task() {
+        ObjectProperty<Accommodation>  response = new SimpleObjectProperty<>();
+        Task<Void> task = new Task<>() {
             @Override
-            public Void call() throws InterruptedException {
+            public Void call(){
                 try {
                     response.set(accommodationDao.createAccommodation(accommodation));
                     NavigationController.getInstance().buildInfoBox("Creazione","Struttura creata con successo! (Id:"+response.get().getId()+")");
@@ -36,7 +36,7 @@ public class AddAccommodationController {
                 } catch (IOException e) {
                     NavigationController.getInstance().buildInfoBox("Creazione",e.getMessage());
                 } catch (DaoException e) {
-                    NavigationController.getInstance().buildInfoBox("Creazione",e.getErrorMessage());
+                    NavigationController.getInstance().buildInfoBox("Creazione",e.getErrorMessage()+"("+e.getErrorCode()+")");
                 }
                 response.notifyAll();
                 return null;
@@ -49,7 +49,7 @@ public class AddAccommodationController {
 
     public StringProperty uploadAccommodationImage(File img, String name){
         StringProperty urlImage = new SimpleStringProperty();
-        Task task = new Task() {
+        Task<Void> task = new Task<>() {
             @Override
             public Void call() {
 
@@ -61,7 +61,7 @@ public class AddAccommodationController {
                     }
                     urlImage.setValue(accommodationDao.uploadAccommodationImage(img, name));
                 } catch (DaoException e) {
-                    NavigationController.getInstance().buildInfoBox("Server error", e.getErrorMessage());
+                    NavigationController.getInstance().buildInfoBox("Server error", e.getErrorMessage()+"("+e.getErrorCode()+")");
                     urlImage.setValue("");
                 }
 

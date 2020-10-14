@@ -58,7 +58,6 @@ public class AccommodationDaoJSON implements AccommodationDao {
 			throw  new DaoException(DaoException.ERROR,"Errore di rete");
 		}
 		return JsonParser.parseReader(jsonResponse).getAsJsonObject();
-		//return convertToJsonObject(jsonResponse);
 	}
 
 	@Override
@@ -73,20 +72,20 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		try {
 			connection = createAuthenticatedConnection(Constants.DELETE_ACCOMMODATION_URL+idAccommodation, "DELETE");
 			responseCode=connection.getResponseCode();
-			//BufferedReader jsonResponse = null;
+			if(responseCode!=HttpsURLConnection.HTTP_OK){
+				if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
+					return false;
+				}
+				else
+					throw  new DaoException(DaoException.ERROR,"Errore di rete");
+			}
+			else
+				return true;
 		} catch (IOException e) {
 			throw new DaoException(DaoException.ERROR,"Errore di rete");
 		}
 
-		if(responseCode!=HttpsURLConnection.HTTP_OK){
-			if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
-				throw  new DaoException(DaoException.NOT_FOUND,"Record non trovato");
-			}
-			else
-				throw  new DaoException(DaoException.ERROR,"Errore di rete");
-		}
-		else
-			return true;
+
 	}
 
 	@Override
@@ -240,7 +239,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 
 	}
 	private Accommodation getAccommodationJSON(int id) throws DaoException {
-		String urlString= Constants.GET_ACCOMMODATION_LIST_URL+"?"+Constants.ACCOMMODATION_ID_PARAM+id;
+		String urlString= Constants.GET_ACCOMMODATION+id;
 
 		BufferedReader bufferedReader;
 		try {

@@ -14,6 +14,7 @@ import consigliaViaggiDesktop.model.Review;
 //import consigliaViaggiDesktop.model.ReviewDao;
 import consigliaViaggiDesktop.model.SearchParamsReview;
 import consigliaViaggiDesktop.view.ReviewDetailView;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,14 +22,14 @@ import javafx.concurrent.Task;
 public class ReviewController {
 
 	
-    private ReviewDao reviewDao;
-    private ObservableList<Review> observableReviewList;
+    private final ReviewDao reviewDao;
+    private final ObservableList<Review> observableReviewList;
+    private final IntegerProperty pageNumber;
+    private final IntegerProperty totalPageNumber;
+    private final IntegerProperty totalElementNumber;
+
     private SearchParamsReview currentSearchParamsReview;
     private ExecutorService executor;
-    private int currentAccommodationId;
-    private IntegerProperty pageNumber;
-    private IntegerProperty totalPageNumber;
-    private IntegerProperty totalElementNumber;
 
     public IntegerProperty getPageNumber() {
         return pageNumber;
@@ -47,16 +48,16 @@ public class ReviewController {
         pageNumber= new SimpleIntegerProperty(-1);
         totalElementNumber= new SimpleIntegerProperty();
 
-        executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(10));
+        executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(10));
         reviewDao= new ReviewDaoJSON();
         observableReviewList= FXCollections.observableArrayList();
     }
 
-    public ObservableList<Review> loadReviewListAsync(SearchParamsReview params) throws DaoException {
+    public ObservableList<Review> loadReviewListAsync(SearchParamsReview params){
 
         currentSearchParamsReview =params;
 
-        Task task = new Task() {
+        Task<Void> task = new Task<>() {
             @Override
             public Void call() throws DaoException {
                 JsonPageResponse<Review> page=reviewDao.getReviewList(currentSearchParamsReview);
@@ -69,7 +70,7 @@ public class ReviewController {
                 return null;
             }
         };
-        executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(10));
+        executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(10));
 
         Thread testThread = new Thread(task);
         executor.execute(testThread);
@@ -77,16 +78,16 @@ public class ReviewController {
         return observableReviewList;
     }
     public ObjectProperty<Review> getReviewAsync(int reviewId) {
-        ObjectProperty<Review>  observableReview = new SimpleObjectProperty<Review>();
-        Task task = new Task() {
+        ObjectProperty<Review>  observableReview = new SimpleObjectProperty<>();
+        Task<Void> task = new Task<>() {
             @Override
-            public Void call() throws InterruptedException {
+            public Void call(){
 
                 try {
                     Review review = reviewDao.getReviewById(reviewId);
                     observableReview.set(review);
                 } catch (DaoException e) {
-                    NavigationController.getInstance().buildInfoBox("Errore",e.getErrorMessage());
+                    NavigationController.getInstance().buildInfoBox("Errore",e.getErrorMessage()+"("+e.getErrorCode()+")");
                 }
 
                 return null;
@@ -98,7 +99,7 @@ public class ReviewController {
 
     }
 
-    public void refreshList() throws DaoException {
+    public void refreshList(){
         loadReviewListAsync(currentSearchParamsReview);
     }
 
@@ -111,7 +112,7 @@ public class ReviewController {
     }
 
 	public void goBack() {
-    	NavigationController.getInstance().navigateBack();
+        Platform.runLater(() -> NavigationController.getInstance().navigateBack());
 		
 	}
 	public void goBackToMenu() {
@@ -121,16 +122,47 @@ public class ReviewController {
 
     }
 
-    public void nextPage() throws DaoException {if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
-        currentSearchParamsReview.setCurrentPage(pageNumber.getValue()+1);
-        loadReviewListAsync(currentSearchParamsReview);
+    public void nextPage(){
+        if (pageNumber.getValue()+1<totalPageNumber.getValue()) {
+            currentSearchParamsReview.setCurrentPage(pageNumber.getValue()+1);
+            loadReviewListAsync(currentSearchParamsReview);
+        }
     }
-    }
-
-    public void previousPage() throws DaoException {
+    public void previousPage() {
         if (pageNumber.getValue()>0) {
             currentSearchParamsReview.setCurrentPage(pageNumber.getValue()-1);
             loadReviewListAsync(currentSearchParamsReview);
         }
+    }
+
+    public SimpleBooleanProperty deleteReview(int reviewId) {
+
+        SimpleBooleanProperty response= new SimpleBooleanProperty();
+        Task<Void> task = new Task<>() {
+            @Override
+            public Void call(){
+                try{
+                    response.setValue(reviewDao.deleteReview(reviewId));
+                    if(response.getValue()) {
+                        NavigationController.getInstance().buildInfoBox("Eliminazione recensione",
+                                "Recensione eliminata con successo!");
+                        refreshList();
+                    }
+                    else
+                    {
+                        NavigationController.getInstance().buildInfoBox("Eliminazione recensione",
+                                "Record non trovato!");
+                    }
+                }catch (DaoException e){
+                    NavigationController.getInstance().buildInfoBox("Eliminazione recensione",
+                            e.getErrorMessage()+"("+e.getErrorCode()+")");
+                }
+                return null;
+            }
+        };
+        Thread deleteReviewThread = new Thread(task);
+        deleteReviewThread.start();
+
+        return response;
     }
 }

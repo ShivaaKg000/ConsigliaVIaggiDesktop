@@ -8,6 +8,7 @@ import consigliaViaggiDesktop.model.Review;
 import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.Status;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -68,13 +69,13 @@ public class ReviewDaoJSON implements ReviewDao {
         BufferedReader bufferedReader;
         try {
             bufferedReader = getJSONFromUrl(urlString);
-            if(bufferedReader==null) throw new DaoException(DaoException.ERROR,"ERROR");
-            JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
-            return parseReviewPage(jsonObject);
         }
         catch (MalformedURLException e) {
             throw new DaoException(DaoException.ERROR,e.getMessage());
         }
+        if(bufferedReader==null) throw new DaoException(DaoException.ERROR,"ERROR");
+        JsonObject jsonObject= JsonParser.parseReader(bufferedReader).getAsJsonObject();
+        return parseReviewPage(jsonObject);
     }
 
     @Override  public Review approveReview(int reviewId) {
@@ -186,6 +187,43 @@ public class ReviewDaoJSON implements ReviewDao {
             e.printStackTrace();
             return null;
         }
+    }
+    // Authenticate for Create/Delete/Edit methods
+    private HttpURLConnection createAuthenticatedConnection(String urlString,String requestMethod) throws IOException {
+        URL url = new URL(urlString);
+        System.out.println(urlString);
+        HttpURLConnection connection;
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(requestMethod);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Authorization","Bearer "+LoginController.getInstance().getCurrentUserAuthenticationToken());
+        connection.setRequestProperty("Content-Type","application/json");
+        return connection;
+    }
+    @Override
+    public Boolean deleteReview(int reviewId) throws DaoException {
+
+        int responseCode;
+        HttpURLConnection connection;
+        try {
+            connection = createAuthenticatedConnection(Constants.DELETE_REVIEW_URL+reviewId, "DELETE");
+            responseCode=connection.getResponseCode();
+
+            if(responseCode!= HttpsURLConnection.HTTP_OK){
+                if (responseCode== HttpURLConnection.HTTP_NOT_FOUND) {
+                    return false;
+                }
+                else
+                    throw  new DaoException(DaoException.ERROR,"Errore di rete");
+            }
+            else
+                return true;
+
+        } catch (IOException e) {
+            throw new DaoException(DaoException.ERROR,"Errore di rete");
+        }
+
+
     }
 }
 

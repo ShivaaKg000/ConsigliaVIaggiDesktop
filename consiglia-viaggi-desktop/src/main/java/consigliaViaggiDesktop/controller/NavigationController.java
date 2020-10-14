@@ -2,7 +2,6 @@ package consigliaViaggiDesktop.controller;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +14,8 @@ import javafx.stage.Stage;
 public class NavigationController {
 	
 	private static NavigationController navigationController;
-	private Stage currentStage;
 	private final LinkedList<Scene> previousSceneStack = new LinkedList<>();
+	private Stage currentStage;
 
 	public static NavigationController getInstance() {
 		if(navigationController==null)
@@ -80,26 +79,16 @@ public class NavigationController {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle(title);
 		alert.setHeaderText(header);
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
-			return true;
-		} else {
-			return false;
-		}
+		return alert.showAndWait().filter(ButtonType.OK::equals).isPresent();
 	}
 	public void buildInfoBox(String title,String header){
 		Platform.runLater(() -> {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setTitle(title);
 			alert.setHeaderText(header);
-			Optional<ButtonType> result = alert.showAndWait();
-
+			alert.showAndWait();
 		});
 
-	}
-
-	public Stage getCurrentStage() {
-		return currentStage;
 	}
 
 	public void setCurrentStage(Stage currentStage) {
@@ -107,11 +96,6 @@ public class NavigationController {
 		this.currentStage = currentStage;
 		currentStage.setHeight(720);
         currentStage.setWidth(1280);
-	}
-
-	public void showCurrentStage() {
-		currentStage.show();
-		
 	}
 
 }

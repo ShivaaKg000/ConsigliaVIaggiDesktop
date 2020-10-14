@@ -113,6 +113,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				}
 
 		);
+		/*choice_category listener end*/
 
 		if(accommodationController ==null) {
 			accommodationController = new AccommodationController();
@@ -121,21 +122,21 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			editAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
 
-			@Override
-			public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
-				selectedAccommodation=newValue;
-				updateAccommodationDetailGui(newValue);
+				@Override
+				public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
+					selectedAccommodation=newValue;
+					updateAccommodationDetailGui(newValue);
 
-			}
+				}
 
-		});
+			});
 
 	}
 
 	@FXML
 	void backButtonClicked() {
-	  accommodationController.goBack();
-    }
+		accommodationController.goBack();
+	}
 
 	@FXML
 	public void addressTextFieldAction(ActionEvent event) {
@@ -173,9 +174,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			if(accommodationId==null){
 				ObjectProperty<Accommodation> response= addAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
 				response.addListener(new ChangeListener<Accommodation>() {
-				@Override
-				public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
-					updateAccommodationDetailGui(newValue);
+					@Override
+					public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
+						updateAccommodationDetailGui(newValue);
 					}
 				});
 			}
@@ -193,7 +194,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		}
 	}
 
-    @FXML
+	@FXML
 	void accommodationImageSelected(MouseEvent event) {
 		openImageFileChooser();
 	}
@@ -341,10 +342,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 							System.out.print("selected "+category_list.get((Integer) newValue));
 							subcategory_list.clear();
 							subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
-
 						}
 					}
-
 			);
 			/*choice_category listener end*/
 
@@ -393,12 +392,12 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private void setAccommodationImage(String url){
 		System.out.println("\n imageUrl: "+url);
 		try{
-		BackgroundImage myBackgroundImage= new BackgroundImage(
-				new Image(url,200,200,true,true),
-				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-				BackgroundSize.DEFAULT);
+			BackgroundImage myBackgroundImage= new BackgroundImage(
+					new Image(url,200,200,true,true),
+					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+					BackgroundSize.DEFAULT);
 
-		imageViewAnchorPane.setBackground(new Background(myBackgroundImage));
+			imageViewAnchorPane.setBackground(new Background(myBackgroundImage));
 		} catch (Exception e) {
 			System.out.print("Not an image");
 		}
@@ -432,5 +431,4 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				new FileChooser.ExtensionFilter("PNG", "*.png")
 		);
 	}
-
 }

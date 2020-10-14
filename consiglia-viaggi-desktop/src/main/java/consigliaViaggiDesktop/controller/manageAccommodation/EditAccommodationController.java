@@ -5,11 +5,10 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
 import consigliaViaggiDesktop.model.DAO.DaoException;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
+
 
 public class EditAccommodationController {
 
@@ -22,8 +21,8 @@ public class EditAccommodationController {
     }
 
     public ObjectProperty<Accommodation> getAccommodationAsync(int id) {
-        ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<Accommodation>();
-        Task task = new Task() {
+        ObjectProperty<Accommodation>  observableAccommodation = new SimpleObjectProperty<>();
+        Task<Void> task = new Task<>() {
             @Override
             public Void call() {
 
@@ -31,7 +30,7 @@ public class EditAccommodationController {
                     Accommodation accommodation = accommodationDao.getAccommodationById(id);
                     observableAccommodation.setValue(accommodation);
                 } catch (DaoException e) {
-                    NavigationController.getInstance().buildInfoBox("Data error",e.getErrorMessage());
+                    NavigationController.getInstance().buildInfoBox("Data error",e.getErrorMessage()+"("+e.getErrorCode()+")");
                 }
 
                 return null;
@@ -45,7 +44,7 @@ public class EditAccommodationController {
 
     public BooleanProperty editAccommodationAsync(Accommodation editedAccommodation) {
         BooleanProperty result= new SimpleBooleanProperty();
-        Task task = new Task() {
+        Task<Void> task = new Task<>() {
             @Override
             public Void call(){
                 try {
@@ -53,7 +52,7 @@ public class EditAccommodationController {
                     NavigationController.getInstance().buildInfoBox("Modifica","Modifica avvenuta con successo!");
                     accommodationController.refreshAccommodationList();
                 } catch (DaoException e) {
-                    NavigationController.getInstance().buildInfoBox("Modifica",e.getErrorMessage());
+                    NavigationController.getInstance().buildInfoBox("Modifica",e.getErrorMessage()+"("+e.getErrorCode()+")");
                 }
                 return null;
             }

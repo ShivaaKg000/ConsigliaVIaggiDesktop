@@ -19,24 +19,33 @@ public class DeleteAccommodationController {
         this.accommodationController=accommodationController;
     }
 
-    public BooleanProperty deleteAccommodation(int accommodationId) {
-        BooleanProperty response = new SimpleBooleanProperty();
-        Task task = new Task() {
+    public SimpleBooleanProperty deleteAccommodation(int accommodationId) {
+        SimpleBooleanProperty response= new SimpleBooleanProperty();
+        Task task = new Task<Void>() {
             @Override
-            public Void call() {
-                try {
+            public Void call(){
+                try{
                     response.setValue(accommodationDao.deleteAccommodation(accommodationId));
-                    NavigationController.getInstance().buildInfoBox("Cancellazione", "Struttura eliminata con successo ");
-                    accommodationController.refreshAccommodationList();
-                } catch (DaoException e) {
-                    NavigationController.getInstance().buildInfoBox("Cancellazione", e.getErrorMessage());
+                    if(response.getValue()) {
+                        NavigationController.getInstance().buildInfoBox("Eliminazione struttura",
+                                "Struttura eliminata con successo!");
+                        accommodationController.refreshAccommodationList();
+                    }
+                    else
+                    {
+                        NavigationController.getInstance().buildInfoBox("Eliminazione struttura",
+                                "Record non trovato!");
+                    }
+                }catch (DaoException e){
+                    NavigationController.getInstance().buildInfoBox("Eliminazione struttura",
+                            e.getErrorMessage()+"("+e.getErrorCode()+")");
                 }
-                response.notifyAll();
                 return null;
             }
         };
         Thread deleteAccommodationThread = new Thread(task);
         deleteAccommodationThread.start();
+
         return response;
     }
 }

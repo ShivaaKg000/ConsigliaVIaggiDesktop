@@ -21,7 +21,7 @@ public class ModerateReviewController {
 
     public ObjectProperty<Review> approveReview(int reviewId) {
         ObjectProperty<Review> updatedReview= new SimpleObjectProperty<>();
-        Task task = new Task() {
+        Task<Void> task = new Task<>() {
             @Override
             public Void call() throws DaoException {
 
@@ -40,9 +40,9 @@ public class ModerateReviewController {
     }
     public ObjectProperty<Review> rejectReview(int reviewId) {
         ObjectProperty<Review> updatedReview= new SimpleObjectProperty<>();
-        Task task = new Task() {
+        Task<Void> task = new Task<>() {
             @Override
-            public Void call() throws InterruptedException, DaoException {
+            public Void call() throws DaoException {
 
                 Review review=  reviewDao.rejectReview(reviewId);
                 updatedReview.setValue(review);

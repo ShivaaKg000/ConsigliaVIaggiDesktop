@@ -11,6 +11,7 @@ public interface ReviewDao {
      JsonPageResponse<Review> getReviewList(SearchParamsReview params) throws DaoException;
      Review approveReview(int reviewId);
      Review rejectReview(int reviewId);
+     Boolean deleteReview(int reviewId) throws DaoException;
 }
 
 
