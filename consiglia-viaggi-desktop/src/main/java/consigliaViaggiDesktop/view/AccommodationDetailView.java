@@ -1,11 +1,11 @@
 package consigliaViaggiDesktop.view;
 
 
-import com.lynden.gmapsfx.GoogleMapView;
-import com.lynden.gmapsfx.MapComponentInitializedListener;
-import com.lynden.gmapsfx.javascript.object.*;
-import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
-import com.lynden.gmapsfx.service.geocoding.GeocodingService;
+import com.dlsc.gmapsfx.GoogleMapView;
+import com.dlsc.gmapsfx.MapComponentInitializedListener;
+import com.dlsc.gmapsfx.javascript.object.*;
+import com.dlsc.gmapsfx.service.geocoding.GeocoderStatus;
+import com.dlsc.gmapsfx.service.geocoding.GeocodingService;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
@@ -93,7 +93,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		AnchorPane.setRightAnchor(mapView, 0.0);
 		map_pane.getChildren().add(mapView);
 		mapView.toBack();
-		mapView.addMapInializedListener(this);
+		mapView.addMapInitializedListener(this);
 		address.bind(addressTextField.textProperty());
 		/*Map edit*/
 
