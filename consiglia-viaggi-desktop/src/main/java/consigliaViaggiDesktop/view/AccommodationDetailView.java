@@ -63,7 +63,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private GoogleMapView mapView;
 	private GoogleMap map;
 	private GeocodingService geocodingService;
-	private StringProperty address = new SimpleStringProperty();
+	private final StringProperty address = new SimpleStringProperty();
 	private Integer accommodationId;
 
 	private AccommodationController accommodationController;
@@ -71,8 +71,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private DeleteAccommodationController deleteAccommodationController;
 	private EditAccommodationController editAccommodationController;
 
-	private ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
-	private ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
+	private final ObservableList<Category> category_list= FXCollections.observableArrayList(Category.class.getEnumConstants());
+	private final ObservableList<Subcategory> subcategory_list= FXCollections.observableArrayList();
 
 	public void initialize(){
 
@@ -102,14 +102,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		/*choice_category listener*/
 		choice_category.getSelectionModel().selectedIndexProperty().addListener(
-				new ChangeListener<Number>() {
-					@Override
-					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-						System.out.print("selected "+category_list.get((Integer) newValue));
-						subcategory_list.clear();
-						subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
+				(observable, oldValue, newValue) -> {
+					System.out.print("selected " + category_list.get((Integer) newValue));
+					subcategory_list.clear();
+					subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
 
-					}
 				}
 
 		);
@@ -120,11 +117,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		}
 		if(accommodationId!=null)
 
-			editAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<Accommodation>() {
+			editAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<>() {
 
 				@Override
 				public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
-					selectedAccommodation=newValue;
+					selectedAccommodation = newValue;
 					updateAccommodationDetailGui(newValue);
 
 				}
@@ -214,18 +211,15 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		if (currentImageFile!=null){
 			uploadImageProgressIndicator.setVisible(true);
-			addAccommodationController.uploadAccommodationImage(currentImageFile,text_name.getText()).addListener(new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-					uploadImageProgressIndicator.setVisible(false);
-					uploadImageButton.setDisable(true);
+			addAccommodationController.uploadAccommodationImage(currentImageFile,text_name.getText()).
+																		addListener((observable, oldValue, newValue) -> {
+				uploadImageProgressIndicator.setVisible(false);
+				uploadImageButton.setDisable(true);
 
-					if (newValue.equals("")) {
-						setAccommodationImage(Constants.IMG_PLACEHOLDER);
-					}
-					else
-						imageUrl=newValue;
-				}
+				if (newValue.equals("")) {
+					setAccommodationImage(Constants.IMG_PLACEHOLDER);
+				} else
+					imageUrl = newValue;
 			});
 		}
 
@@ -238,12 +232,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			if(NavigationController.getInstance().buildAlert("Cancellazione","Confermi l'eliminazione?")) {
 
 				BooleanProperty response = deleteAccommodationController.deleteAccommodation(accommodationId);
-				response.addListener(new ChangeListener<Boolean>() {
-					@Override
-					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-						if (newValue) {
-							Platform.runLater(() -> accommodationController.goBack());
-						}
+				response.addListener((observable, oldValue, newValue) -> {
+					if (newValue) {
+						Platform.runLater(() -> accommodationController.goBack());
 					}
 				});
 			}
@@ -350,12 +341,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			if(mapInitialized.getValue()){
 				addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());
 			}else {
-				mapInitialized.addListener(new ChangeListener<Boolean>() {
-					@Override
-					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-						if (newValue)
-							addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
-					}
+				mapInitialized.addListener((observable, oldValue, newValue) -> {
+					if (newValue)
+						addMapMarker(accommodation.getName(), accommodation.getLatitude(), accommodation.getLongitude());
 				});
 			}
 
