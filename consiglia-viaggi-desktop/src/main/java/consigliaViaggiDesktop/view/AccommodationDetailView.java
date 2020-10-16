@@ -35,6 +35,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.Locale;
 
 public class AccommodationDetailView implements MapComponentInitializedListener {
 
@@ -84,8 +85,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
-		mapView = new GoogleMapView();
-		mapView.setKey("AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
+		mapView = new GoogleMapView(Locale.getDefault().getLanguage(),"AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
+		//mapView.setKey("AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
 		//mapView = new GoogleMapView("en-US", "AIzaSyCMh5QgPKHyXr_swIaV5JXdDkwaABIXbGU");
 		AnchorPane.setBottomAnchor(mapView, 0.0);
 		AnchorPane.setTopAnchor(mapView, 0.0);
@@ -249,7 +250,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		mapOptions.center(new LatLong(40.851799, 14.268120))
 				.mapType(MapTypeIdEnum.ROADMAP)
-
 				.overviewMapControl(false)
 				.panControl(false)
 				.rotateControl(false)
