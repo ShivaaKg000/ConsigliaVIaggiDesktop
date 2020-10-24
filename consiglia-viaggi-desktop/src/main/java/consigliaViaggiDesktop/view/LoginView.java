@@ -3,6 +3,9 @@ package consigliaViaggiDesktop.view;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.controller.NavigationController;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -23,19 +26,23 @@ public class LoginView {
     	String userName = userNameField.getText();
         String password = passwordField.getText();
 
-        try {
-            if (LoginController.getInstance().authenticate(userName, password))
+        LoginController.getInstance().authenticate(userName, password).addListener((observable, oldValue, newValue) -> {
+            if(newValue)
             {
-                errorLabel.setText("");
-                loadMenuView(userName);
+                Platform.runLater(() -> {
+                    errorLabel.setText("");
+                    loadMenuView(userName);
+                });
             }
-            else
-            {
-                errorLabel.setText("Username/Password is not valid");
-            }
-        } catch (IOException e) {
-            errorLabel.setText(e.getMessage());
-        }
+        });
+
+       LoginController.getInstance().errorMessageProperty().addListener((observable, oldValue, newValue) -> {
+           Platform.runLater(() -> {
+               errorLabel.setText(newValue);
+           });
+
+       });
+
         clearFields();
     }
 
