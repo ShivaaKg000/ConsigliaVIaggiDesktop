@@ -3,7 +3,7 @@ package consigliaViaggiDesktop.controller.manageAccommodation;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
-import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
+import consigliaViaggiDesktop.model.DAO.AccommodationDaoFactory;
 import consigliaViaggiDesktop.model.DAO.DaoException;
 
 import javafx.beans.property.*;
@@ -16,7 +16,7 @@ public class EditAccommodationController {
     private final AccommodationController accommodationController;
 
     public EditAccommodationController(AccommodationController accommodationController) {
-        accommodationDao= new AccommodationDaoJSON();
+        accommodationDao= AccommodationDaoFactory.getAccommodationDao();
         this.accommodationController=accommodationController;
     }
 

@@ -2,9 +2,8 @@ package consigliaViaggiDesktop.controller.manageAccommodation;
 
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
-import consigliaViaggiDesktop.model.DAO.AccommodationDaoJSON;
+import consigliaViaggiDesktop.model.DAO.AccommodationDaoFactory;
 import consigliaViaggiDesktop.model.DAO.DaoException;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 
@@ -15,7 +14,7 @@ public class DeleteAccommodationController {
 
     public DeleteAccommodationController(AccommodationController accommodationController) {
 
-        accommodationDao= new AccommodationDaoJSON();
+        accommodationDao= AccommodationDaoFactory.getAccommodationDao();
         this.accommodationController=accommodationController;
     }
 
