@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" minWidth="600.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consigliaViaggiDesktop.view.AccommodationView">
+<ScrollPane fitToHeight="true" fitToWidth="true" minWidth="600.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consigliaViaggiDesktop.view.AccommodationView">
    <content>
       <HBox alignment="CENTER" styleClass="main-bg">
          <children>
-            <SplitPane dividerPositions="0.24088093599449414" minWidth="600.0" orientation="VERTICAL" styleClass="shadow" HBox.hgrow="ALWAYS">
-               <items>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
                   <AnchorPane>
                      <children>
                         <Button layoutX="1037.0" layoutY="50.0" mnemonicParsing="false" onAction="#searchButtonClick" prefHeight="51.0" prefWidth="103.0" styleClass="default-button" text="Cerca" AnchorPane.rightAnchor="10.0">
@@ -51,8 +41,11 @@
                         <Label fx:id="errorLabel" layoutX="193.0" layoutY="95.0" text="Ordinamento" />
                         <ComboBox fx:id="orderByComboBox" layoutX="280.0" layoutY="94.0" onKeyPressed="#searchTextFieldKeyPressed" prefWidth="150.0" />
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
                   </AnchorPane>
-                  <AnchorPane prefWidth="1084.0" SplitPane.resizableWithParent="false">
+                  <AnchorPane prefWidth="1084.0">
                      <children>
                         <VBox alignment="TOP_CENTER" layoutX="40.0" layoutY="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -78,7 +71,8 @@
                                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@/images/left_arrow.png" />
-                                                   </image></ImageView>
+                                                   </image>
+                                                </ImageView>
                                              </graphic>
                                           </Button>
                                           <Button mnemonicParsing="false" onAction="#nextPageAction" styleClass="default-button">
@@ -86,7 +80,8 @@
                                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@/images/right_arrow.png" />
-                                                   </image></ImageView>
+                                                   </image>
+                                                </ImageView>
                                              </graphic>
                                           </Button>
                                           <Label fx:id="pageLabel" text="Label" />
@@ -109,11 +104,15 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-               </items>
+               </children>
+               <styleClass>
+                  <String fx:value="white-box" />
+                  <String fx:value="shadow" />
+               </styleClass>
                <HBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </HBox.margin>
-            </SplitPane>
+            </VBox>
          </children>
       </HBox>
    </content>
