@@ -30,7 +30,7 @@
 	
 }
 .main-bg{
-	-fx-background-image: url('../images/main_bg.png');
+	-fx-background-image: url('../images/main_bg_accent.png');
 	-fx-background-size:cover;
 	-fx-background-repeat:no-repeat;
 	-fx-background-position:center;
@@ -42,24 +42,24 @@
 }
 
 .clear-image-button{
-	-fx-background-color:#28e0ffff;
+	-fx-background-color:#0d717b;/*#28e0ffff*/
     -fx-text-fill: white;
     -fx-font-size: 12px;
 }
 .clear-image-button:hover {
-	-fx-background-color:#88eeffff;
+	-fx-background-color:#13a1b0;/*#88eeffff*/
     -fx-text-fill: white;
     -fx-font-size: 12px;
 }
 
 .default-button {
-	-fx-background-color:#28e0ffff;
+	-fx-background-color:#f03143; /*#28e0ffff*/
     -fx-text-fill: white;
     -fx-font-size: 18px;
     
 }
 .default-button:hover {
-	-fx-background-color:#88eeffff;
+	-fx-background-color:#f35e6c; /*#88eeffff*/
     -fx-text-fill: white;
     -fx-font-size: 18px;
 }
