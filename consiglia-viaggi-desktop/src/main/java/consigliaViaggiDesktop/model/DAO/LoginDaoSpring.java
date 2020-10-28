@@ -75,15 +75,13 @@ public class LoginDaoSpring implements LoginDao{
         if (responseCode== HttpURLConnection.HTTP_OK) {
             jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         }
-        return jsonResponse; //potrebbe essere null
+        return jsonResponse;
     }
 
     private boolean checkIfAdmin(String jwtToken){
         Base64.Decoder decoder = java.util.Base64.getUrlDecoder();
         String[] parts = jwtToken.split("\\."); // split out the "parts" (header, payload and signature)
-        //String headerJson = new String(decoder.decode(parts[0]));
         String payload = new String(decoder.decode(parts[1]));
-        //String signatureJson = new String(decoder.decode(parts[2]));
         JsonObject jsonPayload = JsonParser.parseString(payload).getAsJsonObject();
         JsonArray roles=jsonPayload.getAsJsonArray("roles");
         for (JsonElement role :roles) {
