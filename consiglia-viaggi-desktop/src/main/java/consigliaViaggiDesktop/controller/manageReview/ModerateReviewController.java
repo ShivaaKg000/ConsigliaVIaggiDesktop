@@ -5,6 +5,7 @@ import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DAO.ReviewDao;
 import consigliaViaggiDesktop.model.DAO.ReviewDaoFactory;
 import consigliaViaggiDesktop.model.Review;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
@@ -38,6 +39,7 @@ public class ModerateReviewController {
 
         return updatedReview;
     }
+
     public ObjectProperty<Review> rejectReview(int reviewId) {
         ObjectProperty<Review> updatedReview= new SimpleObjectProperty<>();
         Task<Void> task = new Task<>() {

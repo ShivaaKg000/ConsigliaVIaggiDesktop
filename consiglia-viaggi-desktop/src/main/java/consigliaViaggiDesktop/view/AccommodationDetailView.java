@@ -6,6 +6,7 @@ import com.dlsc.gmapsfx.MapComponentInitializedListener;
 import com.dlsc.gmapsfx.javascript.object.*;
 import com.dlsc.gmapsfx.service.geocoding.GeocoderStatus;
 import com.dlsc.gmapsfx.service.geocoding.GeocodingService;
+
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
@@ -325,18 +326,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			choice_subcategory.setValue(accommodation.getSubCategory());
 			setAccommodationImage(accommodation.getImages());
 
-			/*choice_category listener*//*
-			choice_category.getSelectionModel().selectedIndexProperty().addListener(
-					new ChangeListener<Number>() {
-						@Override
-						public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-							System.out.print("selected "+category_list.get((Integer) newValue));
-							subcategory_list.clear();
-							subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
-						}
-					}
-			);
-			/*choice_category listener end*/
 
 			if(mapInitialized.getValue()){
 				addMapMarker(accommodation.getName(),accommodation.getLatitude(),accommodation.getLongitude());

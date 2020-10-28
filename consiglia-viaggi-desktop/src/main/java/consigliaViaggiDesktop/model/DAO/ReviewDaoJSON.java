@@ -1,6 +1,7 @@
 package consigliaViaggiDesktop.model.DAO;
 
 import com.google.gson.*;
+
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;

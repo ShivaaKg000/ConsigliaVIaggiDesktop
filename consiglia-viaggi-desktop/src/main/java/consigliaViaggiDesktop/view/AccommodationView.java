@@ -1,9 +1,13 @@
 package consigliaViaggiDesktop.view;
+
+
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.model.Subcategory;
+
+
 import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleStringProperty;

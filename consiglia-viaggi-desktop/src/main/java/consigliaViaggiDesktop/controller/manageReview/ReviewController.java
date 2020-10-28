@@ -13,11 +13,13 @@ import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
 import consigliaViaggiDesktop.model.SearchParamsReview;
 import consigliaViaggiDesktop.view.ReviewDetailView;
+
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+
 public class ReviewController {
 
 	

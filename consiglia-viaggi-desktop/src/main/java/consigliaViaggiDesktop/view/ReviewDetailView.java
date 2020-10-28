@@ -4,6 +4,7 @@ import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.manageReview.ModerateReviewController;
 import consigliaViaggiDesktop.controller.manageReview.ReviewController;
 import consigliaViaggiDesktop.model.Review;
+
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;

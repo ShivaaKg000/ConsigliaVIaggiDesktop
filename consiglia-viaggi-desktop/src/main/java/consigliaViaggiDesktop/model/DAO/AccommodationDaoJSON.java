@@ -2,6 +2,7 @@ package consigliaViaggiDesktop.model.DAO;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.*;
+
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.Accommodation;
@@ -9,6 +10,8 @@ import consigliaViaggiDesktop.model.Category;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.model.Subcategory;
+
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

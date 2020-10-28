@@ -9,6 +9,8 @@ import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
 import consigliaViaggiDesktop.view.AccommodationDetailView;
+
+
 import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
