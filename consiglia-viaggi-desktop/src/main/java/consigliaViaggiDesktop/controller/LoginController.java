@@ -1,14 +1,18 @@
 package consigliaViaggiDesktop.controller;
+
 import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DAO.LoginDao;
 import consigliaViaggiDesktop.model.DAO.LoginDaoFactory;
 import consigliaViaggiDesktop.model.User;
+
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
-import java.io.IOException;
+
+
 public class LoginController {
 
 	private static LoginDao loginDao;

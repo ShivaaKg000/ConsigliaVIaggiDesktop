@@ -5,6 +5,8 @@ import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoFactory;
 import consigliaViaggiDesktop.model.DAO.DaoException;
+
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

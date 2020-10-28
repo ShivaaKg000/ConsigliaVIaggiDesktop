@@ -4,6 +4,7 @@ import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
 import consigliaViaggiDesktop.model.DAO.AccommodationDaoFactory;
 import consigliaViaggiDesktop.model.DAO.DaoException;
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 
