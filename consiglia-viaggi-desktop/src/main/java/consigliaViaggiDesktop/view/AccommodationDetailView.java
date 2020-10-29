@@ -7,7 +7,6 @@ import com.dlsc.gmapsfx.javascript.object.*;
 import com.dlsc.gmapsfx.service.geocoding.GeocoderStatus;
 import com.dlsc.gmapsfx.service.geocoding.GeocodingService;
 
-import com.sun.prism.paint.Color;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
@@ -35,7 +34,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Locale;
