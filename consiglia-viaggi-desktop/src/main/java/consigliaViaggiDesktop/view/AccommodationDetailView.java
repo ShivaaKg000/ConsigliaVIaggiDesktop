@@ -7,6 +7,7 @@ import com.dlsc.gmapsfx.javascript.object.*;
 import com.dlsc.gmapsfx.service.geocoding.GeocoderStatus;
 import com.dlsc.gmapsfx.service.geocoding.GeocodingService;
 
+import com.sun.prism.paint.Color;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
@@ -34,6 +35,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
+import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Locale;
@@ -84,6 +86,13 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		editAccommodationController= new EditAccommodationController(accommodationController);
 		/**/
 
+		longitudeTextField.textProperty().addListener(getTextFieldChangeListener());
+		latitudeTextField.textProperty().addListener(getTextFieldChangeListener());
+		text_name.textProperty().addListener(getTextFieldChangeListener());
+		text_description.textProperty().addListener(getTextFieldChangeListener());
+		text_address.textProperty().addListener(getTextFieldChangeListener());
+		cityTextField.textProperty().addListener(getTextFieldChangeListener());
+
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
 		mapView = new GoogleMapView(Locale.getDefault().getLanguage(),"AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
@@ -101,6 +110,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		choice_category.setItems(category_list);
 		choice_subcategory.setItems(subcategory_list);
+		choice_category.setValue(Category.NOT);
 
 		/*choice_category listener*/
 		choice_category.getSelectionModel().selectedIndexProperty().addListener(
@@ -108,7 +118,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 					System.out.print("selected " + category_list.get((Integer) newValue));
 					subcategory_list.clear();
 					subcategory_list.addAll(dynamicSubCategoryChoice(category_list.get((Integer) newValue)));
-
+					choice_subcategory.setValue(Subcategory.BLANK_ATTRACTION);
 				}
 
 		);
@@ -143,7 +153,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		geocodingService.geocode(address.get(),(results, status) -> {
 			System.out.print("geocoded");
 			System.out.print(results[0]);
-			//LatLong latLong = null;
 
 			if( status == GeocoderStatus.ZERO_RESULTS) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, "No matching address found");
@@ -152,7 +161,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			} else if( results.length > 1 ) {
 				Alert alert = new Alert(Alert.AlertType.WARNING, "Multiple results found, showing the first one.");
 				alert.show();
-				//latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
 			}
 			map.clearMarkers();
 			addMapMarker(results[0].getPlaceId(), results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
@@ -170,7 +178,24 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML
 	void saveButtonAction(ActionEvent event) {
 		if(NavigationController.getInstance().buildAlert("Salva","Salvare le modifiche?")){
+
+
+			if(emptyFields())
+			{
+				NavigationController.getInstance().buildInfoBox("Errore Campi vuoti", "Campi non validi!");
+				return;
+			}
+
+
+			if(!accommodationController.validateLatLong(Double.parseDouble(latitudeTextField.getText()),Double.parseDouble(longitudeTextField.getText())))
+			{
+				NavigationController.getInstance().buildInfoBox("Errore Coordinate", "Coordinate non valide!");
+				return;
+			}
+
 			if(accommodationId==null){
+
+
 				ObjectProperty<Accommodation> response= addAccommodationController.createAccommodationAsync(createNewAccommodationFromNewFields());
 				response.addListener(new ChangeListener<Accommodation>() {
 					@Override
@@ -191,6 +216,52 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				});
 			}
 		}
+	}
+
+	private ChangeListener<String> getTextFieldChangeListener(){
+
+		return new ChangeListener<String>() {
+			@Override public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				longitudeTextField.setStyle("text-field");
+				latitudeTextField.setStyle("text-field");
+				text_address.setStyle("text-field");
+				cityTextField.setStyle("text-field");
+				text_description.setStyle("text-field");
+				text_name.setStyle("text-field");
+			}
+		};
+	}
+
+	private boolean emptyFields() {
+
+		boolean ris=false;
+		if(longitudeTextField.getText().equals("") || latitudeTextField.getText().equals(""))
+		{
+			longitudeTextField.setStyle("-fx-background-color: red;");
+			latitudeTextField.setStyle("-fx-background-color: red;");
+			ris= true;
+		}
+		if(text_address.getText().equals("")){
+			text_address.setStyle("-fx-background-color: red;");
+			ris= true;
+		}
+		if(cityTextField.getText().equals("")){
+			cityTextField.setStyle("-fx-background-color: red;");
+			ris= true;
+		}
+		if(text_name.getText().equals("")){
+			text_name.setStyle("-fx-background-color: red;");
+			ris= true;
+		}
+		if(text_description.getText().equals("")){
+			text_description.setStyle("-fx-background-color: red;");
+			ris= true;
+		}
+		if(choice_category.toString().equals("") || choice_subcategory.toString().equals(""))
+			ris=true;
+
+		return ris;
 	}
 
 	@FXML
@@ -318,7 +389,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			text_description.setText(accommodation.getDescription());
 			text_address.setText(accommodation.getAddress());
 			cityTextField.setText(accommodation.getCity());
-			//text_path.setText(accommodation.getLogoUrl());
 			text_rating.setText(String.valueOf(accommodation.getRating()));
 			choice_category.setValue(accommodation.getCategory());
 			subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));

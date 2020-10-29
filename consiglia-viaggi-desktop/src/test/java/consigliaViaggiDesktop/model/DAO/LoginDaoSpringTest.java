@@ -30,7 +30,7 @@ class LoginDaoSpringTest {
     void authenticateWithWrongUserAndRightPassword() {
         LoginDaoSpring loginDaoSpring = new LoginDaoSpring();
         try {
-            assertEquals(false, loginDaoSpring.authenticate("ciruz","ciro" ),"Wrong password");
+            assertEquals(false, loginDaoSpring.authenticate("ciruz","ciro" ),"Wrong user");
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -40,7 +40,7 @@ class LoginDaoSpringTest {
     void authenticateWithWrongUserAndWrongPassword() {
         LoginDaoSpring loginDaoSpring = new LoginDaoSpring();
         try {
-            assertEquals(false, loginDaoSpring.authenticate("ciruz","wrong" ),"Wrong password");
+            assertEquals(false, loginDaoSpring.authenticate("ciruz","wrong" ),"Wrong user and wrong password");
         } catch (DaoException e) {
             e.printStackTrace();
         }

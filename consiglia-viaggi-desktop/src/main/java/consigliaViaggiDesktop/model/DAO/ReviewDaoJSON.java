@@ -6,7 +6,7 @@ import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.LoginController;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
-import consigliaViaggiDesktop.model.*;
+import consigliaViaggiDesktop.model.SearchParamsReview;
 import consigliaViaggiDesktop.model.Status;
 
 import javax.net.ssl.HttpsURLConnection;
