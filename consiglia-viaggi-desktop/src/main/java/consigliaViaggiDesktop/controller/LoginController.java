@@ -1,8 +1,8 @@
 package consigliaViaggiDesktop.controller;
 
 import consigliaViaggiDesktop.model.DAO.DaoException;
+import consigliaViaggiDesktop.model.DAO.DaoFactory;
 import consigliaViaggiDesktop.model.DAO.LoginDao;
-import consigliaViaggiDesktop.model.DAO.LoginDaoFactory;
 import consigliaViaggiDesktop.model.User;
 
 
@@ -23,7 +23,7 @@ public class LoginController {
 	public static LoginController getInstance(){
 		if(loginController ==null) {
 			loginController = new LoginController();
-			loginDao= LoginDaoFactory.getLoginDao();
+			loginDao= DaoFactory.getLoginDao();
 		}
 
 		return loginController;

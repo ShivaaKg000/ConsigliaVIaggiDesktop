@@ -2,8 +2,8 @@ package consigliaViaggiDesktop.controller.manageReview;
 
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.DAO.DaoException;
+import consigliaViaggiDesktop.model.DAO.DaoFactory;
 import consigliaViaggiDesktop.model.DAO.ReviewDao;
-import consigliaViaggiDesktop.model.DAO.ReviewDaoFactory;
 import consigliaViaggiDesktop.model.Review;
 
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +16,7 @@ public class ModerateReviewController {
     private final ReviewController reviewController;
 
     public ModerateReviewController(ReviewController reviewController){
-        reviewDao= ReviewDaoFactory.getReviewDao();
+        reviewDao= DaoFactory.getReviewDao();
         this.reviewController=reviewController;
     }
 

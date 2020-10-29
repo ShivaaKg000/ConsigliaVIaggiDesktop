@@ -4,7 +4,7 @@ import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.Accommodation;
 import consigliaViaggiDesktop.model.DAO.AccommodationDao;
-import consigliaViaggiDesktop.model.DAO.AccommodationDaoFactory;
+import consigliaViaggiDesktop.model.DAO.DaoFactory;
 import consigliaViaggiDesktop.model.DAO.DaoException;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.SearchParamsAccommodation;
@@ -39,7 +39,7 @@ public class AccommodationController {
 		pageNumber= new SimpleLongProperty(-1);
 		totalElementNumber= new SimpleLongProperty();
     	executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
-    	accommodationDao= AccommodationDaoFactory.getAccommodationDao();
+    	accommodationDao= DaoFactory.getAccommodationDao();
         observableAccommodationList= FXCollections.observableArrayList();
     }
 

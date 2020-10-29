@@ -7,8 +7,8 @@ import java.util.concurrent.*;
 import consigliaViaggiDesktop.Constants;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.model.DAO.DaoException;
+import consigliaViaggiDesktop.model.DAO.DaoFactory;
 import consigliaViaggiDesktop.model.DAO.ReviewDao;
-import consigliaViaggiDesktop.model.DAO.ReviewDaoFactory;
 import consigliaViaggiDesktop.model.DTO.JsonPageResponse;
 import consigliaViaggiDesktop.model.Review;
 import consigliaViaggiDesktop.model.SearchParamsReview;
@@ -50,7 +50,7 @@ public class ReviewController {
         totalElementNumber= new SimpleIntegerProperty();
 
         executor= new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(10));
-        reviewDao= ReviewDaoFactory.getReviewDao();
+        reviewDao= DaoFactory.getReviewDao();
         observableReviewList= FXCollections.observableArrayList();
     }
 
