@@ -108,7 +108,7 @@
                                                                   <HBox minWidth="400.0" HBox.hgrow="NEVER">
                                                                      <VBox alignment="CENTER_LEFT" spacing="5.0" HBox.hgrow="ALWAYS">
                                                                         <children>
-                                                                           <Label alignment="TOP_LEFT" nodeOrientation="RIGHT_TO_LEFT" text="ID:">
+                                                                           <Label fx:id="id_label" alignment="TOP_LEFT" nodeOrientation="RIGHT_TO_LEFT" text="ID:">
                                                                               <graphic>
                                                                                  <Text fx:id="text_id" strokeType="OUTSIDE" strokeWidth="0.0" text="id" translateX="-26.0" />
                                                                               </graphic>
@@ -116,7 +116,7 @@
                                                                                  <Font size="14.0" />
                                                                               </font>
                                                                            </Label>
-                                                                           <Label nodeOrientation="RIGHT_TO_LEFT" text="Rating:">
+                                                                           <Label fx:id="rating_label" nodeOrientation="RIGHT_TO_LEFT" text="Rating:">
                                                                               <graphic>
                                                                                  <Text fx:id="text_rating" nodeOrientation="RIGHT_TO_LEFT" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                                                                               </graphic>

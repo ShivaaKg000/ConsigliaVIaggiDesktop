@@ -57,6 +57,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private Button deleteButton;
 	@FXML private ProgressIndicator uploadImageProgressIndicator;
 	@FXML private Button uploadImageButton;
+	@FXML private Label id_label;
+	@FXML private Label rating_label;
+
 
 	private String imageUrl="";
 	private File currentImageFile;
@@ -90,7 +93,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		text_description.textProperty().addListener(getTextFieldChangeListener());
 		text_address.textProperty().addListener(getTextFieldChangeListener());
 		cityTextField.textProperty().addListener(getTextFieldChangeListener());
-
+		longitudeTextField.setEditable(false);
+		latitudeTextField.setEditable(false);
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
 		mapView = new GoogleMapView(Locale.getDefault().getLanguage(),"AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
@@ -125,18 +129,24 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		if(accommodationController ==null) {
 			accommodationController = new AccommodationController();
 		}
-		if(accommodationId!=null)
-
+		if(accommodationId!=null) {
 			editAccommodationController.getAccommodationAsync(accommodationId).addListener(new ChangeListener<>() {
 
 				@Override
 				public void changed(ObservableValue<? extends Accommodation> observable, Accommodation oldValue, Accommodation newValue) {
 					selectedAccommodation = newValue;
 					updateAccommodationDetailGui(newValue);
-
 				}
 
 			});
+		}
+		else
+		{
+			id_label.setVisible(false);
+			text_id.setText(" ");
+			rating_label.setVisible(false);
+			text_rating.setText(" ");
+		}
 
 	}
 
@@ -180,7 +190,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			if(emptyFields())
 			{
-				NavigationController.getInstance().buildInfoBox("Errore Campi vuoti", "Campi non validi!");
+				NavigationController.getInstance().buildInfoBox("Errore Campi vuoti", "Campi non validi!\nTutti i campi sono obbligatori");
 				return;
 			}
 
@@ -219,14 +229,19 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	private ChangeListener<String> getTextFieldChangeListener(){
 
 		return new ChangeListener<String>() {
-			@Override public void changed(ObservableValue<? extends String> observable,
-					String oldValue, String newValue) {
-				longitudeTextField.setStyle("text-field");
-				latitudeTextField.setStyle("text-field");
-				text_address.setStyle("text-field");
-				cityTextField.setStyle("text-field");
-				text_description.setStyle("text-field");
-				text_name.setStyle("text-field");
+			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				cityTextField.setStyle(null);
+				longitudeTextField.setStyle(null);
+				latitudeTextField.setStyle(null);
+				text_address.setStyle(null);
+				text_description.setStyle(null);
+				text_name.setStyle(null);
+				longitudeTextField.getStyleClass().add("text-field");
+				latitudeTextField.getStyleClass().add("text-field");
+				text_address.getStyleClass().add("text-field");
+				cityTextField.getStyleClass().add("text-field");
+				text_description.getStyleClass().add("text-field");
+				text_name.getStyleClass().add("text-field");
 			}
 		};
 	}
@@ -256,7 +271,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			text_description.setStyle("-fx-background-color: red;");
 			ris= true;
 		}
-		if(choice_category.toString().equals("") || choice_subcategory.toString().equals(""))
+
+		if(choice_category.getValue().toString().equals("") || choice_subcategory.getValue().toString().equals(""))
 			ris=true;
 
 		return ris;
@@ -389,6 +405,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 			cityTextField.setText(accommodation.getCity());
 			text_rating.setText(String.valueOf(accommodation.getRating()));
 			choice_category.setValue(accommodation.getCategory());
+			subcategory_list.clear();
 			subcategory_list.addAll(dynamicSubCategoryChoice(accommodation.getCategory()));
 			choice_subcategory.setItems(subcategory_list);
 			choice_subcategory.setValue(accommodation.getSubCategory());
