@@ -93,8 +93,8 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		text_description.textProperty().addListener(getTextFieldChangeListener());
 		text_address.textProperty().addListener(getTextFieldChangeListener());
 		cityTextField.textProperty().addListener(getTextFieldChangeListener());
-		longitudeTextField.setEditable(false);
-		latitudeTextField.setEditable(false);
+		longitudeTextField.setEditable(true);
+		latitudeTextField.setEditable(true);
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
 		mapView = new GoogleMapView(Locale.getDefault().getLanguage(),"AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
@@ -236,12 +236,12 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 				text_address.setStyle(null);
 				text_description.setStyle(null);
 				text_name.setStyle(null);
-				longitudeTextField.getStyleClass().add("text-field");
-				latitudeTextField.getStyleClass().add("text-field");
-				text_address.getStyleClass().add("text-field");
-				cityTextField.getStyleClass().add("text-field");
-				text_description.getStyleClass().add("text-field");
-				text_name.getStyleClass().add("text-field");
+				longitudeTextField.getStyleClass().remove("text-field-error");
+				latitudeTextField.getStyleClass().remove("text-field-error");
+				text_address.getStyleClass().remove("text-field-error");
+				cityTextField.getStyleClass().remove("text-field-error");
+				text_description.setStyle("-fx-background-color: white;");
+				text_name.getStyleClass().remove("text-field-error");
 			}
 		};
 	}
@@ -251,20 +251,20 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		boolean ris=false;
 		if(longitudeTextField.getText().equals("") || latitudeTextField.getText().equals(""))
 		{
-			longitudeTextField.setStyle("-fx-background-color: red;");
-			latitudeTextField.setStyle("-fx-background-color: red;");
+			longitudeTextField.getStyleClass().add("text-field-error");
+			latitudeTextField.getStyleClass().add("text-field-error");
 			ris= true;
 		}
 		if(text_address.getText().equals("")){
-			text_address.setStyle("-fx-background-color: red;");
+			text_address.getStyleClass().add("text-field-error");
 			ris= true;
 		}
 		if(cityTextField.getText().equals("")){
-			cityTextField.setStyle("-fx-background-color: red;");
+			cityTextField.getStyleClass().add("text-field-error");
 			ris= true;
 		}
 		if(text_name.getText().equals("")){
-			text_name.setStyle("-fx-background-color: red;");
+			text_name.getStyleClass().add("text-field-error");
 			ris= true;
 		}
 		if(text_description.getText().equals("")){
