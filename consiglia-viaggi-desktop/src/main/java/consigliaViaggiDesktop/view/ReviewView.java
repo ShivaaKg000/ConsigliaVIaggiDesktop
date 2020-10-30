@@ -5,6 +5,8 @@ import consigliaViaggiDesktop.model.*;
 import consigliaViaggiDesktop.model.DAO.DaoException;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -108,6 +110,9 @@ public class ReviewView {
 
 		reviewController = new ReviewController();
 
+		constraintTextFieldToNumber(idTextField);
+		constraintTextFieldToNumber(accommodationIdTextField);
+
         orderByComboBox.setItems(OrderByChoice.getList(orderBy_list));
 		orderByComboBox.getSelectionModel().select(0);
 
@@ -120,6 +125,22 @@ public class ReviewView {
 		accommodationName.setCellValueFactory(new PropertyValueFactory<Review, String>("accommodationName"));
 		accommodationId.setCellValueFactory(new PropertyValueFactory<Review, Integer>("accommodationId"));
 		reviewText.setCellValueFactory(new PropertyValueFactory<Review, String>("reviewText"));
+		reviewText.setCellFactory(column -> {
+					return new TableCell<Review, String>() {
+						@Override
+						protected void updateItem(String item, boolean empty) {
+							super.updateItem(item, empty); //This is mandatory
+							if (item == null || empty) //If the cell is empty
+							{
+								setText(null);
+
+							} else
+							setText(item.replace("\n", " "));
+
+						}
+					};
+
+		});
 		creationData.setCellValueFactory(new PropertyValueFactory<Review, String>("data"));
 		status.setCellValueFactory(new PropertyValueFactory<Review, Status>("status"));
 		status.setCellFactory(column -> {
@@ -286,5 +307,17 @@ public class ReviewView {
 						setOrderBy(orderByComboBox.getValue().getParam()).
                         setDirection(orderByComboBox.getValue().getDirection()).
 						build();
+	}
+
+	private void constraintTextFieldToNumber(TextField textField){
+		textField.textProperty().addListener ( new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue,
+								String newValue) {
+				if (!newValue.matches("\\d*")) {
+					textField.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+			}
+		});
 	}
 }

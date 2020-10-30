@@ -56,7 +56,6 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 	@FXML private HBox mainHbox;
 	@FXML private Button deleteButton;
 	@FXML private ProgressIndicator uploadImageProgressIndicator;
-	@FXML private Button uploadImageButton;
 	@FXML private Label id_label;
 	@FXML private Label rating_label;
 
@@ -93,13 +92,11 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		text_description.textProperty().addListener(getTextFieldChangeListener());
 		text_address.textProperty().addListener(getTextFieldChangeListener());
 		cityTextField.textProperty().addListener(getTextFieldChangeListener());
-		longitudeTextField.setEditable(true);
-		latitudeTextField.setEditable(true);
+		longitudeTextField.setEditable(false);
+		latitudeTextField.setEditable(false);
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
 		mapView = new GoogleMapView(Locale.getDefault().getLanguage(),"AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
-		//mapView.setKey("AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
-		//mapView = new GoogleMapView("en-US", "AIzaSyCMh5QgPKHyXr_swIaV5JXdDkwaABIXbGU");
 		AnchorPane.setBottomAnchor(mapView, 0.0);
 		AnchorPane.setTopAnchor(mapView, 0.0);
 		AnchorPane.setLeftAnchor(mapView, 0.0);
@@ -140,13 +137,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			});
 		}
-		else
-		{
-			id_label.setVisible(false);
-			text_id.setText(" ");
-			rating_label.setVisible(false);
-			text_rating.setText(" ");
-		}
+
 
 	}
 
@@ -288,30 +279,9 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 		imageUrl="";
 		setAccommodationImage(Constants.IMG_PLACEHOLDER);
-		uploadImageButton.setDisable(true);
-		//TO DO deleteImageFromServer
 
 	}
 
-	@FXML
-	void uploadButtonAction(ActionEvent event) {
-
-		if (currentImageFile!=null){
-			uploadImageProgressIndicator.setVisible(true);
-			addAccommodationController.uploadAccommodationImage(currentImageFile,text_name.getText()).
-																		addListener((observable, oldValue, newValue) -> {
-				uploadImageProgressIndicator.setVisible(false);
-				uploadImageButton.setDisable(true);
-
-				if (newValue.equals("")) {
-					setAccommodationImage(Constants.IMG_PLACEHOLDER);
-				} else
-					imageUrl = newValue;
-			});
-		}
-
-
-	}
 
 	@FXML
 	void deleteButtonAction(ActionEvent event){
@@ -461,7 +431,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 
 			imageViewAnchorPane.setBackground(new Background(myBackgroundImage));
 		} catch (Exception e) {
-			System.out.print("Not an image");
+			setAccommodationImage(Constants.IMG_PLACEHOLDER);
 		}
 	}
 
@@ -474,12 +444,30 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		if (currentImageFile != null) {
 			try {
 				setAccommodationImage(currentImageFile.toURI().toURL().toExternalForm());
-				uploadImageButton.setDisable(false);
+				uploadImage();
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 
 		}
+	}
+
+	private void uploadImage() {
+
+		if (currentImageFile!=null){
+			uploadImageProgressIndicator.setVisible(true);
+			addAccommodationController.uploadAccommodationImage(currentImageFile,text_name.getText()).
+					addListener((observable, oldValue, newValue) -> {
+						uploadImageProgressIndicator.setVisible(false);
+
+						if (newValue.equals("")) {
+							setAccommodationImage(Constants.IMG_PLACEHOLDER);
+						} else
+							imageUrl = newValue;
+					});
+		}
+
+
 	}
 
 	private static void configureFileChooser(final FileChooser fileChooser) {

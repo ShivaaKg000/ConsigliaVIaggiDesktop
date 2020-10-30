@@ -105,6 +105,8 @@ public class AccommodationView {
 
 	public void initialize(){
 
+		tableAccommodation.setPlaceholder(new Label("Nessuna struttura trovata"));
+
 		orderByComboBox.setItems(OrderByChoice.getList(orderBy_list));
 		orderByComboBox.getSelectionModel().select(0);
 
@@ -252,5 +254,6 @@ public class AccommodationView {
 	@FXML private void backButtonClicked() {
 		accommodationController.goBackToMenu();
 	}
+
 
 }
