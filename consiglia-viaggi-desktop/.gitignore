@@ -4,3 +4,4 @@
 # Ignore Gradle build output directory
 build
 /bin/
+/src/main/java/consigliaViaggiDesktop/KeyHolder.java

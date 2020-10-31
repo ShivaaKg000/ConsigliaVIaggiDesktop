@@ -8,6 +8,7 @@ import com.dlsc.gmapsfx.service.geocoding.GeocoderStatus;
 import com.dlsc.gmapsfx.service.geocoding.GeocodingService;
 
 import consigliaViaggiDesktop.Constants;
+import consigliaViaggiDesktop.KeyHolder;
 import consigliaViaggiDesktop.controller.NavigationController;
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
 import consigliaViaggiDesktop.controller.manageAccommodation.AddAccommodationController;
@@ -96,7 +97,7 @@ public class AccommodationDetailView implements MapComponentInitializedListener 
 		latitudeTextField.setEditable(false);
 		/*Map edit*/
 		mapInitialized = new SimpleBooleanProperty();
-		mapView = new GoogleMapView(Locale.getDefault().getLanguage(),"AIzaSyAGG1sR-7ABQ3WIus8IR6aFEsVPBeSkt-w");
+		mapView = new GoogleMapView(Locale.getDefault().getLanguage(), KeyHolder.GOOGLE_API_KEY);
 		AnchorPane.setBottomAnchor(mapView, 0.0);
 		AnchorPane.setTopAnchor(mapView, 0.0);
 		AnchorPane.setLeftAnchor(mapView, 0.0);
