@@ -28,31 +28,30 @@ public final class Constants  {
 	public static final String  ACCOMMODATION_DETAIL_VIEW = "/fxml/accommodation_detail.fxml";
 
 	/*JSON URLs*/
-    public static final String SERVER_URL="http://localhost:5000/";
-    public static final String LOGIN_URL = SERVER_URL+"authenticate";
+    public static final String LOGIN_URL = KeyHolder.SERVER_URL+"authenticate";
     public static final String PAGE_PARAM ="page=";
     //Accommodation
-    public static final String GET_ACCOMMODATION_LIST_URL = SERVER_URL+"accommodation_generic";
-    public static final String CREATE_ACCOMMODATION_URL = SERVER_URL+"accommodation/create";
-    public static final String DELETE_ACCOMMODATION_URL = SERVER_URL+"accommodation/delete/";
-
-    public static final String EDIT_ACCOMMODATION_URL =SERVER_URL+"accommodation/edit/" ;
+    public static final String GET_ACCOMMODATION_LIST_URL = KeyHolder.SERVER_URL+"accommodation_generic";
+    public static final String CREATE_ACCOMMODATION_URL = KeyHolder.SERVER_URL+"accommodation/create";
+    public static final String DELETE_ACCOMMODATION_URL = KeyHolder.SERVER_URL+"accommodation/delete/";
+    public static final String UPLOAD_IMAGE_URL = KeyHolder.SERVER_URL+"accommodation/image/";
+    public static final String EDIT_ACCOMMODATION_URL =KeyHolder.SERVER_URL+"accommodation/edit/" ;
     public static final String QUERY_PARAM ="query=";
     public static final String CATEGORY_PARAM ="category=";
     public static final String SUBCATEGORY_PARAM ="subCategory=";
     //Review
-    public static final String GET_REVIEW_LIST_URL = SERVER_URL+"review_view";
-    public static final String APPROVE_REVIEW = SERVER_URL+"review/edit/";
+    public static final String GET_REVIEW_LIST_URL = KeyHolder.SERVER_URL+"review_view";
+    public static final String APPROVE_REVIEW = KeyHolder.SERVER_URL+"review/edit/";
     public static final String REVIEW_ID_PARAM ="reviewId=";
     public static final String STATUS_PARAM ="status=";
     public static final String CONTENT_PARAM ="content=" ;
     public static final String ACCOMMODATION_NAME_PARAM ="accommodationName=" ;
-    public static final String GET_REVIEW_URL=SERVER_URL+"single_review_view";
+    public static final String GET_REVIEW_URL=KeyHolder.SERVER_URL+"single_review_view";
     public static final String ORDER_BY_PARAM ="orderBy=" ;
     public static final String DIRECTION_PARAM ="direction=" ;
-    public static final String DELETE_REVIEW_URL =SERVER_URL+"review/delete/";
+    public static final String DELETE_REVIEW_URL =KeyHolder.SERVER_URL+"review/delete/";
     public static final String ACCOMMODATION_ID_PARAM ="accommodationId=";
-    public static final String GET_ACCOMMODATION =SERVER_URL+"accommodation?"+ACCOMMODATION_ID_PARAM;
+    public static final String GET_ACCOMMODATION =KeyHolder.SERVER_URL+"accommodation?"+ACCOMMODATION_ID_PARAM;
 
 
     private Constants(){

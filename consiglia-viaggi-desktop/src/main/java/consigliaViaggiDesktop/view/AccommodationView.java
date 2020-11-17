@@ -2,10 +2,7 @@ package consigliaViaggiDesktop.view;
 
 
 import consigliaViaggiDesktop.controller.manageAccommodation.AccommodationController;
-import consigliaViaggiDesktop.model.Accommodation;
-import consigliaViaggiDesktop.model.Category;
-import consigliaViaggiDesktop.model.SearchParamsAccommodation;
-import consigliaViaggiDesktop.model.Subcategory;
+import consigliaViaggiDesktop.model.*;
 
 
 import javafx.application.Platform;
@@ -132,6 +129,22 @@ public class AccommodationView {
 		id.setCellValueFactory(new PropertyValueFactory<Accommodation,Integer>("id"));
 		name.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("name"));
 		description.setCellValueFactory(new PropertyValueFactory<Accommodation, String>("description"));
+		description.setCellFactory(column -> {
+			return new TableCell<Accommodation, String>() {
+				@Override
+				protected void updateItem(String item, boolean empty) {
+					super.updateItem(item, empty); //This is mandatory
+					if (item == null || empty) //If the cell is empty
+					{
+						setText(null);
+
+					} else
+						setText(item.replace("\n", " "));
+
+				}
+			};
+
+		});
 		category.setCellValueFactory(new PropertyValueFactory<Accommodation, Category>("category"));
 		subCategory.setCellValueFactory(new PropertyValueFactory<Accommodation,Subcategory>("subCategory"));
 		city.setCellValueFactory(new Callback<CellDataFeatures<Accommodation, String>, ObservableValue<String>>() {

@@ -279,7 +279,7 @@ public class AccommodationDaoJSON implements AccommodationDao {
 		HttpClient httpclient = HttpClientBuilder.create()
 				.build();
 
-		HttpPost post = new HttpPost(Constants.SERVER_URL+"accommodation/image/");
+		HttpPost post = new HttpPost(Constants.UPLOAD_IMAGE_URL);
 		String message = "This is a multipart post";
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
